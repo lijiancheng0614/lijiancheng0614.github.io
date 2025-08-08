@@ -1,0 +1,1108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>ENAS - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="(ICML 2018) Efficient Neural Architecture Search via Parameter Sharing Paper: https://arxiv.org/abs/1802.03268 Code: https://github.com/melodyguan/enas">
+<meta name="keywords" content="Computer Vision,Deep Learning,NLP,Paper">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="ENAS">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="(ICML 2018) Efficient Neural Architecture Search via Parameter Sharing Paper: https://arxiv.org/abs/1802.03268 Code: https://github.com/melodyguan/enas">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure6.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/table1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/table2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure7.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure8.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure6.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/table1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/table2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure7.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure8.png">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.812Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ENAS">
+<meta name="twitter:description" content="(ICML 2018) Efficient Neural Architecture Search via Parameter Sharing Paper: https://arxiv.org/abs/1802.03268 Code: https://github.com/melodyguan/enas">
+<meta name="twitter:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure1.png">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure3.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/figure3.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            ENAS
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2018-10-31T00:00:00+08:00">
+	
+		    Oct 31, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>, <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/NLP/">NLP</a>, <a class="tag-link" href="/tags/Paper/">Paper</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中文"><span class="toc-text">中文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法"><span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#设计循环单元"><span class="toc-text">设计循环单元</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#训练-enas-及衍生架构"><span class="toc-text">训练 ENAS 及衍生架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设计卷积网络"><span class="toc-text">设计卷积网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设计卷积单元"><span class="toc-text">设计卷积单元</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验"><span class="toc-text">实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#在-penn-treebank-数据集上训练的语言模型"><span class="toc-text">在 Penn Treebank 数据集上训练的语言模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在-cifar-10-数据集上的图像分类实验"><span class="toc-text">在 CIFAR-10 数据集上的图像分类实验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#enas-的重要性"><span class="toc-text">ENAS 的重要性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关工作和讨论"><span class="toc-text">相关工作和讨论</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#english"><span class="toc-text">English</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#designing-recurrent-cells"><span class="toc-text">Designing Recurrent Cells</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#training-enas-and-deriving-architectures"><span class="toc-text">Training ENAS and Deriving Architectures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#designing-convolutional-networks"><span class="toc-text">Designing Convolutional Networks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#designing-convolutional-cells"><span class="toc-text">Designing Convolutional Cells</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#experiments"><span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#language-model-with-penn-treebank"><span class="toc-text">Language Model with Penn Treebank</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#image-classification-on-cifar-10"><span class="toc-text">Image Classification on CIFAR-10</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-importance-of-enas"><span class="toc-text">The Importance of ENAS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#related-work-and-discussions"><span class="toc-text">Related Work and Discussions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#conclusion"><span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+            <p>(ICML 2018) Efficient Neural Architecture Search via Parameter Sharing</p>
+<p>Paper: <a href="https://arxiv.org/abs/1802.03268" class="uri" target="_blank" rel="noopener">https://arxiv.org/abs/1802.03268</a></p>
+<p>Code: <a href="https://github.com/melodyguan/enas" class="uri" target="_blank" rel="noopener">https://github.com/melodyguan/enas</a></p>
+<a id="more"></a>
+<p>我们提出了高效的神经架构搜索（ENAS），一种快速且廉价的自动模型设计方法。在 ENAS 中，有一个控制器通过在一个大型计算图中搜索一个最优的子图以学习发现最优神经网络架构的方法。控制器采用策略梯度进行训练，以选择最大化验证集期望奖励的子图。同时，和所选子图对应的模型将进行训练以最小化标准交叉熵损失。由于子模型之间的参数共享，ENAS 的速度很快：它只需要使用少得多的 GPU 运算时间就能达到比当前的自动化模型设计方法好很多的经验性能，尤其是，其计算成本只有标准的神经架构搜索（NAS）的千分之一。</p>
+<p>We propose Efficient Neural Architecture Search (ENAS), a fast and inexpensive approach for automatic model design. In ENAS, a controller discovers neural network architectures by searching for an optimal subgraph within a large computational graph. The controller is trained with policy gradient to select a subgraph that maximizes the expected reward on a validation set. Meanwhile the model corresponding to the selected subgraph is trained to minimize a canonical cross entropy loss. Sharing parameters among child models allows ENAS to deliver strong empirical performances, while using much fewer GPUhours than existing automatic model design approaches, and notably, 1000x less expensive than standard Neural Architecture Search.</p>
+<h1 id="中文">中文</h1>
+<h2 id="简介">简介</h2>
+<p>本文研究做出的主要贡献是通过强制所有子模型共享权重而提升了 NAS 的效率。</p>
+<p>重要的是，在本研究所有使用单个 Nvidia GTX 1080Ti GPU 的实验中，搜索架构的时间都少于 16 小时。相较于 NAS，GPU 运算时间缩短了 1000 倍以上。</p>
+<h2 id="方法">方法</h2>
+<p>ENAS 思想的核心是观察到 NAS 最终迭代的所有图可以看作更大图的子图。换句话说，我们可以使用单个有向无环图（DAG）来表征 NAS 的搜索空间。</p>
+<h3 id="设计循环单元">设计循环单元</h3>
+<p>为了设计循环单元，作者使用了有 N 个结点的有向无环图（DAG），其中每个节点代表局部运算，而每条边代表 N 个节点中的信息流。</p>
+<p>ENAS 的控制器是一个 RNN，它会控制：</p>
+<ol type="1">
+<li><p>哪一条边处于激活状态</p></li>
+<li><p>在 DAG 中的每一个结点会执行哪些运算</p></li>
+</ol>
+<p><img src="figure1.png"></p>
+<p>图 1：搜索空间中带有四个计算节点的循环单元案例。左图为对应循环单元的计算 DAG，其中红色的边代表图中的信息流。中间为循环单元。右图为 RNN 控制器的输出结果，它将会生成中间的循环单元和左边的 DAG。注意节点 3 和 4 永远不会被 RNN 采样，所以它们结果是平均值，且可以作为单元的输出。</p>
+<h3 id="训练-enas-及衍生架构">训练 ENAS 及衍生架构</h3>
+<p>我们的控制器网络是一个有 100 个隐藏单元的LSTM。</p>
+<p>在 ENAS 中，有两组可学习的参数：控制器 LSTM 的参数，由 <span class="math inline">\(\theta\)</span> 表示，以及子模型的共享参数，由 <span class="math inline">\(\omega\)</span> 表示。</p>
+<p>第一阶段训练 <span class="math inline">\(\omega\)</span>，子模型的共享参数，通过训练数据集训练一个完整的 pass。</p>
+<p>第二阶段训练控制器 LSTM 的参数 <span class="math inline">\(\theta\)</span>，固定步数，在我们的实验中通常设置为 2000。</p>
+<p><strong>训练子模型的共享参数 <span class="math inline">\(\omega\)</span></strong></p>
+<p>在此步骤中，我们修复控制器的策略 <span class="math inline">\(\pi(m; \theta)\)</span> 并在 <span class="math inline">\(\omega\)</span> 上执行随机梯度下降（SGD）最小化预期损失函数（标准交叉熵损失）。使用蒙特卡洛估计来计算梯度。</p>
+<p><strong>训练控制器参数 <span class="math inline">\(\theta\)</span></strong></p>
+<p>在此步骤中，我们修复 <span class="math inline">\(\omega\)</span> 并更新策略参数 <span class="math inline">\(\theta\)</span>，旨在最大化预期的奖励。使用 REINFORCE 计算梯度。</p>
+<p><strong>推导架构</strong></p>
+<p>我们首先从训练好的策略 <span class="math inline">\(\pi(m; \theta)\)</span> 中抽取几个模型。对于每个采样模型，我们从验证集中采样的单个小批量上计算其奖励。然后我们只采用奖励最高的模型从头开始重新训练。</p>
+<h3 id="设计卷积网络">设计卷积网络</h3>
+<p>在卷积网络的搜索空间中，RNN 控制器在每一个决策模块上会制定两组决策：</p>
+<ol type="1">
+<li><p>前一个单元需要连接什么；</p></li>
+<li><p>它需要什么样的运算过程。</p></li>
+</ol>
+<p>这些决策共同构建了卷积网络中的不同层级。</p>
+<p><img src="figure3.png"></p>
+<p>图 3：搜索空间中一个循环单元的实例运行，该空间带有 4 个计算节点，表征卷积网络的 4 个层。顶部：控制器 RNN 的输出。左下：对应于网络架构的计算 DAG。红箭头表征激活的计算路径。右下：完整的网络。虚线箭头表征跳跃连接。</p>
+<p>控制器可用的6种操作是：滤波器大小为 3 x 3 和 5 x 5 的卷积，滤波器大小为 3 x 3 和 5 x 5 的深度可分离卷积，核大小为 3 x 3 的最大池化和平均池化。</p>
+<h3 id="设计卷积单元">设计卷积单元</h3>
+<p>本文并没有采用直接设计完整的卷积网络的方法，而是先设计小型的模块然后将模块连接以构建完整的网络。图 4 展示了这种设计的例子，其中设计了卷积单元和 reduction cell。</p>
+<p><img src="figure4.png"></p>
+<p>图 4：连接卷积单元和 reduction 单元，以构建完整的网络。</p>
+<p>5 个可用的操作是：identity，核大小为 3 x 3 和 5 x 5 的可分离卷积，核大小为 3 x 3 的平均池化和最大池化。</p>
+<p>还可以从我们讨论的搜索空间中实现缩小单元，简单地通过以下方式：</p>
+<ol type="1">
+<li>从搜索空间中对计算图进行采样</li>
+<li>对所有操作设置步长为 2</li>
+</ol>
+<p>因此，缩小单元减小了其空间维度，为原来的一半。</p>
+<h2 id="实验">实验</h2>
+<h3 id="在-penn-treebank-数据集上训练的语言模型">在 Penn Treebank 数据集上训练的语言模型</h3>
+<p><img src="figure6.png"></p>
+<p>图 6：ENAS 为 Penn Treebank 数据集发现的 RNN 单元。</p>
+<p><img src="table1.png"></p>
+<p>表 1：ENAS 为 Penn Treebank 数据集发现的架构的测试困惑度以及其它的基线结果的比较。（缩写说明：RHN 是 Recurrent Highway Network、VD 是 Variational Dropout、WT 是 Weight Tying、ℓ2 是 Weight Penalty、AWD 是 Averaged Weight Drop、MoC 是 Mixture of Contexts、MoS 是 Mixture of Softmaxes。）</p>
+<h3 id="在-cifar-10-数据集上的图像分类实验">在 CIFAR-10 数据集上的图像分类实验</h3>
+<p><img src="table2.png"></p>
+<p>表 2：ENAS 发现的架构在 CIFAR-10 数据集上的分类误差和其它基线结果的对比。在这个表中，第一块展示了 DenseNet，由人类专家设计的当前最佳架构。第二块展示了设计整个网络的方法。最后一块展示了设计模块单元以构建大型模型的技术。</p>
+<p><img src="figure7.png"></p>
+<p>图 7：ENAS 从大型搜索空间中发现的用于图像分类的网络架构。</p>
+<p>ENAS 用了 11.5 个小时来发现合适的卷积单元和 reduction 单元，如图 8 所示。</p>
+<p><img src="figure8.png"></p>
+<p>图 8：ENAS 在微搜索空间中挖掘新的单元。</p>
+<h3 id="enas-的重要性">ENAS 的重要性</h3>
+<h2 id="相关工作和讨论">相关工作和讨论</h2>
+<p>##结论</p>
+<p>在本文中，我们介绍了 ENAS，一种在 GPU 小时数方面加速 NAS 超过1000倍的新方法。ENAS的关键贡献是在搜索体系结构时跨子模型共享参数。</p>
+<h1 id="english">English</h1>
+<h2 id="introduction">Introduction</h2>
+<p>The main contribution of this work is to improve the efficiency of NAS by forcing all child models to share weights to eschew training each child model from scratch to convergence.</p>
+<p>Importantly, in all of our experiments, for which we use a single Nvidia GTX 1080Ti GPU, the search for architectures takes less than 16 hours. Compared to NAS, this is a reduction of GPU-hours by more than 1000x.</p>
+<h2 id="methods">Methods</h2>
+<p>Central to the idea of ENAS is the observation that all of the graphs which NAS ends up iterating over can be viewed as sub-graphs of a larger graph. In other words, we can represent NAS’s search space using a single directed acyclic graph (DAG).</p>
+<h3 id="designing-recurrent-cells">Designing Recurrent Cells</h3>
+<p>To design recurrent cells, we employ a DAG with N nodes, where the nodes represent local computations, and the edges represent the flow of information between the N nodes.</p>
+<p>ENAS’s controller is an RNN that decides:</p>
+<ol type="1">
+<li><p>which edges are activated</p></li>
+<li><p>which computations are performed at each node in the DAG.</p></li>
+</ol>
+<p><img src="figure1.png"></p>
+<p>Figure 1. An example of a recurrent cell in our search space with 4 computational nodes. Left: The computational DAG that corresponds to the recurrent cell. The red edges represent the flow of information in the graph. Middle: The recurrent cell. Right: The outputs of the controller RNN that result in the cell in the middle and the DAG on the left. Note that nodes 3 and 4 are never sampled by the RNN, so their results are averaged and are treated as the cell’s output.</p>
+<h3 id="training-enas-and-deriving-architectures">Training ENAS and Deriving Architectures</h3>
+<p>Our controller network is an LSTM with 100 hidden units.</p>
+<p>In ENAS, there are two sets of learnable parameters: the parameters of the controller LSTM, denoted by <span class="math inline">\(\theta\)</span>, and the shared parameters of the child models, denoted by <span class="math inline">\(\omega\)</span>.</p>
+<p>The first phase trains <span class="math inline">\(\omega\)</span>, the shared parameters of the child models, on a whole pass through the training data set.</p>
+<p>The second phase trains <span class="math inline">\(\theta\)</span>, the parameters of the controller LSTM, for a fixed number of steps, typically set to 2000 in our experiments.</p>
+<p><strong>Training the shared parameters <span class="math inline">\(\omega\)</span> of the child models.</strong></p>
+<p>In this step, we fix the controller’s policy <span class="math inline">\(\pi(m; \theta)\)</span> and perform stochastic gradient descent (SGD) on <span class="math inline">\(\omega\)</span> to minimize the expected loss function (the standard cross-entropy loss). The gradient is computed using the Monte Carlo estimate.</p>
+<p><strong>Training the controller parameters <span class="math inline">\(\theta\)</span>.</strong></p>
+<p>In this step, we fix <span class="math inline">\(\omega\)</span> and update the policy parameters <span class="math inline">\(\theta\)</span>, aiming to maximize the expected reward. The gradient is computed using REINFORCE.</p>
+<p><strong>Deriving Architectures.</strong></p>
+<p>We first sample several models from the trained policy <span class="math inline">\(\pi(m; \theta)\)</span>. For each sampled model, we compute its reward on a single minibatch sampled from the validation set. We then take only the model with the highest reward to re-train from scratch.</p>
+<h3 id="designing-convolutional-networks">Designing Convolutional Networks</h3>
+<p>In the search space for convolutional models, the controller RNN also samples two sets of decisions at each decision block:</p>
+<ol type="1">
+<li><p>what previous nodes to connect to</p></li>
+<li><p>what computation operation to use.</p></li>
+</ol>
+<p>These decisions construct a layer in the convolutional model.</p>
+<p><img src="figure3.png"></p>
+<p>Figure 3. An example run of a recurrent cell in our search space with 4 computational nodes, which represent 4 layers in a convolutional network. Top: The output of the controller RNN. Bot- tom Left: The computational DAG corresponding to the network’s architecture. Red arrows denote the active computational paths. Bottom Right: The complete network. Dotted arrows denote skip connections.</p>
+<p>The 6 operations available for the controller are: convolutions with filter sizes 3 x 3 and 5 x 5, depthwise-separable convolutionswith filter sizes 3 x 3 and 5 x 5, and max pooling and average pooling of kernel size 3 x 3.</p>
+<h3 id="designing-convolutional-cells">Designing Convolutional Cells</h3>
+<p>Rather than designing the entire convolutional network, one can design smaller modules and then connect them together to form a network. Figure 4 illustrates this design, where the convolutional cell and reduction cell architectures are to be designed.</p>
+<p><img src="figure4.png"></p>
+<p>Figure 4. Connecting 3 blocks, each with N convolution cells and 1 reduction cell, to make the final network.</p>
+<p>The 5 available operations are: identity, separable convolution with kernel size 3 x 3 and 5 x 5, and average pooling and max pooling with kernel size 3 x 3.</p>
+<p>A reduction cell can also be realized from the search space we discussed, simply by:</p>
+<ol type="1">
+<li><p>sampling a computational graph from the search space</p></li>
+<li><p>applying all operations with a stride of 2.</p></li>
+</ol>
+<p>A reduction cell thus reduces the spatial dimensions of its input by a factor of 2.</p>
+<h2 id="experiments">Experiments</h2>
+<h3 id="language-model-with-penn-treebank">Language Model with Penn Treebank</h3>
+<p><img src="figure6.png"></p>
+<p>Figure 6. The RNN cell ENAS discovered for Penn Treebank.</p>
+<p><img src="table1.png"></p>
+<p>Table 1. Test perplexity on Penn Treebank of ENAS and other baselines. Abbreviations: RHN is Recurrent Highway Network, VD is Variational Dropout; WT is Weight Tying; ℓ2 is Weight Penalty; AWD is Averaged Weight Drop; MoC is Mixture of Contexts; MoS is Mixture of Softmaxes.</p>
+<h3 id="image-classification-on-cifar-10">Image Classification on CIFAR-10</h3>
+<p><img src="table2.png"></p>
+<p>Table 2. Classification errors of ENAS and baselines on CIFAR-10. In this table, the first block presents DenseNet, one of the state-ofthe- art architectures designed by human experts. The second block presents approaches that design the entire network. The last block presents techniques that design modular cells which are combined to build the final network.</p>
+<p><img src="figure7.png"></p>
+<p>Figure 7. ENAS’s discovered network from the macro search space for image classification.</p>
+<p>ENAS takes 11.5 hours to discover the convolution cell and the reduction cell, which are visualized in Figure 8.</p>
+<p><img src="figure8.png"></p>
+<p>Figure 8. ENAS cells discovered in the micro search space.</p>
+<h3 id="the-importance-of-enas">The Importance of ENAS</h3>
+<h2 id="related-work-and-discussions">Related Work and Discussions</h2>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this paper, we presented ENAS, a novel method that speeds up NAS by more than 1000x, in terms of GPU hours. ENAS’s key contribution is the sharing of parameters across child models during the search for architectures.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/04/16/2019_04_16_TT100K/"  data-tooltip="TT100K">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/10/29/2018_10_29_NAS/" data-tooltip="NAS">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/04/16/2019_04_16_TT100K/"  data-tooltip="TT100K">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/10/29/2018_10_29_NAS/" data-tooltip="NAS">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2018/10/31/2018_10_31_ENAS/';
+                 
+                    this.page.identifier = '2018/10/31/2018_10_31_ENAS/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

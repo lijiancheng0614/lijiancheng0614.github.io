@@ -1,0 +1,3143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>TT100K - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="(CVPR 2016) Traffic-Sign Detection and Classification in the Wild Paper: https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Zhu_Traffic-Sign_Detection_and_CVPR_2016_paper.pdf Page: http">
+<meta name="keywords" content="Computer Vision,Deep Learning,Paper">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="TT100K">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="(CVPR 2016) Traffic-Sign Detection and Classification in the Wild Paper: https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Zhu_Traffic-Sign_Detection_and_CVPR_2016_paper.pdf Page: http">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i6.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i7.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i8.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i9.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i10.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i11.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i12.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i13.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i14.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i15.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/il50.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/il60.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/il70.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/il80.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/il90.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/il100.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/il110.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ilx.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/io.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ip.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p6.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p7.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p8.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p9.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p10.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p11.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p12.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p13.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p14.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p15.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p16.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p17.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p18.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p19.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p20.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p21.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p22.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p23.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p24.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p25.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p26.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p27.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p28.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/p29.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pa8.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pa10.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pa12.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pa13.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pa14.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pax.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pb.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pc.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pd.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pe.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pg.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph1.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph2.1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph2.2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph2.4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph2.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph2.6.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph2.8.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph2.9.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph3.2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph3.3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph3.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph3.8.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph4.2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph4.3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph4.4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph4.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph4.8.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph5.3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ph5.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/phx.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl0.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl10.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl15.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl20.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl25.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl30.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl35.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl40.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl50.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl60.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl65.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl70.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl80.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl90.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl100.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl110.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pl120.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/plx.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm1.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm2.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm8.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm10.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm13.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm15.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm20.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm25.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm30.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm35.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm40.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm46.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm50.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pm55.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pmx.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pn.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pn40.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pne.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pnl.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/po.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr10.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr20.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr30.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr40.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr45.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr50.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr60.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr70.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr80.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pr100.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/prx.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/ps.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pw2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pw2.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pw3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pw3.2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pw3.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pw4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pw4.2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pw4.5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/pwx.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w4.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w5.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w6.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w7.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w8.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w9.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w10.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w11.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w12.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w13.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w14.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w15.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w16.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w17.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w18.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w19.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w20.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w21.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w22.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w23.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w24.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w25.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w26.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w27.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w28.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w29.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w30.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w31.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w32.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w33.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w34.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w35.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w36.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w37.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w38.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w39.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w40.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w41.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w42.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w43.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w44.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w45.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w46.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w47.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w48.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w49.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w50.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w51.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w52.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w53.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w54.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w55.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w56.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w57.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w58.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w59.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w60.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w61.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w62.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w63.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w64.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w65.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w66.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/w67.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/wo.png">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.815Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TT100K">
+<meta name="twitter:description" content="(CVPR 2016) Traffic-Sign Detection and Classification in the Wild Paper: https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Zhu_Traffic-Sign_Detection_and_CVPR_2016_paper.pdf Page: http">
+<meta name="twitter:image" content="http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/signs/i1.png">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="https://cg.cs.tsinghua.edu.cn/traffic-sign/images/index/u18.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://cg.cs.tsinghua.edu.cn/traffic-sign/images/index/u18.jpg" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            TT100K
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2019-04-16T00:00:00+08:00">
+	
+		    Apr 16, 2019
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>, <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/Paper/">Paper</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中文"><span class="toc-text">中文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验"><span class="toc-text">实验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关工作和讨论"><span class="toc-text">相关工作和讨论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-text">结论</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#english"><span class="toc-text">English</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#related-work"><span class="toc-text">Related work</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#traffic-sign-classification"><span class="toc-text">Traffic Sign Classification</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#object-detection-by-cnns"><span class="toc-text">Object Detection by CNNs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#benchmark"><span class="toc-text">Benchmark</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#data-collection"><span class="toc-text">Data Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data-annotation"><span class="toc-text">Data Annotation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dataset-statistics"><span class="toc-text">Dataset Statistics</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#neural-network"><span class="toc-text">Neural Network</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#architecture"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#training"><span class="toc-text">Training</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#results"><span class="toc-text">Results</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#detection"><span class="toc-text">Detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#simultaneous-detection-and-classification"><span class="toc-text">Simultaneous detection and classification</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#conclusions"><span class="toc-text">Conclusions</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据分析-data-analysis"><span class="toc-text">数据分析 Data Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#train"><span class="toc-text">train</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#test"><span class="toc-text">test</span></a></li></ol></li></ol></li></ol>
+            <p>(CVPR 2016) Traffic-Sign Detection and Classification in the Wild</p>
+<p>Paper: <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Zhu_Traffic-Sign_Detection_and_CVPR_2016_paper.pdf" class="uri" target="_blank" rel="noopener">https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Zhu_Traffic-Sign_Detection_and_CVPR_2016_paper.pdf</a></p>
+<p>Page: <a href="https://cg.cs.tsinghua.edu.cn/traffic-sign/" class="uri" target="_blank" rel="noopener">https://cg.cs.tsinghua.edu.cn/traffic-sign/</a></p>
+<p>Code: <a href="http://cg.cs.tsinghua.edu.cn/traffic-sign/data_model_code/code.zip" class="uri" target="_blank" rel="noopener">http://cg.cs.tsinghua.edu.cn/traffic-sign/data_model_code/code.zip</a></p>
+<a id="more"></a>
+<p>我们做了两个贡献：</p>
+<ol type="1">
+<li><p>我们从 10 万张腾讯街景全景图中创建了一个大型交通标志基准，超越了之前的基准。 它提供包含 30000 个交通标志实例的 100000 张图像。 这些图像涵盖了照度和天气条件的巨大变化。基准测试中的每个交通标志都标注了类别标签、边界框和像素掩码。 我们将此基准称为 Tsinghua-Tencent 100K。</p></li>
+<li><p>我们演示了一个强大的端到端卷积神经网络（CNN）如何同时检测和分类交通标志。大多数先前的 CNN 图像处理解决方案针对占据图像的大部分的对象，并且这种网络不能很好地用于仅占据图像的一小部分的目标对象，比如这里的交通标志。实验结果表明了我们网络的稳健性及其对替代方案的优越性。</p></li>
+</ol>
+<p>We make two contributions:</p>
+<ol type="1">
+<li><p>we have created a large traffic-sign benchmark from 100000 Tencent Street View panoramas, going beyond previous benchmarks. It provides 100000 images containing 30000 traffic-sign instances. These images cover large variations in illuminance and weather conditions. Each traffic-sign in the benchmark is annotated with a class label, its bounding box and pixel mask. We call this benchmark Tsinghua-Tencent 100K.</p></li>
+<li><p>we demonstrate how a robust end-to-end convolutional neural network (CNN) can simultaneously detect and classify traffic-signs. Most previous CNN image processing solutions target objects that occupy a large proportion of an image, and such networks do not work well for target objects occupying only a small fraction of an image like the traffic-signs here. Experimental results show the robustness of our network and its superiority to alternatives.</p></li>
+</ol>
+<h1 id="中文">中文</h1>
+<h2 id="简介">简介</h2>
+<h2 id="实验">实验</h2>
+<h2 id="相关工作和讨论">相关工作和讨论</h2>
+<h2 id="结论">结论</h2>
+<h1 id="english">English</h1>
+<h2 id="introduction">Introduction</h2>
+<h2 id="related-work">Related work</h2>
+<h3 id="traffic-sign-classification">Traffic Sign Classification</h3>
+<h3 id="object-detection-by-cnns">Object Detection by CNNs</h3>
+<h2 id="benchmark">Benchmark</h2>
+<h3 id="data-collection">Data Collection</h3>
+<h3 id="data-annotation">Data Annotation</h3>
+<h3 id="dataset-statistics">Dataset Statistics</h3>
+<h2 id="neural-network">Neural Network</h2>
+<h3 id="architecture">Architecture</h3>
+<h3 id="training">Training</h3>
+<h2 id="results">Results</h2>
+<h3 id="detection">Detection</h3>
+<h3 id="simultaneous-detection-and-classification">Simultaneous detection and classification</h3>
+<h2 id="conclusions">Conclusions</h2>
+<h1 id="数据分析-data-analysis">数据分析 Data Analysis</h1>
+<p>num_classes: 222 (0 background + 221 traffic signs)</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><img src="signs/i1.png"></th>
+<th><img src="signs/i2.png"></th>
+<th><img src="signs/i3.png"></th>
+<th><img src="signs/i4.png"></th>
+<th><img src="signs/i5.png"></th>
+<th><img src="signs/i6.png"></th>
+<th><img src="signs/i7.png"></th>
+<th><img src="signs/i8.png"></th>
+<th><img src="signs/i9.png"></th>
+<th><img src="signs/i10.png"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 i1</td>
+<td>2 i2</td>
+<td>3 i3</td>
+<td>4 i4</td>
+<td>5 i5</td>
+<td>6 i6</td>
+<td>7 i7</td>
+<td>8 i8</td>
+<td>9 i9</td>
+<td>10 i10</td>
+</tr>
+<tr class="even">
+<td><img src="signs/i11.png"></td>
+<td><img src="signs/i12.png"></td>
+<td><img src="signs/i13.png"></td>
+<td><img src="signs/i14.png"></td>
+<td><img src="signs/i15.png"></td>
+<td><img src="signs/il50.png"></td>
+<td><img src="signs/il60.png"></td>
+<td><img src="signs/il70.png"></td>
+<td><img src="signs/il80.png"></td>
+<td><img src="signs/il90.png"></td>
+</tr>
+<tr class="odd">
+<td>11 i11</td>
+<td>12 i12</td>
+<td>13 i13</td>
+<td>14 i14</td>
+<td>15 i15</td>
+<td>16 il50</td>
+<td>17 il60</td>
+<td>18 il70</td>
+<td>19 il80</td>
+<td>20 il90</td>
+</tr>
+<tr class="even">
+<td><img src="signs/il100.png"></td>
+<td><img src="signs/il110.png"></td>
+<td><img src="signs/ilx.png"></td>
+<td><img src="signs/io.png"></td>
+<td><img src="signs/ip.png"></td>
+<td><img src="signs/p1.png"></td>
+<td><img src="signs/p2.png"></td>
+<td><img src="signs/p3.png"></td>
+<td><img src="signs/p4.png"></td>
+<td><img src="signs/p5.png"></td>
+</tr>
+<tr class="odd">
+<td>21 il100</td>
+<td>22 il110</td>
+<td>23 ilx</td>
+<td>24 io</td>
+<td>25 ip</td>
+<td>26 p1</td>
+<td>27 p2</td>
+<td>28 p3</td>
+<td>29 p4</td>
+<td>30 p5</td>
+</tr>
+<tr class="even">
+<td><img src="signs/p6.png"></td>
+<td><img src="signs/p7.png"></td>
+<td><img src="signs/p8.png"></td>
+<td><img src="signs/p9.png"></td>
+<td><img src="signs/p10.png"></td>
+<td><img src="signs/p11.png"></td>
+<td><img src="signs/p12.png"></td>
+<td><img src="signs/p13.png"></td>
+<td><img src="signs/p14.png"></td>
+<td><img src="signs/p15.png"></td>
+</tr>
+<tr class="odd">
+<td>31 p6</td>
+<td>32 p7</td>
+<td>33 p8</td>
+<td>34 p9</td>
+<td>35 p10</td>
+<td>36 p11</td>
+<td>37 p12</td>
+<td>38 p13</td>
+<td>39 p14</td>
+<td>40 p15</td>
+</tr>
+<tr class="even">
+<td><img src="signs/p16.png"></td>
+<td><img src="signs/p17.png"></td>
+<td><img src="signs/p18.png"></td>
+<td><img src="signs/p19.png"></td>
+<td><img src="signs/p20.png"></td>
+<td><img src="signs/p21.png"></td>
+<td><img src="signs/p22.png"></td>
+<td><img src="signs/p23.png"></td>
+<td><img src="signs/p24.png"></td>
+<td><img src="signs/p25.png"></td>
+</tr>
+<tr class="odd">
+<td>41 p16</td>
+<td>42 p17</td>
+<td>43 p18</td>
+<td>44 p19</td>
+<td>45 p20</td>
+<td>46 p21</td>
+<td>47 p22</td>
+<td>48 p23</td>
+<td>49 p24</td>
+<td>50 p25</td>
+</tr>
+<tr class="even">
+<td><img src="signs/p26.png"></td>
+<td><img src="signs/p27.png"></td>
+<td><img src="signs/p28.png"></td>
+<td><img src="signs/p29.png"></td>
+<td><img src="signs/pa8.png"></td>
+<td><img src="signs/pa10.png"></td>
+<td><img src="signs/pa12.png"></td>
+<td><img src="signs/pa13.png"></td>
+<td><img src="signs/pa14.png"></td>
+<td><img src="signs/pax.png"></td>
+</tr>
+<tr class="odd">
+<td>51 p26</td>
+<td>52 p27</td>
+<td>53 p28</td>
+<td>54 p29</td>
+<td>55 pa8</td>
+<td>56 pa10</td>
+<td>57 pa12</td>
+<td>58 pa13</td>
+<td>59 pa14</td>
+<td>60 pax</td>
+</tr>
+<tr class="even">
+<td><img src="signs/pb.png"></td>
+<td><img src="signs/pc.png"></td>
+<td><img src="signs/pd.png"></td>
+<td><img src="signs/pe.png"></td>
+<td><img src="signs/pg.png"></td>
+<td><img src="signs/ph1.5.png"></td>
+<td><img src="signs/ph2.png"></td>
+<td><img src="signs/ph2.1.png"></td>
+<td><img src="signs/ph2.2.png"></td>
+<td><img src="signs/ph2.4.png"></td>
+</tr>
+<tr class="odd">
+<td>61 pb</td>
+<td>62 pc</td>
+<td>63 pd</td>
+<td>64 pe</td>
+<td>65 pg</td>
+<td>66 ph1.5</td>
+<td>67 ph2</td>
+<td>68 ph2.1</td>
+<td>69 ph2.2</td>
+<td>70 ph2.4</td>
+</tr>
+<tr class="even">
+<td><img src="signs/ph2.5.png"></td>
+<td><img src="signs/ph2.6.png"></td>
+<td><img src="signs/ph2.8.png"></td>
+<td><img src="signs/ph2.9.png"></td>
+<td><img src="signs/ph3.png"></td>
+<td><img src="signs/ph3.2.png"></td>
+<td><img src="signs/ph3.3.png"></td>
+<td><img src="signs/ph3.5.png"></td>
+<td><img src="signs/ph3.8.png"></td>
+<td><img src="signs/ph4.png"></td>
+</tr>
+<tr class="odd">
+<td>71 ph2.5</td>
+<td>72 ph2.6</td>
+<td>73 ph2.8</td>
+<td>74 ph2.9</td>
+<td>75 ph3</td>
+<td>76 ph3.2</td>
+<td>77 ph3.3</td>
+<td>78 ph3.5</td>
+<td>79 ph3.8</td>
+<td>80 ph4</td>
+</tr>
+<tr class="even">
+<td><img src="signs/ph4.2.png"></td>
+<td><img src="signs/ph4.3.png"></td>
+<td><img src="signs/ph4.4.png"></td>
+<td><img src="signs/ph4.5.png"></td>
+<td><img src="signs/ph4.8.png"></td>
+<td><img src="signs/ph5.png"></td>
+<td><img src="signs/ph5.3.png"></td>
+<td><img src="signs/ph5.5.png"></td>
+<td><img src="signs/phx.png"></td>
+<td><img src="signs/pl0.png"></td>
+</tr>
+<tr class="odd">
+<td>81 ph4.2</td>
+<td>82 ph4.3</td>
+<td>83 ph4.4</td>
+<td>84 ph4.5</td>
+<td>85 ph4.8</td>
+<td>86 ph5</td>
+<td>87 ph5.3</td>
+<td>88 ph5.5</td>
+<td>89 phx</td>
+<td>90 pl0</td>
+</tr>
+<tr class="even">
+<td><img src="signs/pl3.png"></td>
+<td><img src="signs/pl4.png"></td>
+<td><img src="signs/pl5.png"></td>
+<td><img src="signs/pl10.png"></td>
+<td><img src="signs/pl15.png"></td>
+<td><img src="signs/pl20.png"></td>
+<td><img src="signs/pl25.png"></td>
+<td><img src="signs/pl30.png"></td>
+<td><img src="signs/pl35.png"></td>
+<td><img src="signs/pl40.png"></td>
+</tr>
+<tr class="odd">
+<td>91 pl3</td>
+<td>92 pl4</td>
+<td>93 pl5</td>
+<td>94 pl10</td>
+<td>95 pl15</td>
+<td>96 pl20</td>
+<td>97 pl25</td>
+<td>98 pl30</td>
+<td>99 pl35</td>
+<td>100 pl40</td>
+</tr>
+<tr class="even">
+<td><img src="signs/pl50.png"></td>
+<td><img src="signs/pl60.png"></td>
+<td><img src="signs/pl65.png"></td>
+<td><img src="signs/pl70.png"></td>
+<td><img src="signs/pl80.png"></td>
+<td><img src="signs/pl90.png"></td>
+<td><img src="signs/pl100.png"></td>
+<td><img src="signs/pl110.png"></td>
+<td><img src="signs/pl120.png"></td>
+<td><img src="signs/plx.png"></td>
+</tr>
+<tr class="odd">
+<td>101 pl50</td>
+<td>102 pl60</td>
+<td>103 pl65</td>
+<td>104 pl70</td>
+<td>105 pl80</td>
+<td>106 pl90</td>
+<td>107 pl100</td>
+<td>108 pl110</td>
+<td>109 pl120</td>
+<td>110 plx</td>
+</tr>
+<tr class="even">
+<td><img src="signs/pm1.5.png"></td>
+<td><img src="signs/pm2.png"></td>
+<td><img src="signs/pm2.5.png"></td>
+<td><img src="signs/pm5.png"></td>
+<td><img src="signs/pm8.png"></td>
+<td><img src="signs/pm10.png"></td>
+<td><img src="signs/pm13.png"></td>
+<td><img src="signs/pm15.png"></td>
+<td><img src="signs/pm20.png"></td>
+<td><img src="signs/pm25.png"></td>
+</tr>
+<tr class="odd">
+<td>111 pm1.5</td>
+<td>112 pm2</td>
+<td>113 pm2.5</td>
+<td>114 pm5</td>
+<td>115 pm8</td>
+<td>116 pm10</td>
+<td>117 pm13</td>
+<td>118 pm15</td>
+<td>119 pm20</td>
+<td>120 pm25</td>
+</tr>
+<tr class="even">
+<td><img src="signs/pm30.png"></td>
+<td><img src="signs/pm35.png"></td>
+<td><img src="signs/pm40.png"></td>
+<td><img src="signs/pm46.png"></td>
+<td><img src="signs/pm50.png"></td>
+<td><img src="signs/pm55.png"></td>
+<td><img src="signs/pmx.png"></td>
+<td><img src="signs/pn.png"></td>
+<td><img src="signs/pn40.png"></td>
+<td><img src="signs/pne.png"></td>
+</tr>
+<tr class="odd">
+<td>121 pm30</td>
+<td>122 pm35</td>
+<td>123 pm40</td>
+<td>124 pm46</td>
+<td>125 pm50</td>
+<td>126 pm55</td>
+<td>127 pmx</td>
+<td>128 pn</td>
+<td>129 pn40</td>
+<td>130 pne</td>
+</tr>
+<tr class="even">
+<td><img src="signs/pnl.png"></td>
+<td><img src="signs/po.png"></td>
+<td><img src="signs/pr10.png"></td>
+<td><img src="signs/pr20.png"></td>
+<td><img src="signs/pr30.png"></td>
+<td><img src="signs/pr40.png"></td>
+<td><img src="signs/pr45.png"></td>
+<td><img src="signs/pr50.png"></td>
+<td><img src="signs/pr60.png"></td>
+<td><img src="signs/pr70.png"></td>
+</tr>
+<tr class="odd">
+<td>131 pnl</td>
+<td>132 po</td>
+<td>133 pr10</td>
+<td>134 pr20</td>
+<td>135 pr30</td>
+<td>136 pr40</td>
+<td>137 pr45</td>
+<td>138 pr50</td>
+<td>139 pr60</td>
+<td>140 pr70</td>
+</tr>
+<tr class="even">
+<td><img src="signs/pr80.png"></td>
+<td><img src="signs/pr100.png"></td>
+<td><img src="signs/prx.png"></td>
+<td><img src="signs/ps.png"></td>
+<td><img src="signs/pw2.png"></td>
+<td><img src="signs/pw2.5.png"></td>
+<td><img src="signs/pw3.png"></td>
+<td><img src="signs/pw3.2.png"></td>
+<td><img src="signs/pw3.5.png"></td>
+<td><img src="signs/pw4.png"></td>
+</tr>
+<tr class="odd">
+<td>141 pr80</td>
+<td>142 pr100</td>
+<td>143 prx</td>
+<td>144 ps</td>
+<td>145 pw2</td>
+<td>146 pw2.5</td>
+<td>147 pw3</td>
+<td>148 pw3.2</td>
+<td>149 pw3.5</td>
+<td>150 pw4</td>
+</tr>
+<tr class="even">
+<td><img src="signs/pw4.2.png"></td>
+<td><img src="signs/pw4.5.png"></td>
+<td><img src="signs/pwx.png"></td>
+<td><img src="signs/w1.png"></td>
+<td><img src="signs/w2.png"></td>
+<td><img src="signs/w3.png"></td>
+<td><img src="signs/w4.png"></td>
+<td><img src="signs/w5.png"></td>
+<td><img src="signs/w6.png"></td>
+<td><img src="signs/w7.png"></td>
+</tr>
+<tr class="odd">
+<td>151 pw4.2</td>
+<td>152 pw4.5</td>
+<td>153 pwx</td>
+<td>154 w1</td>
+<td>155 w2</td>
+<td>156 w3</td>
+<td>157 w4</td>
+<td>158 w5</td>
+<td>159 w6</td>
+<td>160 w7</td>
+</tr>
+<tr class="even">
+<td><img src="signs/w8.png"></td>
+<td><img src="signs/w9.png"></td>
+<td><img src="signs/w10.png"></td>
+<td><img src="signs/w11.png"></td>
+<td><img src="signs/w12.png"></td>
+<td><img src="signs/w13.png"></td>
+<td><img src="signs/w14.png"></td>
+<td><img src="signs/w15.png"></td>
+<td><img src="signs/w16.png"></td>
+<td><img src="signs/w17.png"></td>
+</tr>
+<tr class="odd">
+<td>161 w8</td>
+<td>162 w9</td>
+<td>163 w10</td>
+<td>164 w11</td>
+<td>165 w12</td>
+<td>166 w13</td>
+<td>167 w14</td>
+<td>168 w15</td>
+<td>169 w16</td>
+<td>170 w17</td>
+</tr>
+<tr class="even">
+<td><img src="signs/w18.png"></td>
+<td><img src="signs/w19.png"></td>
+<td><img src="signs/w20.png"></td>
+<td><img src="signs/w21.png"></td>
+<td><img src="signs/w22.png"></td>
+<td><img src="signs/w23.png"></td>
+<td><img src="signs/w24.png"></td>
+<td><img src="signs/w25.png"></td>
+<td><img src="signs/w26.png"></td>
+<td><img src="signs/w27.png"></td>
+</tr>
+<tr class="odd">
+<td>171 w18</td>
+<td>172 w19</td>
+<td>173 w20</td>
+<td>174 w21</td>
+<td>175 w22</td>
+<td>176 w23</td>
+<td>177 w24</td>
+<td>178 w25</td>
+<td>179 w26</td>
+<td>180 w27</td>
+</tr>
+<tr class="even">
+<td><img src="signs/w28.png"></td>
+<td><img src="signs/w29.png"></td>
+<td><img src="signs/w30.png"></td>
+<td><img src="signs/w31.png"></td>
+<td><img src="signs/w32.png"></td>
+<td><img src="signs/w33.png"></td>
+<td><img src="signs/w34.png"></td>
+<td><img src="signs/w35.png"></td>
+<td><img src="signs/w36.png"></td>
+<td><img src="signs/w37.png"></td>
+</tr>
+<tr class="odd">
+<td>181 w28</td>
+<td>182 w29</td>
+<td>183 w30</td>
+<td>184 w31</td>
+<td>185 w32</td>
+<td>186 w33</td>
+<td>187 w34</td>
+<td>188 w35</td>
+<td>189 w36</td>
+<td>190 w37</td>
+</tr>
+<tr class="even">
+<td><img src="signs/w38.png"></td>
+<td><img src="signs/w39.png"></td>
+<td><img src="signs/w40.png"></td>
+<td><img src="signs/w41.png"></td>
+<td><img src="signs/w42.png"></td>
+<td><img src="signs/w43.png"></td>
+<td><img src="signs/w44.png"></td>
+<td><img src="signs/w45.png"></td>
+<td><img src="signs/w46.png"></td>
+<td><img src="signs/w47.png"></td>
+</tr>
+<tr class="odd">
+<td>191 w38</td>
+<td>192 w39</td>
+<td>193 w40</td>
+<td>194 w41</td>
+<td>195 w42</td>
+<td>196 w43</td>
+<td>197 w44</td>
+<td>198 w45</td>
+<td>199 w46</td>
+<td>200 w47</td>
+</tr>
+<tr class="even">
+<td><img src="signs/w48.png"></td>
+<td><img src="signs/w49.png"></td>
+<td><img src="signs/w50.png"></td>
+<td><img src="signs/w51.png"></td>
+<td><img src="signs/w52.png"></td>
+<td><img src="signs/w53.png"></td>
+<td><img src="signs/w54.png"></td>
+<td><img src="signs/w55.png"></td>
+<td><img src="signs/w56.png"></td>
+<td><img src="signs/w57.png"></td>
+</tr>
+<tr class="odd">
+<td>201 w48</td>
+<td>202 w49</td>
+<td>203 w50</td>
+<td>204 w51</td>
+<td>205 w52</td>
+<td>206 w53</td>
+<td>207 w54</td>
+<td>208 w55</td>
+<td>209 w56</td>
+<td>210 w57</td>
+</tr>
+<tr class="even">
+<td><img src="signs/w58.png"></td>
+<td><img src="signs/w59.png"></td>
+<td><img src="signs/w60.png"></td>
+<td><img src="signs/w61.png"></td>
+<td><img src="signs/w62.png"></td>
+<td><img src="signs/w63.png"></td>
+<td><img src="signs/w64.png"></td>
+<td><img src="signs/w65.png"></td>
+<td><img src="signs/w66.png"></td>
+<td><img src="signs/w67.png"></td>
+</tr>
+<tr class="odd">
+<td>211 w58</td>
+<td>212 w59</td>
+<td>213 w60</td>
+<td>214 w61</td>
+<td>215 w62</td>
+<td>216 w63</td>
+<td>217 w64</td>
+<td>218 w65</td>
+<td>219 w66</td>
+<td>220 w67</td>
+</tr>
+<tr class="even">
+<td><img src="signs/wo.png"></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>221 wo</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="train">train</h3>
+<p>train: 7196 samples (train 6105 samples + other 7641 samples - 6550 negative samples)</p>
+<p>7196 images, 18159 bboxes</p>
+<p>count_images_for_bbox:</p>
+<table>
+<thead>
+<tr class="header">
+<th>count_bbox</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>count_images</td>
+<td>2745</td>
+<td>1922</td>
+<td>958</td>
+<td>568</td>
+<td>441</td>
+<td>234</td>
+<td>83</td>
+<td>85</td>
+<td>104</td>
+<td>21</td>
+<td>13</td>
+<td>21</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>count_bbox_min_size:</p>
+<table>
+<thead>
+<tr class="header">
+<th>bbox_min_size</th>
+<th>0</th>
+<th>20</th>
+<th>40</th>
+<th>60</th>
+<th>80</th>
+<th>100</th>
+<th>120</th>
+<th>140</th>
+<th>160</th>
+<th>180</th>
+<th>200</th>
+<th>220</th>
+<th>240</th>
+<th>260</th>
+<th>280</th>
+<th>360</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>count</td>
+<td>144</td>
+<td>7737</td>
+<td>5079</td>
+<td>2531</td>
+<td>1385</td>
+<td>673</td>
+<td>312</td>
+<td>144</td>
+<td>86</td>
+<td>35</td>
+<td>18</td>
+<td>11</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>average bbox_min_size: 42.3916876326</p>
+<p>count_bbox_height_width_ratio:</p>
+<table>
+<thead>
+<tr class="header">
+<th>bbox_height_width_ratio</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>count</td>
+<td>5</td>
+<td>16655</td>
+<td>1353</td>
+<td>116</td>
+<td>19</td>
+<td>9</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>average bbox_height_width_ratio: 1.14734565069</p>
+<p>count_images_for_category_id:</p>
+<table>
+<thead>
+<tr class="header">
+<th>category_id</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+<th>16</th>
+<th>17</th>
+<th>18</th>
+<th>19</th>
+<th>20</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>count_images</td>
+<td>6</td>
+<td>292</td>
+<td>6</td>
+<td>474</td>
+<td>1077</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>54</td>
+<td>1</td>
+<td>12</td>
+<td>13</td>
+<td>4</td>
+<td>3</td>
+<td>15</td>
+<td>254</td>
+<td>9</td>
+<td>176</td>
+<td>57</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>21</td>
+<td>22</td>
+<td>23</td>
+<td>24</td>
+<td>25</td>
+<td>26</td>
+<td>27</td>
+<td>28</td>
+<td>29</td>
+<td>30</td>
+<td>31</td>
+<td>32</td>
+<td>33</td>
+<td>34</td>
+<td>35</td>
+<td>36</td>
+<td>37</td>
+<td>38</td>
+<td>39</td>
+<td>40</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>93</td>
+<td>19</td>
+<td>0</td>
+<td>371</td>
+<td>172</td>
+<td>55</td>
+<td>11</td>
+<td>112</td>
+<td>2</td>
+<td>269</td>
+<td>69</td>
+<td>1</td>
+<td>9</td>
+<td>47</td>
+<td>235</td>
+<td>978</td>
+<td>111</td>
+<td>4</td>
+<td>29</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>41</td>
+<td>42</td>
+<td>43</td>
+<td>44</td>
+<td>45</td>
+<td>46</td>
+<td>47</td>
+<td>48</td>
+<td>49</td>
+<td>50</td>
+<td>51</td>
+<td>52</td>
+<td>53</td>
+<td>54</td>
+<td>55</td>
+<td>56</td>
+<td>57</td>
+<td>58</td>
+<td>59</td>
+<td>60</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>14</td>
+<td>23</td>
+<td>28</td>
+<td>89</td>
+<td>2</td>
+<td>2</td>
+<td>31</td>
+<td>162</td>
+<td>1</td>
+<td>37</td>
+<td>485</td>
+<td>84</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>11</td>
+<td>2</td>
+<td>14</td>
+<td>47</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>61</td>
+<td>62</td>
+<td>63</td>
+<td>64</td>
+<td>65</td>
+<td>66</td>
+<td>67</td>
+<td>68</td>
+<td>69</td>
+<td>70</td>
+<td>71</td>
+<td>72</td>
+<td>73</td>
+<td>74</td>
+<td>75</td>
+<td>76</td>
+<td>77</td>
+<td>78</td>
+<td>79</td>
+<td>80</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>47</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>104</td>
+<td>2</td>
+<td>10</td>
+<td>1</td>
+<td>7</td>
+<td>2</td>
+<td>6</td>
+<td>3</td>
+<td>15</td>
+<td>2</td>
+<td>12</td>
+<td>1</td>
+<td>20</td>
+<td>5</td>
+<td>0</td>
+<td>80</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>81</td>
+<td>82</td>
+<td>83</td>
+<td>84</td>
+<td>85</td>
+<td>86</td>
+<td>87</td>
+<td>88</td>
+<td>89</td>
+<td>90</td>
+<td>91</td>
+<td>92</td>
+<td>93</td>
+<td>94</td>
+<td>95</td>
+<td>96</td>
+<td>97</td>
+<td>98</td>
+<td>99</td>
+<td>100</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>21</td>
+<td>4</td>
+<td>1</td>
+<td>112</td>
+<td>8</td>
+<td>66</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>1</td>
+<td>223</td>
+<td>23</td>
+<td>72</td>
+<td>97</td>
+<td>6</td>
+<td>383</td>
+<td>20</td>
+<td>880</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>101</td>
+<td>102</td>
+<td>103</td>
+<td>104</td>
+<td>105</td>
+<td>106</td>
+<td>107</td>
+<td>108</td>
+<td>109</td>
+<td>110</td>
+<td>111</td>
+<td>112</td>
+<td>113</td>
+<td>114</td>
+<td>115</td>
+<td>116</td>
+<td>117</td>
+<td>118</td>
+<td>119</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>681</td>
+<td>518</td>
+<td>1</td>
+<td>100</td>
+<td>542</td>
+<td>44</td>
+<td>269</td>
+<td>39</td>
+<td>159</td>
+<td>0</td>
+<td>2</td>
+<td>5</td>
+<td>0</td>
+<td>13</td>
+<td>8</td>
+<td>47</td>
+<td>2</td>
+<td>25</td>
+<td>105</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>121</td>
+<td>122</td>
+<td>123</td>
+<td>124</td>
+<td>125</td>
+<td>126</td>
+<td>127</td>
+<td>128</td>
+<td>129</td>
+<td>130</td>
+<td>131</td>
+<td>132</td>
+<td>133</td>
+<td>134</td>
+<td>135</td>
+<td>136</td>
+<td>137</td>
+<td>138</td>
+<td>139</td>
+<td>140</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>72</td>
+<td>4</td>
+<td>7</td>
+<td>6</td>
+<td>9</td>
+<td>95</td>
+<td>0</td>
+<td>1934</td>
+<td>1</td>
+<td>1415</td>
+<td>0</td>
+<td>549</td>
+<td>1</td>
+<td>27</td>
+<td>47</td>
+<td>136</td>
+<td>0</td>
+<td>30</td>
+<td>42</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>141</td>
+<td>142</td>
+<td>143</td>
+<td>144</td>
+<td>145</td>
+<td>146</td>
+<td>147</td>
+<td>148</td>
+<td>149</td>
+<td>150</td>
+<td>151</td>
+<td>152</td>
+<td>153</td>
+<td>154</td>
+<td>155</td>
+<td>156</td>
+<td>157</td>
+<td>158</td>
+<td>159</td>
+<td>160</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>9</td>
+<td>2</td>
+<td>0</td>
+<td>62</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>4</td>
+<td>1</td>
+<td>4</td>
+<td>1</td>
+<td>3</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>11</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>161</td>
+<td>162</td>
+<td>163</td>
+<td>164</td>
+<td>165</td>
+<td>166</td>
+<td>167</td>
+<td>168</td>
+<td>169</td>
+<td>170</td>
+<td>171</td>
+<td>172</td>
+<td>173</td>
+<td>174</td>
+<td>175</td>
+<td>176</td>
+<td>177</td>
+<td>178</td>
+<td>179</td>
+<td>180</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>7</td>
+<td>0</td>
+<td>4</td>
+<td>0</td>
+<td>1</td>
+<td>98</td>
+<td>0</td>
+<td>20</td>
+<td>32</td>
+<td>0</td>
+<td>10</td>
+<td>0</td>
+<td>11</td>
+<td>46</td>
+<td>46</td>
+<td>0</td>
+<td>12</td>
+<td>0</td>
+<td>9</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>181</td>
+<td>182</td>
+<td>183</td>
+<td>184</td>
+<td>185</td>
+<td>186</td>
+<td>187</td>
+<td>188</td>
+<td>189</td>
+<td>190</td>
+<td>191</td>
+<td>192</td>
+<td>193</td>
+<td>194</td>
+<td>195</td>
+<td>196</td>
+<td>197</td>
+<td>198</td>
+<td>199</td>
+<td>200</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>0</td>
+<td>0</td>
+<td>72</td>
+<td>3</td>
+<td>66</td>
+<td>0</td>
+<td>12</td>
+<td>2</td>
+<td>0</td>
+<td>4</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>26</td>
+<td>6</td>
+<td>1</td>
+<td>16</td>
+<td>5</td>
+<td>35</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>201</td>
+<td>202</td>
+<td>203</td>
+<td>204</td>
+<td>205</td>
+<td>206</td>
+<td>207</td>
+<td>208</td>
+<td>209</td>
+<td>210</td>
+<td>211</td>
+<td>212</td>
+<td>213</td>
+<td>214</td>
+<td>215</td>
+<td>216</td>
+<td>217</td>
+<td>218</td>
+<td>219</td>
+<td>220</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>109</td>
+<td>0</td>
+<td>252</td>
+<td>49</td>
+<td>124</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>73</td>
+<td>0</td>
+<td>0</td>
+<td>4</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>221</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>60</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>avg 75.1990950226 max 1934 (1) min 0 (46)</p>
+<h3 id="test">test</h3>
+<p>test: 3071 samples</p>
+<p>3071 images, 8190 bboxes</p>
+<p>count_images_for_bbox:</p>
+<table>
+<thead>
+<tr class="header">
+<th>count_bbox</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>18</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>count_images</td>
+<td>1042</td>
+<td>844</td>
+<td>407</td>
+<td>278</td>
+<td>236</td>
+<td>111</td>
+<td>53</td>
+<td>39</td>
+<td>42</td>
+<td>6</td>
+<td>4</td>
+<td>6</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>count_bbox_min_size:</p>
+<table>
+<thead>
+<tr class="header">
+<th>bbox_min_size</th>
+<th>0</th>
+<th>20</th>
+<th>40</th>
+<th>60</th>
+<th>80</th>
+<th>100</th>
+<th>120</th>
+<th>140</th>
+<th>160</th>
+<th>180</th>
+<th>200</th>
+<th>220</th>
+<th>240</th>
+<th>260</th>
+<th>300</th>
+<th>320</th>
+<th>340</th>
+<th>400</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>count</td>
+<td>16</td>
+<td>3440</td>
+<td>2459</td>
+<td>1107</td>
+<td>561</td>
+<td>306</td>
+<td>139</td>
+<td>77</td>
+<td>44</td>
+<td>23</td>
+<td>7</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>average bbox_min_size: 42.8355321502</p>
+<p>count_bbox_height_width_ratio:</p>
+<table>
+<thead>
+<tr class="header">
+<th>bbox_height_width_ratio</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>count</td>
+<td>8</td>
+<td>7402</td>
+<td>699</td>
+<td>69</td>
+<td>10</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>average bbox_height_width_ratio: 1.15697810748</p>
+<p>count_images_for_category_id:</p>
+<table>
+<thead>
+<tr class="header">
+<th>category_id</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+<th>16</th>
+<th>17</th>
+<th>18</th>
+<th>19</th>
+<th>20</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>count_images</td>
+<td>1</td>
+<td>140</td>
+<td>2</td>
+<td>223</td>
+<td>461</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>15</td>
+<td>2</td>
+<td>1</td>
+<td>4</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+<td>103</td>
+<td>5</td>
+<td>84</td>
+<td>17</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>21</td>
+<td>22</td>
+<td>23</td>
+<td>24</td>
+<td>25</td>
+<td>26</td>
+<td>27</td>
+<td>28</td>
+<td>29</td>
+<td>30</td>
+<td>31</td>
+<td>32</td>
+<td>33</td>
+<td>34</td>
+<td>35</td>
+<td>36</td>
+<td>37</td>
+<td>38</td>
+<td>39</td>
+<td>40</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>39</td>
+<td>2</td>
+<td>0</td>
+<td>175</td>
+<td>114</td>
+<td>15</td>
+<td>5</td>
+<td>58</td>
+<td>2</td>
+<td>117</td>
+<td>39</td>
+<td>0</td>
+<td>4</td>
+<td>14</td>
+<td>86</td>
+<td>491</td>
+<td>66</td>
+<td>2</td>
+<td>13</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>41</td>
+<td>42</td>
+<td>43</td>
+<td>44</td>
+<td>45</td>
+<td>46</td>
+<td>47</td>
+<td>48</td>
+<td>49</td>
+<td>50</td>
+<td>51</td>
+<td>52</td>
+<td>53</td>
+<td>54</td>
+<td>55</td>
+<td>56</td>
+<td>57</td>
+<td>58</td>
+<td>59</td>
+<td>60</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>6</td>
+<td>9</td>
+<td>12</td>
+<td>33</td>
+<td>0</td>
+<td>0</td>
+<td>8</td>
+<td>99</td>
+<td>0</td>
+<td>12</td>
+<td>230</td>
+<td>47</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>11</td>
+<td>13</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>61</td>
+<td>62</td>
+<td>63</td>
+<td>64</td>
+<td>65</td>
+<td>66</td>
+<td>67</td>
+<td>68</td>
+<td>69</td>
+<td>70</td>
+<td>71</td>
+<td>72</td>
+<td>73</td>
+<td>74</td>
+<td>75</td>
+<td>76</td>
+<td>77</td>
+<td>78</td>
+<td>79</td>
+<td>80</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>18</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>44</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>5</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>4</td>
+<td>1</td>
+<td>36</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>81</td>
+<td>82</td>
+<td>83</td>
+<td>84</td>
+<td>85</td>
+<td>86</td>
+<td>87</td>
+<td>88</td>
+<td>89</td>
+<td>90</td>
+<td>91</td>
+<td>92</td>
+<td>93</td>
+<td>94</td>
+<td>95</td>
+<td>96</td>
+<td>97</td>
+<td>98</td>
+<td>99</td>
+<td>100</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>8</td>
+<td>2</td>
+<td>0</td>
+<td>55</td>
+<td>3</td>
+<td>30</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>130</td>
+<td>12</td>
+<td>17</td>
+<td>55</td>
+<td>2</td>
+<td>202</td>
+<td>1</td>
+<td>432</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>101</td>
+<td>102</td>
+<td>103</td>
+<td>104</td>
+<td>105</td>
+<td>106</td>
+<td>107</td>
+<td>108</td>
+<td>109</td>
+<td>110</td>
+<td>111</td>
+<td>112</td>
+<td>113</td>
+<td>114</td>
+<td>115</td>
+<td>116</td>
+<td>117</td>
+<td>118</td>
+<td>119</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>338</td>
+<td>262</td>
+<td>0</td>
+<td>44</td>
+<td>259</td>
+<td>3</td>
+<td>124</td>
+<td>3</td>
+<td>79</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>5</td>
+<td>47</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>121</td>
+<td>122</td>
+<td>123</td>
+<td>124</td>
+<td>125</td>
+<td>126</td>
+<td>127</td>
+<td>128</td>
+<td>129</td>
+<td>130</td>
+<td>131</td>
+<td>132</td>
+<td>133</td>
+<td>134</td>
+<td>135</td>
+<td>136</td>
+<td>137</td>
+<td>138</td>
+<td>139</td>
+<td>140</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>31</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>2</td>
+<td>37</td>
+<td>0</td>
+<td>913</td>
+<td>0</td>
+<td>615</td>
+<td>0</td>
+<td>282</td>
+<td>0</td>
+<td>5</td>
+<td>2</td>
+<td>63</td>
+<td>2</td>
+<td>6</td>
+<td>10</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>141</td>
+<td>142</td>
+<td>143</td>
+<td>144</td>
+<td>145</td>
+<td>146</td>
+<td>147</td>
+<td>148</td>
+<td>149</td>
+<td>150</td>
+<td>151</td>
+<td>152</td>
+<td>153</td>
+<td>154</td>
+<td>155</td>
+<td>156</td>
+<td>157</td>
+<td>158</td>
+<td>159</td>
+<td>160</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>13</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>7</td>
+<td>1</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>161</td>
+<td>162</td>
+<td>163</td>
+<td>164</td>
+<td>165</td>
+<td>166</td>
+<td>167</td>
+<td>168</td>
+<td>169</td>
+<td>170</td>
+<td>171</td>
+<td>172</td>
+<td>173</td>
+<td>174</td>
+<td>175</td>
+<td>176</td>
+<td>177</td>
+<td>178</td>
+<td>179</td>
+<td>180</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>31</td>
+<td>0</td>
+<td>2</td>
+<td>3</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>3</td>
+<td>9</td>
+<td>14</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>181</td>
+<td>182</td>
+<td>183</td>
+<td>184</td>
+<td>185</td>
+<td>186</td>
+<td>187</td>
+<td>188</td>
+<td>189</td>
+<td>190</td>
+<td>191</td>
+<td>192</td>
+<td>193</td>
+<td>194</td>
+<td>195</td>
+<td>196</td>
+<td>197</td>
+<td>198</td>
+<td>199</td>
+<td>200</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>1</td>
+<td>0</td>
+<td>20</td>
+<td>0</td>
+<td>33</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>4</td>
+<td>3</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>201</td>
+<td>202</td>
+<td>203</td>
+<td>204</td>
+<td>205</td>
+<td>206</td>
+<td>207</td>
+<td>208</td>
+<td>209</td>
+<td>210</td>
+<td>211</td>
+<td>212</td>
+<td>213</td>
+<td>214</td>
+<td>215</td>
+<td>216</td>
+<td>217</td>
+<td>218</td>
+<td>219</td>
+<td>220</td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>59</td>
+<td>1</td>
+<td>115</td>
+<td>19</td>
+<td>60</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>13</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>category_id</td>
+<td>221</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>count_images</td>
+<td>34</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>avg 33.8280542986 max 913 (1) min 0 (85)</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/07/07/2019_07_07_Quantitative/"  data-tooltip="常用的量化策略及其实现">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/10/31/2018_10_31_ENAS/" data-tooltip="ENAS">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/07/07/2019_07_07_Quantitative/"  data-tooltip="常用的量化策略及其实现">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/10/31/2018_10_31_ENAS/" data-tooltip="ENAS">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2019/04/16/2019_04_16_TT100K/';
+                 
+                    this.page.identifier = '2019/04/16/2019_04_16_TT100K/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

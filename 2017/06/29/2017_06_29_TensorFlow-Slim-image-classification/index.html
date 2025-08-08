@@ -1,0 +1,1050 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>使用TensorFlow-Slim进行图像分类 - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="参考 https://github.com/tensorflow/models/tree/master/research/slim 使用TensorFlow-Slim进行图像分类">
+<meta name="keywords" content="Computer Vision,Deep Learning,TensorFlow">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="使用TensorFlow-Slim进行图像分类">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="参考 https://github.com/tensorflow/models/tree/master/research/slim 使用TensorFlow-Slim进行图像分类">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.803Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用TensorFlow-Slim进行图像分类">
+<meta name="twitter:description" content="参考 https://github.com/tensorflow/models/tree/master/research/slim 使用TensorFlow-Slim进行图像分类">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="https://www.tensorflow.org/images/tf_logo_transp.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://www.tensorflow.org/images/tf_logo_transp.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            使用TensorFlow-Slim进行图像分类
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-06-29T00:00:00+08:00">
+	
+		    Jun 29, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>, <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#准备"><span class="toc-text">准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练"><span class="toc-text">训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#验证"><span class="toc-text">验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li></ol>
+            <p>参考 <a href="https://github.com/tensorflow/models/tree/master/research/slim" class="uri" target="_blank" rel="noopener">https://github.com/tensorflow/models/tree/master/research/slim</a></p>
+<p>使用TensorFlow-Slim进行图像分类</p>
+<a id="more"></a>
+<h2 id="准备">准备</h2>
+<ol type="1">
+<li><p>安装TensorFlow</p>
+<p>参考 <a href="https://www.tensorflow.org/install/" class="uri" target="_blank" rel="noopener">https://www.tensorflow.org/install/</a></p>
+<p>如在Ubuntu下安装TensorFlow with GPU support, python 2.7版本</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.2.0-cp27-none-linux_x86_64.whl</span><br><span class="line">pip install tensorflow_gpu-1.2.0-cp27-none-linux_x86_64.whl</span><br></pre></td></tr></table></figure></p></li>
+<li><p>下载TF-slim图像模型库</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$WORKSPACE</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/tensorflow/models/</span><br></pre></td></tr></table></figure></p></li>
+<li><p>准备数据</p>
+<p>有不少公开数据集，这里以官网提供的<code>Flowers</code>为例。</p>
+<p>官网提供了下载和转换数据的代码，为了理解代码并能使用自己的数据，这里参考官方提供的代码进行修改。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$WORKSPACE</span>/data</span><br><span class="line">wget http://download.tensorflow.org/example_images/flower_photos.tgz</span><br><span class="line">tar zxf flower_photos.tgz</span><br></pre></td></tr></table></figure></p>
+<p>数据集文件夹结构如下：</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">flower_photos</span><br><span class="line">├── daisy</span><br><span class="line">│   ├── 100080576_f52e8ee070_n.jpg</span><br><span class="line">│   └── ...</span><br><span class="line">├── dandelion</span><br><span class="line">├── LICENSE.txt</span><br><span class="line">├── roses</span><br><span class="line">├── sunflowers</span><br><span class="line">└── tulips</span><br></pre></td></tr></table></figure></p>
+<p>由于实际情况中我们自己的数据集并不一定把图片按类别放在不同的文件夹里，故我们生成<code>list.txt</code>来表示图片路径与标签的关系。</p>
+<p>Python代码：</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">class_names_to_ids = &#123;<span class="string">'daisy'</span>: <span class="number">0</span>, <span class="string">'dandelion'</span>: <span class="number">1</span>, <span class="string">'roses'</span>: <span class="number">2</span>, <span class="string">'sunflowers'</span>: <span class="number">3</span>, <span class="string">'tulips'</span>: <span class="number">4</span>&#125;</span><br><span class="line">data_dir = <span class="string">'flower_photos/'</span></span><br><span class="line">output_path = <span class="string">'list.txt'</span></span><br><span class="line"></span><br><span class="line">fd = open(output_path, <span class="string">'w'</span>)</span><br><span class="line"><span class="keyword">for</span> class_name <span class="keyword">in</span> class_names_to_ids.keys():</span><br><span class="line">    images_list = os.listdir(data_dir + class_name)</span><br><span class="line">    <span class="keyword">for</span> image_name <span class="keyword">in</span> images_list:</span><br><span class="line">        fd.write(<span class="string">'&#123;&#125;/&#123;&#125; &#123;&#125;\n'</span>.format(class_name, image_name, class_names_to_ids[class_name]))</span><br><span class="line"></span><br><span class="line">fd.close()</span><br></pre></td></tr></table></figure></p>
+<p>为了方便后期查看label标签，也可以定义<code>labels.txt</code>：</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">daisy</span><br><span class="line">dandelion</span><br><span class="line">roses</span><br><span class="line">sunflowers</span><br><span class="line">tulips</span><br></pre></td></tr></table></figure></p>
+<p>随机生成训练集与验证集：</p>
+<p>Python代码：</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">_NUM_VALIDATION = <span class="number">350</span></span><br><span class="line">_RANDOM_SEED = <span class="number">0</span></span><br><span class="line">list_path = <span class="string">'list.txt'</span></span><br><span class="line">train_list_path = <span class="string">'list_train.txt'</span></span><br><span class="line">val_list_path = <span class="string">'list_val.txt'</span></span><br><span class="line"></span><br><span class="line">fd = open(list_path)</span><br><span class="line">lines = fd.readlines()</span><br><span class="line">fd.close()</span><br><span class="line">random.seed(_RANDOM_SEED)</span><br><span class="line">random.shuffle(lines)</span><br><span class="line"></span><br><span class="line">fd = open(train_list_path, <span class="string">'w'</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> lines[_NUM_VALIDATION:]:</span><br><span class="line">    fd.write(line)</span><br><span class="line"></span><br><span class="line">fd.close()</span><br><span class="line">fd = open(val_list_path, <span class="string">'w'</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> lines[:_NUM_VALIDATION]:</span><br><span class="line">    fd.write(line)</span><br><span class="line"></span><br><span class="line">fd.close()</span><br></pre></td></tr></table></figure></p>
+<p>生成TFRecord数据：</p>
+<p>Python代码：</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.insert(<span class="number">0</span>, <span class="string">'../models/slim/'</span>)</span><br><span class="line"><span class="keyword">from</span> datasets <span class="keyword">import</span> dataset_utils</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert_dataset</span><span class="params">(list_path, data_dir, output_dir, _NUM_SHARDS=<span class="number">5</span>)</span>:</span></span><br><span class="line">    fd = open(list_path)</span><br><span class="line">    lines = [line.split() <span class="keyword">for</span> line <span class="keyword">in</span> fd]</span><br><span class="line">    fd.close()</span><br><span class="line">    num_per_shard = int(math.ceil(len(lines) / float(_NUM_SHARDS)))</span><br><span class="line">    <span class="keyword">with</span> tf.Graph().as_default():</span><br><span class="line">        decode_jpeg_data = tf.placeholder(dtype=tf.string)</span><br><span class="line">        decode_jpeg = tf.image.decode_jpeg(decode_jpeg_data, channels=<span class="number">3</span>)</span><br><span class="line">        <span class="keyword">with</span> tf.Session(<span class="string">''</span>) <span class="keyword">as</span> sess:</span><br><span class="line">            <span class="keyword">for</span> shard_id <span class="keyword">in</span> range(_NUM_SHARDS):</span><br><span class="line">                output_path = os.path.join(output_dir,</span><br><span class="line">                    <span class="string">'data_&#123;:05&#125;-of-&#123;:05&#125;.tfrecord'</span>.format(shard_id, _NUM_SHARDS))</span><br><span class="line">                tfrecord_writer = tf.python_io.TFRecordWriter(output_path)</span><br><span class="line">                start_ndx = shard_id * num_per_shard</span><br><span class="line">                end_ndx = min((shard_id + <span class="number">1</span>) * num_per_shard, len(lines))</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(start_ndx, end_ndx):</span><br><span class="line">                    sys.stdout.write(<span class="string">'\r&gt;&gt; Converting image &#123;&#125;/&#123;&#125; shard &#123;&#125;'</span>.format(</span><br><span class="line">                        i + <span class="number">1</span>, len(lines), shard_id))</span><br><span class="line">                    sys.stdout.flush()</span><br><span class="line">                    image_data = tf.gfile.FastGFile(os.path.join(data_dir, lines[i][<span class="number">0</span>]), <span class="string">'rb'</span>).read()</span><br><span class="line">                    image = sess.run(decode_jpeg, feed_dict=&#123;decode_jpeg_data: image_data&#125;)</span><br><span class="line">                    height, width = image.shape[<span class="number">0</span>], image.shape[<span class="number">1</span>]</span><br><span class="line">                    example = dataset_utils.image_to_tfexample(</span><br><span class="line">                        image_data, <span class="string">b'jpg'</span>, height, width, int(lines[i][<span class="number">1</span>]))</span><br><span class="line">                    tfrecord_writer.write(example.SerializeToString())</span><br><span class="line">                tfrecord_writer.close()</span><br><span class="line">    sys.stdout.write(<span class="string">'\n'</span>)</span><br><span class="line">    sys.stdout.flush()</span><br><span class="line"></span><br><span class="line">os.system(<span class="string">'mkdir -p train'</span>)</span><br><span class="line">convert_dataset(<span class="string">'list_train.txt'</span>, <span class="string">'flower_photos'</span>, <span class="string">'train/'</span>)</span><br><span class="line">os.system(<span class="string">'mkdir -p val'</span>)</span><br><span class="line">convert_dataset(<span class="string">'list_val.txt'</span>, <span class="string">'flower_photos'</span>, <span class="string">'val/'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>得到的文件夹结构如下：</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">data</span><br><span class="line">├── flower_photos</span><br><span class="line">├── labels.txt</span><br><span class="line">├── list_train.txt</span><br><span class="line">├── list.txt</span><br><span class="line">├── list_val.txt</span><br><span class="line">├── train</span><br><span class="line">│   ├── data_00000-of-00005.tfrecord</span><br><span class="line">│   ├── ...</span><br><span class="line">│   └── data_00004-of-00005.tfrecord</span><br><span class="line">└── val</span><br><span class="line">    ├── data_00000-of-00005.tfrecord</span><br><span class="line">    ├── ...</span><br><span class="line">    └── data_00004-of-00005.tfrecord</span><br></pre></td></tr></table></figure></p></li>
+<li><p>（可选）下载模型</p>
+<p>官方提供了不少预训练模型，这里以<code>Inception-ResNet-v2</code>以例。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$WORKSPACE</span>/checkpoints</span><br><span class="line">wget http://download.tensorflow.org/models/inception_resnet_v2_2016_08_30.tar.gz</span><br><span class="line">tar zxf inception_resnet_v2_2016_08_30.tar.gz</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="训练">训练</h2>
+<ol type="1">
+<li><p>读入数据</p>
+<p>官方提供了读入<code>Flowers</code>数据集的代码<code>models/slim/datasets/flowers.py</code>，同样这里也是参考并修改成能读入上面定义的通用数据集。</p>
+<p>把下面代码写入<code>models/slim/datasets/dataset_classification.py</code>。</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">slim = tf.contrib.slim</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_dataset</span><span class="params">(dataset_dir, num_samples, num_classes, labels_to_names_path=None, file_pattern=<span class="string">'*.tfrecord'</span>)</span>:</span></span><br><span class="line">    file_pattern = os.path.join(dataset_dir, file_pattern)</span><br><span class="line">    keys_to_features = &#123;</span><br><span class="line">        <span class="string">'image/encoded'</span>: tf.FixedLenFeature((), tf.string, default_value=<span class="string">''</span>),</span><br><span class="line">        <span class="string">'image/format'</span>: tf.FixedLenFeature((), tf.string, default_value=<span class="string">'jpg'</span>),</span><br><span class="line">        <span class="string">'image/class/label'</span>: tf.FixedLenFeature(</span><br><span class="line">            [], tf.int64, default_value=tf.zeros([], dtype=tf.int64)),</span><br><span class="line">    &#125;</span><br><span class="line">    items_to_handlers = &#123;</span><br><span class="line">        <span class="string">'image'</span>: slim.tfexample_decoder.Image(),</span><br><span class="line">        <span class="string">'label'</span>: slim.tfexample_decoder.Tensor(<span class="string">'image/class/label'</span>),</span><br><span class="line">    &#125;</span><br><span class="line">    decoder = slim.tfexample_decoder.TFExampleDecoder(keys_to_features, items_to_handlers)</span><br><span class="line">    items_to_descriptions = &#123;</span><br><span class="line">        <span class="string">'image'</span>: <span class="string">'A color image of varying size.'</span>,</span><br><span class="line">        <span class="string">'label'</span>: <span class="string">'A single integer between 0 and '</span> + str(num_classes - <span class="number">1</span>),</span><br><span class="line">    &#125;</span><br><span class="line">    labels_to_names = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> labels_to_names_path <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        fd = open(labels_to_names_path)</span><br><span class="line">        labels_to_names = &#123;i : line.strip() <span class="keyword">for</span> i, line <span class="keyword">in</span> enumerate(fd)&#125;</span><br><span class="line">        fd.close()</span><br><span class="line">    <span class="keyword">return</span> slim.dataset.Dataset(</span><br><span class="line">            data_sources=file_pattern,</span><br><span class="line">            reader=tf.TFRecordReader,</span><br><span class="line">            decoder=decoder,</span><br><span class="line">            num_samples=num_samples,</span><br><span class="line">            items_to_descriptions=items_to_descriptions,</span><br><span class="line">            num_classes=num_classes,</span><br><span class="line">            labels_to_names=labels_to_names)</span><br></pre></td></tr></table></figure></p></li>
+<li><p>构建模型</p>
+<p>官方提供了许多模型在<code>models/slim/nets/</code>。</p>
+<p>如需要自定义模型，则参考官方提供的模型并放在对应的文件夹即可。</p></li>
+<li><p>开始训练</p>
+<p>官方提供了训练脚本，如果使用官方的数据读入和处理，可使用以下方式开始训练。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$WORKSPACE</span>/models/slim</span><br><span class="line">CUDA_VISIBLE_DEVICES=<span class="string">"0"</span> python train_image_classifier.py \</span><br><span class="line">    --train_dir=train_logs \</span><br><span class="line">    --dataset_name=flowers \</span><br><span class="line">    --dataset_split_name=train \</span><br><span class="line">    --dataset_dir=../../data/flowers \</span><br><span class="line">    --model_name=inception_resnet_v2 \</span><br><span class="line">    --checkpoint_path=../../checkpoints/inception_resnet_v2_2016_08_30.ckpt \</span><br><span class="line">    --checkpoint_exclude_scopes=InceptionResnetV2/Logits,InceptionResnetV2/AuxLogits \</span><br><span class="line">    --trainable_scopes=InceptionResnetV2/Logits,InceptionResnetV2/AuxLogits \</span><br><span class="line">    --max_number_of_steps=1000 \</span><br><span class="line">    --batch_size=32 \</span><br><span class="line">    --learning_rate=0.01 \</span><br><span class="line">    --learning_rate_decay_type=fixed \</span><br><span class="line">    --save_interval_secs=60 \</span><br><span class="line">    --save_summaries_secs=60 \</span><br><span class="line">    --log_every_n_steps=10 \</span><br><span class="line">    --optimizer=rmsprop \</span><br><span class="line">    --weight_decay=0.00004</span><br></pre></td></tr></table></figure></p>
+<p>不fine-tune把<code>--checkpoint_path</code>, <code>--checkpoint_exclude_scopes</code>和<code>--trainable_scopes</code>删掉。</p>
+<p>fine-tune所有层把<code>--checkpoint_exclude_scopes</code>和<code>--trainable_scopes</code>删掉。</p>
+<p>如果只使用CPU则加上<code>--clone_on_cpu=True</code>。</p>
+<p>其它参数可删掉用默认值或自行修改。</p>
+<p>使用自己的数据则需要修改<code>models/slim/train_image_classifier.py</code>：</p>
+<p>把<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datasets <span class="keyword">import</span> dataset_factory</span><br></pre></td></tr></table></figure></p>
+<p>修改为<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datasets <span class="keyword">import</span> dataset_classification</span><br></pre></td></tr></table></figure></p>
+<p>把<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dataset = dataset_factory.get_dataset(</span><br><span class="line">    FLAGS.dataset_name, FLAGS.dataset_split_name, FLAGS.dataset_dir)</span><br></pre></td></tr></table></figure></p>
+<p>修改为<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dataset = dataset_classification.get_dataset(</span><br><span class="line">    FLAGS.dataset_dir, FLAGS.num_samples, FLAGS.num_classes, FLAGS.labels_to_names_path)</span><br></pre></td></tr></table></figure></p>
+<p>在<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'dataset_dir'</span>, <span class="literal">None</span>, <span class="string">'The directory where the dataset files are stored.'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>后加入<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tf.app.flags.DEFINE_integer(</span><br><span class="line">    <span class="string">'num_samples'</span>, <span class="number">3320</span>, <span class="string">'Number of samples.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_integer(</span><br><span class="line">    <span class="string">'num_classes'</span>, <span class="number">5</span>, <span class="string">'Number of classes.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'labels_to_names_path'</span>, <span class="literal">None</span>, <span class="string">'Label names file path.'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>训练时执行以下命令即可：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$WORKSPACE</span>/models/slim</span><br><span class="line">python train_image_classifier.py \</span><br><span class="line">    --train_dir=train_logs \</span><br><span class="line">    --dataset_dir=../../data/train \</span><br><span class="line">    --num_samples=3320 \</span><br><span class="line">    --num_classes=5 \</span><br><span class="line">    --labels_to_names_path=../../data/labels.txt \</span><br><span class="line">    --model_name=inception_resnet_v2 \</span><br><span class="line">    --checkpoint_path=../../checkpoints/inception_resnet_v2_2016_08_30.ckpt \</span><br><span class="line">    --checkpoint_exclude_scopes=InceptionResnetV2/Logits,InceptionResnetV2/AuxLogits \</span><br><span class="line">    --trainable_scopes=InceptionResnetV2/Logits,InceptionResnetV2/AuxLogits</span><br></pre></td></tr></table></figure></p></li>
+<li><p>可视化log</p>
+<p>可一边训练一边可视化训练的log，可看到Loss趋势。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir train_logs/</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="验证">验证</h2>
+<p>官方提供了验证脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">python eval_image_classifier.py \</span><br><span class="line">    --checkpoint_path=train_logs \</span><br><span class="line">    --eval_dir=eval_logs \</span><br><span class="line">    --dataset_name=flowers \</span><br><span class="line">    --dataset_split_name=validation \</span><br><span class="line">    --dataset_dir=../../data/flowers \</span><br><span class="line">    --model_name=inception_resnet_v2</span><br></pre></td></tr></table></figure>
+<p>同样，如果是使用自己的数据集，则需要修改<code>models/slim/eval_image_classifier.py</code>：</p>
+<p>把<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datasets <span class="keyword">import</span> dataset_factory</span><br></pre></td></tr></table></figure></p>
+<p>修改为<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datasets <span class="keyword">import</span> dataset_classification</span><br></pre></td></tr></table></figure></p>
+<p>把<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dataset = dataset_factory.get_dataset(</span><br><span class="line">    FLAGS.dataset_name, FLAGS.dataset_split_name, FLAGS.dataset_dir)</span><br></pre></td></tr></table></figure></p>
+<p>修改为<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dataset = dataset_classification.get_dataset(</span><br><span class="line">    FLAGS.dataset_dir, FLAGS.num_samples, FLAGS.num_classes, FLAGS.labels_to_names_path)</span><br></pre></td></tr></table></figure></p>
+<p>在<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'dataset_dir'</span>, <span class="literal">None</span>, <span class="string">'The directory where the dataset files are stored.'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>后加入<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tf.app.flags.DEFINE_integer(</span><br><span class="line">    <span class="string">'num_samples'</span>, <span class="number">350</span>, <span class="string">'Number of samples.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_integer(</span><br><span class="line">    <span class="string">'num_classes'</span>, <span class="number">5</span>, <span class="string">'Number of classes.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'labels_to_names_path'</span>, <span class="literal">None</span>, <span class="string">'Label names file path.'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>验证时执行以下命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">python eval_image_classifier.py \</span><br><span class="line">    --checkpoint_path=train_logs \</span><br><span class="line">    --eval_dir=eval_logs \</span><br><span class="line">    --dataset_dir=../../data/val \</span><br><span class="line">    --num_samples=350 \</span><br><span class="line">    --num_classes=5 \</span><br><span class="line">    --model_name=inception_resnet_v2</span><br></pre></td></tr></table></figure>
+<p>可以一边训练一边验证，，注意使用其它的GPU或合理分配显存。</p>
+<p>同样也可以可视化log，如果已经在可视化训练的log则建议使用其它端口，如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir eval_logs/ --port 6007</span><br></pre></td></tr></table></figure>
+<h2 id="测试">测试</h2>
+<p>参考<code>models/slim/eval_image_classifier.py</code>，可编写批量读取图片用模型进行推导的脚本<code>models/slim/test_image_classifier.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> nets <span class="keyword">import</span> nets_factory</span><br><span class="line"><span class="keyword">from</span> preprocessing <span class="keyword">import</span> preprocessing_factory</span><br><span class="line"></span><br><span class="line">slim = tf.contrib.slim</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'master'</span>, <span class="string">''</span>, <span class="string">'The address of the TensorFlow master to use.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'checkpoint_path'</span>, <span class="string">'/tmp/tfmodel/'</span>,</span><br><span class="line">    <span class="string">'The directory where the model was written to or an absolute path to a '</span></span><br><span class="line">    <span class="string">'checkpoint file.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'test_list'</span>, <span class="string">''</span>, <span class="string">'Test image list.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'test_dir'</span>, <span class="string">'.'</span>, <span class="string">'Test image directory.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_integer(</span><br><span class="line">    <span class="string">'batch_size'</span>, <span class="number">16</span>, <span class="string">'Batch size.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_integer(</span><br><span class="line">    <span class="string">'num_classes'</span>, <span class="number">5</span>, <span class="string">'Number of classes.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_integer(</span><br><span class="line">    <span class="string">'labels_offset'</span>, <span class="number">0</span>,</span><br><span class="line">    <span class="string">'An offset for the labels in the dataset. This flag is primarily used to '</span></span><br><span class="line">    <span class="string">'evaluate the VGG and ResNet architectures which do not use a background '</span></span><br><span class="line">    <span class="string">'class for the ImageNet dataset.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'model_name'</span>, <span class="string">'inception_v3'</span>, <span class="string">'The name of the architecture to evaluate.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_string(</span><br><span class="line">    <span class="string">'preprocessing_name'</span>, <span class="literal">None</span>, <span class="string">'The name of the preprocessing to use. If left '</span></span><br><span class="line">    <span class="string">'as `None`, then the model_name flag is used.'</span>)</span><br><span class="line"></span><br><span class="line">tf.app.flags.DEFINE_integer(</span><br><span class="line">    <span class="string">'test_image_size'</span>, <span class="literal">None</span>, <span class="string">'Eval image size'</span>)</span><br><span class="line"></span><br><span class="line">FLAGS = tf.app.flags.FLAGS</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(_)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> FLAGS.test_list:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'You must supply the test list with --test_list'</span>)</span><br><span class="line"></span><br><span class="line">    tf.logging.set_verbosity(tf.logging.INFO)</span><br><span class="line">    <span class="keyword">with</span> tf.Graph().as_default():</span><br><span class="line">        tf_global_step = slim.get_or_create_global_step()</span><br><span class="line"></span><br><span class="line">        <span class="comment">####################</span></span><br><span class="line">        <span class="comment"># Select the model #</span></span><br><span class="line">        <span class="comment">####################</span></span><br><span class="line">        network_fn = nets_factory.get_network_fn(</span><br><span class="line">            FLAGS.model_name,</span><br><span class="line">            num_classes=(FLAGS.num_classes - FLAGS.labels_offset),</span><br><span class="line">            is_training=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#####################################</span></span><br><span class="line">        <span class="comment"># Select the preprocessing function #</span></span><br><span class="line">        <span class="comment">#####################################</span></span><br><span class="line">        preprocessing_name = FLAGS.preprocessing_name <span class="keyword">or</span> FLAGS.model_name</span><br><span class="line">        image_preprocessing_fn = preprocessing_factory.get_preprocessing(</span><br><span class="line">            preprocessing_name,</span><br><span class="line">            is_training=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">        test_image_size = FLAGS.test_image_size <span class="keyword">or</span> network_fn.default_image_size</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> tf.gfile.IsDirectory(FLAGS.checkpoint_path):</span><br><span class="line">            checkpoint_path = tf.train.latest_checkpoint(FLAGS.checkpoint_path)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            checkpoint_path = FLAGS.checkpoint_path</span><br><span class="line"></span><br><span class="line">        batch_size = FLAGS.batch_size</span><br><span class="line">        tensor_input = tf.placeholder(tf.float32, [<span class="literal">None</span>, test_image_size, test_image_size, <span class="number">3</span>])</span><br><span class="line">        logits, _ = network_fn(tensor_input)</span><br><span class="line">        logits = tf.nn.top_k(logits, <span class="number">5</span>)</span><br><span class="line">        config = tf.ConfigProto()</span><br><span class="line">        config.gpu_options.allow_growth = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">        test_ids = [line.strip() <span class="keyword">for</span> line <span class="keyword">in</span> open(FLAGS.test_list)]</span><br><span class="line">        tot = len(test_ids)</span><br><span class="line">        results = list()</span><br><span class="line">        <span class="keyword">with</span> tf.Session(config=config) <span class="keyword">as</span> sess:</span><br><span class="line">            sess.run(tf.global_variables_initializer())</span><br><span class="line">            saver = tf.train.Saver()</span><br><span class="line">            saver.restore(sess, checkpoint_path)</span><br><span class="line">            time_start = time.time()</span><br><span class="line">            <span class="keyword">for</span> idx <span class="keyword">in</span> range(<span class="number">0</span>, tot, batch_size):</span><br><span class="line">                images = list()</span><br><span class="line">                idx_end = min(tot, idx + batch_size)</span><br><span class="line">                print(idx)</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(idx, idx_end):</span><br><span class="line">                    image_id = test_ids[i]</span><br><span class="line">                    test_path = os.path.join(FLAGS.test_dir, image_id)</span><br><span class="line">                    image = open(test_path, <span class="string">'rb'</span>).read()</span><br><span class="line">                    image = tf.image.decode_jpeg(image, channels=<span class="number">3</span>)</span><br><span class="line">                    processed_image = image_preprocessing_fn(image, test_image_size, test_image_size)</span><br><span class="line">                    processed_image = sess.run(processed_image)</span><br><span class="line">                    images.append(processed_image)</span><br><span class="line">                images = np.array(images)</span><br><span class="line">                predictions = sess.run(logits, feed_dict = &#123;tensor_input : images&#125;).indices</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(idx, idx_end):</span><br><span class="line">                    print(<span class="string">'&#123;&#125; &#123;&#125;'</span>.format(image_id, predictions[i - idx].tolist())</span><br><span class="line">            time_total = time.time() - time_start</span><br><span class="line">            print(<span class="string">'total time: &#123;&#125;, total images: &#123;&#125;, average time: &#123;&#125;'</span>.format(</span><br><span class="line">                time_total, len(test_ids), time_total / len(test_ids)))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    tf.app.run()</span><br></pre></td></tr></table></figure>
+<p>测试时执行以下命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CUDA_VISIBLE_DEVICES=<span class="string">"0"</span> python test_image_classifier.py \</span><br><span class="line">    --checkpoint_path=train_logs/ \</span><br><span class="line">    --test_list=../../data/list_val.txt \</span><br><span class="line">    --test_dir=../../data/flower_photos/ \</span><br><span class="line">    --batch_size=16 \</span><br><span class="line">    --num_classes=5 \</span><br><span class="line">    --model_name=inception_resnet_v2</span><br></pre></td></tr></table></figure>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/"  data-tooltip="使用TensorFlow Object Detection API进行物体检测">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/28/2017_06_28_DeepLabv3/" data-tooltip="DeepLabv3">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/"  data-tooltip="使用TensorFlow Object Detection API进行物体检测">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/28/2017_06_28_DeepLabv3/" data-tooltip="DeepLabv3">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/';
+                 
+                    this.page.identifier = '2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

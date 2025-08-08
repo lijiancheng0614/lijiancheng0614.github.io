@@ -1,0 +1,1117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>Non-negative Matrix Factorization 非负矩阵分解 - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="Non-negative Matrix Factorization 非负矩阵分解">
+<meta name="keywords" content="Note,Algorithm">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Non-negative Matrix Factorization 非负矩阵分解">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="Non-negative Matrix Factorization 非负矩阵分解">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/Figure1.jpg">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.753Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Non-negative Matrix Factorization 非负矩阵分解">
+<meta name="twitter:description" content="Non-negative Matrix Factorization 非负矩阵分解">
+<meta name="twitter:image" content="http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/Figure1.jpg">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/Figure1.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/Figure1.jpg" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Non-negative Matrix Factorization 非负矩阵分解
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-08-13T00:00:00+08:00">
+	
+		    Aug 13, 2015
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Algorithm/">Algorithm</a>, <a class="tag-link" href="/tags/Note/">Note</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#起源"><span class="toc-text">起源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用领域"><span class="toc-text">应用领域</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关"><span class="toc-text">相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#整体比较"><span class="toc-text">整体比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具体比较"><span class="toc-text">具体比较</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解法"><span class="toc-text">解法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lee和seung的倍增更新法则"><span class="toc-text">Lee和Seung的倍增更新法则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#matlab"><span class="toc-text">Matlab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python"><span class="toc-text">Python</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用"><span class="toc-text">应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#图像分析"><span class="toc-text">图像分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文本聚类数据挖掘"><span class="toc-text">文本聚类/数据挖掘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#语音处理"><span class="toc-text">语音处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#机器人控制"><span class="toc-text">机器人控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生物医学工程和化学工程"><span class="toc-text">生物医学工程和化学工程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#read-list"><span class="toc-text">Read List</span></a></li></ol>
+            <p>Non-negative Matrix Factorization 非负矩阵分解</p>
+<a id="more"></a>
+<h2 id="介绍">介绍</h2>
+<h3 id="定义">定义</h3>
+<p>　　非负矩阵分解(non-negative matrix factorization)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>，或非负矩阵近似(non-negative matrix approximation)，是多变量分析和线性代数的算法。</p>
+<p>　　输入：非负矩阵<span class="math inline">\(V\)</span></p>
+<p>　　输出：两个非负矩阵<span class="math inline">\(W\)</span>和<span class="math inline">\(H\)</span></p>
+<p>　　目标：<span class="math inline">\(V=WH\)</span></p>
+<h3 id="起源">起源</h3>
+<p>　　著名的科学杂志《Nature》于1999年刊登了两位科学家D.D.Lee和H.S.Seung对数学中非负矩阵研究的突出成果。该文<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>提出了一种新的矩阵分解思想——非负矩阵分解(Non-negative Matrix Factorization，NMF)算法，即NMF是在矩阵中所有元素均为非负数约束条件之下的矩阵分解方法。</p>
+<h3 id="优点">优点</h3>
+<ol type="1">
+<li>处理大规模数据更快更便捷；</li>
+<li>实现简便性、分解形式和分解结果上的可解释性，占用存储空间少。</li>
+</ol>
+<h3 id="缺点">缺点</h3>
+<ol type="1">
+<li>NMF中只用一层表示隐变量，无法处理复杂学习问题；</li>
+<li>NMF只约束了<span class="math inline">\(W\)</span>和<span class="math inline">\(H\)</span>的非负性（这是唯一先验，只要求满足这个），而没有考虑到对于该先验，<span class="math inline">\(H\)</span>内部元素间的相关性。（如图1中NMF部分的第1列第5行与第4列第7行类似，这二者的线性组合表示眼睛，而NMF假设他们不相关。）</li>
+</ol>
+<h3 id="应用领域">应用领域</h3>
+<p>　　计算机视觉，文档聚类，化学统计学，音频信号处理，推荐系统</p>
+<h2 id="相关">相关</h2>
+<h3 id="整体比较">整体比较</h3>
+<p>　　利用矩阵分解来解决实际问题的分析方法很多，如PCA（主成分分析）、ICA（独立成分分析）、SVD（奇异值分解）、VQ（矢量量化）等。</p>
+<p>　　这些方法的共同特点是，<span class="math inline">\(W\)</span>和<span class="math inline">\(H\)</span>中的元素可为正或负，即使输入的初始矩阵元素是全正的，传统的秩削减算法也不能保证原始数据的非负性。</p>
+<p>　　在数学上，从计算的观点看，分解结果中存在负值是正确的，但负值元素在实际问题中往往是没有意义的。例如图像数据中不可能有负值的像素点；在文档统计中，负值也是无法解释的。</p>
+<h3 id="具体比较">具体比较</h3>
+<p>　　在VQ分解中，每一列的<span class="math inline">\(H\)</span>被约束为一个一元矢量。其中只有一个元素为1，其他元素为0。若<span class="math inline">\(H\)</span>的第一列中，第<span class="math inline">\(r_1\)</span>个元素为1，那么<span class="math inline">\(V\)</span>中第一列的脸，就完全由基图像中的第<span class="math inline">\(r_1\)</span>列数据表示。此时得到的基图像称为原型基图像，这些原型图像表示一张<strong>原型脸</strong>（whole-face prototypes）。</p>
+<p>　　在PCA分解中，<span class="math inline">\(W\)</span>的各列之间相互正交，<span class="math inline">\(H\)</span>各行之间相互正交。这个约束比VQ的松弛很多，也就是，<span class="math inline">\(H\)</span>中的元素可为正也可为负。<span class="math inline">\(V\)</span>中每一张脸的每一个像素点都是<span class="math inline">\(W\)</span>中各列对应的像素点的一个加权和。由于权重矩阵<span class="math inline">\(H\)</span>中元素符号的任意性，所以基矩阵<span class="math inline">\(W\)</span>表示出来并不像VQ中原型脸那样的直观可解释。此时将W的列数据画出来并不一定能直接看到一张“脸”。但是在统计上可以解释为最大方差方向，我们把这些“脸”称为<strong>“特征脸”</strong>（distorted versions of whole faces）。</p>
+<p>　　在NMF中，由于加了非负约束。与VQ的单一元素不为0不同，NMF允许基图像H间的加权结合来表示脸部图像V；与PCA不同，NMF的加权系数H中的元素都为非负的。前两者得到的都是一个完整的脸部特征基图像，而NMF得到的是<strong>脸部 子特征</strong>（localized features）。</p>
+<p>　　通俗点说，VQ是用一张完整的图像直接代表源脸部图像；PCA是将几个完整人脸加减压成一张脸；而NMF是取甲的眼睛，乙的鼻子，丙的嘴巴直接拼成一张脸。这样解释虽然细节上略有不妥，但不失其概念上的意义。</p>
+<p>　　<div class="figure center" style="width:;"><img class="fig-img" src="Figure1.jpg" alt="图1"><span class="caption">图1</span></div></p>
+<p>　　图1 第一列为矩阵<span class="math inline">\(W\)</span>组成的图像。其中每一个小格为<span class="math inline">\(W\)</span>的一列的<span class="math inline">\(19 \times 19\)</span>个元素重构而成的<span class="math inline">\(19 \times 19\)</span>的矩阵图像。第二列为矩阵<span class="math inline">\(H\)</span>，其中红色表示负数，灰黑表示正数， 颜色程度表示大小。右边的图像只是<span class="math inline">\(V\)</span>矩阵的一列的<span class="math inline">\(19 \times 19\)</span>个元素组成的一张原始脸。</p>
+<h2 id="解法">解法</h2>
+<p>　　有很多方法可以求<span class="math inline">\(W\)</span>和<span class="math inline">\(H\)</span>，其中Lee和Seung的倍增更新法则因为实现简单，是最流行的方法。</p>
+<p>　　一些成功的算法是基于交替非负最小二乘法：在每一步中，首先固定<span class="math inline">\(H\)</span>并通过非负最小二乘法求解法得到<span class="math inline">\(W\)</span>，然后固定<span class="math inline">\(W\)</span>同理求出<span class="math inline">\(H\)</span>。求解<span class="math inline">\(W\)</span>或<span class="math inline">\(H\)</span>的方法可以相同或不同，因为可以对<span class="math inline">\(W\)</span>或<span class="math inline">\(H\)</span>进行规范化（以防止过拟合）。具体求解方法包括the projected gradient descent methods（投影梯度下降方法），the active set method 和 the block principal pivoting method。</p>
+<h3 id="lee和seung的倍增更新法则">Lee和Seung的倍增更新法则</h3>
+<p>分解的公式：</p>
+<p><span class="math display">\[ V_{i\mu} \approx (WH)_{i\mu} = \sum_{a=1}^r W_{ia}H_{a\mu} \tag{1} \]</span></p>
+<p>其中<span class="math inline">\(r\)</span>是分解矩阵的秩，<span class="math inline">\(V\)</span>是原矩阵的一个近似，<span class="math inline">\(W\)</span>与<span class="math inline">\(H\)</span>就是分解而成的两个矩阵。</p>
+<p>优化目标函数为</p>
+<p><span class="math display">\[ F=\sum_{i=1}^n \sum_{\mu=1}^m [V_{i\mu} log(WH)_{i\mu} - (WH)_{i\mu}] \tag{2} \]</span></p>
+<p>其中<span class="math inline">\(V_{i\mu}\)</span>表示一个像素，由泊松噪声的<span class="math inline">\((WH)_{i\mu}\)</span>而得。</p>
+<p>因此目标函数实际上表示由基<span class="math inline">\(W\)</span>和编码<span class="math inline">\(H\)</span>产生图像<span class="math inline">\(V\)</span>的概率。</p>
+<p>用迭代算法求<span class="math inline">\(W\)</span>和<span class="math inline">\(H\)</span>，初始时是随机矩阵，然后不断迭代更新，使得<span class="math inline">\(F\)</span>达到一个局部极大值：</p>
+<p><span class="math display">\[ W_{ia} \leftarrow W_{ia} \sum_\mu \frac{ V_{i\mu} }{ (WH)_{i\mu} } H_{a\mu} \tag{3} \]</span></p>
+<p><span class="math display">\[ W_{ia} \leftarrow \frac{W_{ia}}{ \sum_j W{ja} } \tag{4} \]</span></p>
+<p><span class="math display">\[ H_{a\mu} \leftarrow H_{a\mu} \sum_i W_{ia} \frac{V_{i\mu}}{ \sum_j (WH)_{i\mu} } \tag{5} \]</span></p>
+<h2 id="实现">实现</h2>
+<h3 id="matlab">Matlab</h3>
+<p><a href="http://cn.mathworks.com/help/stats/nnmf.html" class="uri" target="_blank" rel="noopener">http://cn.mathworks.com/help/stats/nnmf.html</a> <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>给定矩阵 <span class="math inline">\(A \in R^{n \times m}\)</span> 和整数 <span class="math inline">\(k\)</span>，</p>
+<p>返回分解的非负矩阵 <span class="math inline">\(W \in R^{n \times k}\)</span>, <span class="math inline">\(H \in R^{k \times m}\)</span>。</p>
+<p>还可以返回均方根残差 <span class="math inline">\(D = norm(A - W \times H, \text{&#39;fro&#39;}) / sqrt(N \times M)\)</span></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[W,H] = nnmf(A,k)</span><br><span class="line">[W,H] = nnmf(A,k,param1,val1,param2,val2,...)</span><br><span class="line">[W,H,D] = nnmf(...)</span><br></pre></td></tr></table></figure>
+<h3 id="python">Python</h3>
+<ul>
+<li>nimfa - A Python Library for Nonnegative Matrix Factorization Techniques<br>
+<a href="http://nimfa.biolab.si/" class="uri" target="_blank" rel="noopener">http://nimfa.biolab.si/</a>
+<ul>
+<li>nmf_example.py<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scipy.sparse <span class="keyword">as</span> spr</span><br><span class="line"><span class="keyword">import</span> nimfa</span><br><span class="line"></span><br><span class="line">V = spr.csr_matrix([[<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">6</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line"></span><br><span class="line">lsnmf = nimfa.Lsnmf(V, seed=<span class="string">'random_vcol'</span>, max_iter=<span class="number">10000</span>, rank=<span class="number">2</span>)</span><br><span class="line">lsnmf_fit = lsnmf()</span><br><span class="line"></span><br><span class="line">W = lsnmf_fit.basis()</span><br><span class="line">print(<span class="string">'Basis matrix:\n%s'</span> % W.todense())</span><br><span class="line"></span><br><span class="line">H = lsnmf_fit.coef()</span><br><span class="line">print(<span class="string">'Mixture matrix:\n%s'</span> % H.todense())</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">print(<span class="string">'Target estimate:\n%s'</span> % np.dot(W.todense(), H.todense()))</span><br><span class="line">print(<span class="string">'Iterations: %d'</span> % lsnmf_fit.n_iter)</span><br><span class="line">print(<span class="string">'Euclidean distance: %5.3f'</span> % lsnmf_fit.distance(metric=<span class="string">'euclidean'</span>))</span><br><span class="line">print(<span class="string">'K-L divergence: %5.3f'</span> % lsnmf_fit.distance(metric=<span class="string">'kl'</span>))</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><a href="http://www.csie.ntu.edu.tw/~cjlin/nmf/" class="uri" target="_blank" rel="noopener">http://www.csie.ntu.edu.tw/~cjlin/nmf/</a> <a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a><br>
+给定<span class="math inline">\(W\)</span>和<span class="math inline">\(H\)</span>的初始矩阵，收敛时的容忍值（tolerance），时间限制，迭代次数限制，返回分解的非负矩阵<span class="math inline">\(W\)</span>和<span class="math inline">\(H\)</span>。
+<ul>
+<li><p>nmf.py<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># NMF by alternative non-negative least squares using projected gradients</span></span><br><span class="line"><span class="comment"># Author: Chih-Jen Lin, National Taiwan University</span></span><br><span class="line"><span class="comment"># Python/numpy translation: Anthony Di Franco</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> numpy.linalg <span class="keyword">import</span> norm</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> stdout</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nmf</span><span class="params">(V,Winit,Hinit,tol,timelimit,maxiter)</span>:</span></span><br><span class="line"> <span class="string">"""</span></span><br><span class="line"><span class="string"> (W,H) = nmf(V,Winit,Hinit,tol,timelimit,maxiter)</span></span><br><span class="line"><span class="string"> W,H: output solution</span></span><br><span class="line"><span class="string"> Winit,Hinit: initial solution</span></span><br><span class="line"><span class="string"> tol: tolerance for a relative stopping condition</span></span><br><span class="line"><span class="string"> timelimit, maxiter: limit of time and iterations</span></span><br><span class="line"><span class="string"> """</span></span><br><span class="line"></span><br><span class="line"> W = Winit; H = Hinit; initt = time();</span><br><span class="line"></span><br><span class="line"> gradW = dot(W, dot(H, H.T)) - dot(V, H.T)</span><br><span class="line"> gradH = dot(dot(W.T, W), H) - dot(W.T, V)</span><br><span class="line"> initgrad = norm(r_[gradW, gradH.T])</span><br><span class="line"> <span class="keyword">print</span> <span class="string">'Init gradient norm %f'</span> % initgrad</span><br><span class="line"> tolW = max(<span class="number">0.001</span>,tol)*initgrad</span><br><span class="line"> tolH = tolW</span><br><span class="line"></span><br><span class="line"> <span class="keyword">for</span> iter <span class="keyword">in</span> xrange(<span class="number">1</span>,maxiter):</span><br><span class="line">  <span class="comment"># stopping condition</span></span><br><span class="line">  projnorm = norm(r_[gradW[logical_or(gradW&lt;<span class="number">0</span>, W&gt;<span class="number">0</span>)],</span><br><span class="line">                                 gradH[logical_or(gradH&lt;<span class="number">0</span>, H&gt;<span class="number">0</span>)]])</span><br><span class="line">  <span class="keyword">if</span> projnorm &lt; tol*initgrad <span class="keyword">or</span> time() - initt &gt; timelimit: <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">  (W, gradW, iterW) = nlssubprob(V.T,H.T,W.T,tolW,<span class="number">1000</span>)</span><br><span class="line">  W = W.T</span><br><span class="line">  gradW = gradW.T</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> iterW==<span class="number">1</span>: tolW = <span class="number">0.1</span> * tolW</span><br><span class="line"></span><br><span class="line">  (H,gradH,iterH) = nlssubprob(V,W,H,tolH,<span class="number">1000</span>)</span><br><span class="line">  <span class="keyword">if</span> iterH==<span class="number">1</span>: tolH = <span class="number">0.1</span> * tolH</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> iter % <span class="number">10</span> == <span class="number">0</span>: stdout.write(<span class="string">'.'</span>)</span><br><span class="line"></span><br><span class="line"> <span class="keyword">print</span> <span class="string">'\nIter = %d Final proj-grad norm %f'</span> % (iter, projnorm)</span><br><span class="line"> <span class="keyword">return</span> (W,H)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nlssubprob</span><span class="params">(V,W,Hinit,tol,maxiter)</span>:</span></span><br><span class="line"> <span class="string">"""</span></span><br><span class="line"><span class="string"> H, grad: output solution and gradient</span></span><br><span class="line"><span class="string"> iter: #iterations used</span></span><br><span class="line"><span class="string"> V, W: constant matrices</span></span><br><span class="line"><span class="string"> Hinit: initial solution</span></span><br><span class="line"><span class="string"> tol: stopping tolerance</span></span><br><span class="line"><span class="string"> maxiter: limit of iterations</span></span><br><span class="line"><span class="string"> """</span></span><br><span class="line"></span><br><span class="line"> H = Hinit</span><br><span class="line"> WtV = dot(W.T, V)</span><br><span class="line"> WtW = dot(W.T, W)</span><br><span class="line"></span><br><span class="line"> alpha = <span class="number">1</span>; beta = <span class="number">0.1</span>;</span><br><span class="line"> <span class="keyword">for</span> iter <span class="keyword">in</span> xrange(<span class="number">1</span>, maxiter):</span><br><span class="line">  grad = dot(WtW, H) - WtV</span><br><span class="line">  projgrad = norm(grad[logical_or(grad &lt; <span class="number">0</span>, H &gt;<span class="number">0</span>)])</span><br><span class="line">  <span class="keyword">if</span> projgrad &lt; tol: <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># search step size</span></span><br><span class="line">  <span class="keyword">for</span> inner_iter <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">20</span>):</span><br><span class="line">   Hn = H - alpha*grad</span><br><span class="line">   Hn = where(Hn &gt; <span class="number">0</span>, Hn, <span class="number">0</span>)</span><br><span class="line">   d = Hn-H</span><br><span class="line">   gradd = sum(grad * d)</span><br><span class="line">   dQd = sum(dot(WtW,d) * d)</span><br><span class="line">   suff_decr = <span class="number">0.99</span>*gradd + <span class="number">0.5</span>*dQd &lt; <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">if</span> inner_iter == <span class="number">1</span>:</span><br><span class="line">    decr_alpha = <span class="keyword">not</span> suff_decr; Hp = H;</span><br><span class="line">   <span class="keyword">if</span> decr_alpha:</span><br><span class="line">    <span class="keyword">if</span> suff_decr:</span><br><span class="line">     H = Hn; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">     alpha = alpha * beta;</span><br><span class="line">   <span class="keyword">else</span>:</span><br><span class="line">      <span class="keyword">if</span> <span class="keyword">not</span> suff_decr <span class="keyword">or</span> (Hp == Hn).all():</span><br><span class="line">       H = Hp; <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">else</span>:</span><br><span class="line">       alpha = alpha/beta; Hp = Hn;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> iter == maxiter:</span><br><span class="line">   <span class="keyword">print</span> <span class="string">'Max iter in nlssubprob'</span></span><br><span class="line"> <span class="keyword">return</span> (H, grad, iter)</span><br></pre></td></tr></table></figure></p></li>
+<li><p>nmf_example.py<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy, nmf</span><br><span class="line"></span><br><span class="line">w1 = array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line">h1 = array([[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>],[<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line">w2 = array([[<span class="number">1</span>,<span class="number">1</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line">h2 = array([[<span class="number">1</span>,<span class="number">1</span>],[<span class="number">3</span>,<span class="number">4</span>],[<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"></span><br><span class="line">v = dot(w1,h1)</span><br><span class="line"></span><br><span class="line">(wo,ho) = nmf(v, w2, h2, <span class="number">0.001</span>, <span class="number">10</span>, <span class="number">10</span>)</span><br><span class="line"><span class="keyword">print</span> wo</span><br><span class="line"><span class="keyword">print</span> ho</span><br></pre></td></tr></table></figure></p></li>
+</ul></li>
+</ul>
+<h2 id="应用">应用</h2>
+<h3 id="图像分析">图像分析</h3>
+<p>　　NMF最成功的一类应用是在图像的分析和处理领域。图像本身包含大量的数据，计算机一般将图像的信息按照矩阵的形式进行存放，针对图像的识别、分析和处理也是在矩阵的基础上进行的。这些特点使得NMF方法能很好地与图像分析处理相结合。人们已经利用NMF算法，对卫星发回的图像进行处理，以自动辨别太空中的垃圾碎片；使用NMF算法对天文望远镜拍摄到的图像进行分析，有助于天文学家识别星体；美国还尝试在机场安装由NMF算法驱动的识别系统，根据事先输入计算机的恐怖分子的特征图像库来自动识别进出机场的可疑恐怖分子。</p>
+<h3 id="文本聚类数据挖掘">文本聚类/数据挖掘</h3>
+<p>　　文本在人类日常接触的信息中占有很大分量，为了更快更精确地从大量的文本数据中取得所需要的信息，针对文本信息处理的研究一直没有停止过。文本数据不光信息量大，而且一般是无结构的。此外，典型的文本数据通常以矩阵的形式被计算机处理，此时的数据矩阵具有高维稀疏的特征，因此，对大规模文本信息进行处理分析的另一个障碍便是如何削减原始数据的维数。NMF算法正是解决这方面难题的一种新手段。NMF在挖掘用户所需数据和进行文本聚类研究中都有着成功的应用例子。由于NMF算法在处理文本数据方面的高效性，著名的商业数据库软件Oracle在其第10版中专门利用NMF算法来进行文本特征的提取和分类。为什么NMF对于文本信息提取得很好呢？原因在于智能文本处理的核心问题是以一种能捕获语义或相关信息的方式来表示文本，但是传统的常用分析方法仅仅是对词进行统计，而不考虑其他的信息。而NMF不同，它往往能达到表示信息的局部之间相关关系的效果，从而获得更好的处理结果。</p>
+<h3 id="语音处理">语音处理</h3>
+<p>　　语音的自动识别一直是计算机科学家努力的方向，也是未来智能应用实现的基础技术。语音同样包含大量的数据信息，识别语音的过程也是对这些信息处理的过程。NMF算法在这方面也为我们提供了一种新方法，在已有的应用中，NMF算法成功实现了有效的语音特征提取，并且由于NMF算法的快速性，对实现机器的实时语音识别有着促进意义。也有使用NMF方法进行音乐分析的应用。复调音乐的识别是个很困难的问题，三菱研究所和MIT(麻省理工学院)的科学家合作，利用NMF从演奏中的复调音乐中识别出各个调子，并将它们分别记录下来。实验结果表明，这种采用NMF算法的方法不光简单，而且无须基于知识库。</p>
+<h3 id="机器人控制">机器人控制</h3>
+<p>　　如何快速准确地让机器人识别周围的物体对于机器人研究具有重要的意义，因为这是机器人能迅速作出相应反应和动作的基础。机器人通过传感器获得周围环境的图像信息，这些图像信息也是以矩阵的形式存储的。已经有研究人员采用NMF算法实现了机器人对周围对象的快速识别，根据现有的研究资料显示，识别的准确率达到了80%以上。</p>
+<h3 id="生物医学工程和化学工程">生物医学工程和化学工程</h3>
+<p>　　生物医学和化学研究中，也常常需要借助计算机来分析处理试验的数据，往往一些烦杂的数据会耗费研究人员的过多精力。NMF算法也为这些数据的处理提供了一种新的高效快速的途径。科学家将NMF方法用于处理核医学中的电子发射过程的动态连续图像，有效地从这些动态图像中提取所需要的特征。NMF还可以应用到遗传学和药物发现中。因为NMF的分解不出现负值，因此采用NMF分析基因DNA的分子序列可使分析结果更加可靠。同样，用NMF来选择药物成分还可以获得最有效的且负作用最小的新药物。</p>
+<p>　　此外，NMF算法在环境数据处理、信号分析与复杂对象的识别方面都有着很好的应用。近年来采用NMF思想的应用才刚展开，相信以后会有更多的成功应用。这些成功的应用反过来也将促进NMF的进一步研究。</p>
+<h2 id="参考">参考</h2>
+<h2 id="read-list">Read List</h2>
+<p><a href="http://blog.sciencenet.cn/blog-795427-629574.html" class="uri" target="_blank" rel="noopener">http://blog.sciencenet.cn/blog-795427-629574.html</a></p>
+<p>1994_Environmeteics_Positive matrix factorization A non-negative factor model with optimal utilization of error estimates of data values.pdf</p>
+<p>1997_JM_A fast non-negativity-constrained least squares algorithm.pdf</p>
+<p>1999_nature_Learning the parts of objects by non-negative matrix factorization.pdf</p>
+<p>2000_IEEE_Normalized Cuts and Image Segmentation.pdf</p>
+<p>2001_NIPS_Algorithms for non-negative matrix factorization.pdf</p>
+<p>2001_CVPR_Learning Spatially Localized, Parts-B ased Representation.pdf</p>
+<p>2001_PSUTR_Spectral Relaxation Models And Structure Analysis For K-Way Graph Clustering And Bi-Clustering .pdf</p>
+<p>2001_WI_ICA.pdf</p>
+<p>2002_IEEE_Algorithms for Non-Negative Independent Component Analysis .pdf</p>
+<p>2002_NIPS_Spectral relaxation for K-means clustering.pdf</p>
+<p>2002_NNSP_non-negative sparse coding.pdf</p>
+<p>2003_ICASSP_NON-NEGATIVE MATRIX FACTORIZATION FOR VISUAL CODING.pdf</p>
+<p>2004_NIPS_When Does Non-Negative Matrix Factorization give a correct Decomposition into parts.pdf</p>
+<p>2004_Non-negative Matrix Factorization with Sparseness Constraints.pdf</p>
+<p>2004_On reduced rank nonnegative matrix factorization for symmetric nonnegative matrices.pdf</p>
+<p>2005-IEEE-Sparse image coding using a 3D non-negative tensor factorization.pdf</p>
+<p>2005_ECML_Nonnegative Lagrangian Relaxation of K-Means and Spectral Clustering.pdf</p>
+<p>2005_On the Equivalence of Nonnegative Matrix Factorization and Spectral Clustering.pdf</p>
+<p>2005_ISSTECH_ Projected Gradient Methods for Non-negative Matrix Factorization.pdf</p>
+<p>2005_SCIA_Projective Nonnegative Matrix Factorization for Image Compression and Feature Extraction.pdf</p>
+<p>2006-IEEE-SOUND SOURCE SEPARATION USING SHIFTED NON-NEGATIVE TENSOR.pdf</p>
+<p>2006_ACM_Orthogonal Nonnegative Matrix Tri-Factorizations for Clustering.pdf</p>
+<p>2006_ICAISCP_Non-negative matrix factorization with quasi-Newton optimization.pdf</p>
+<p>2006_ICDM_The Relationships Among Various Nonnegative Matrix Factorization Methods for Clustering.pdf</p>
+<p>2006_IEEE_Convex and Semi-Nonnegative Matrix Factorizations.pdf</p>
+<p>2006_IEEE_Nonsmooth nonnegative matrix factorization.pdf</p>
+<p>2006_LAA_Nonnegative matrix factorization for spectraldata analysis.pdf</p>
+<p>2006_Nonnegative matrix factorization for spectral data analysis.pdf</p>
+<p>2007-ISSN-Regularized Alternating Least Squares Algorithms for Non-negative MatrixTensor Factorization.pdf</p>
+<p>2007_CSDA_Algorithms and applications for approximate nonnegative matrix factorization.pdf</p>
+<p>2007_ICDM_Solving Consensus and Semi-supervised Clustering Problems Using Nonnegative Matrix Factorization.pdf</p>
+<p>2007_NC_Projected Gradient Methods for Nonnegative Matrix Factorization.pdf</p>
+<p>2007_VLSI_Non-negative Matrix Factorization with Orthogonality Constraints and its Application to Raman Spectroscopy.pdf</p>
+<p>2008_ICDM_Non-negative Matrix Factorization on Manifold.pdf</p>
+<p>2008_ICDM_Nonnegative Matrix Factorization for Combinatorial Optimization Spectral Clustering Graph Matching and Clique Finding.pdf</p>
+<p>2008_IJCNN_Algorithms for orthogonal nonnegative matrix factorization.pdf</p>
+<p>2008_PR_SVD based initialization A head start for nonnegative matrix factorization.pdf</p>
+<p>2008_SIAM_ Nonnegative Matrix FactorizationBased on Alternating Nonnegativity Constrained Least Squares and Active Set Method.pdf</p>
+<p>2008_Non-negative matrix factorization for semi-supervised data clustering.pdf</p>
+<p>2008_SIAM_ Fast Newton-type methods for the least squares nonneg-ative matrix approximation problem.pdf</p>
+<p>2008_SIAM_Semi-Supervised Clustering via Matrix Factorization.pdf</p>
+<p>2010_AAAI_Non-Negative Matrix Factorization with Constraints.pdf</p>
+<p>2010_ECML_Improved MinMax Cut Graph Clustering with Nonnegative Relaxation.pdf</p>
+<p>2010_Extended Semi-supervised Matrix Factorization for Clustering.pdf</p>
+<p>2010_ICDM_Integrating Symmetric Nonnegative Matrix Factorization and Normalized Cut Spectral Clustering.pdf</p>
+<p>2010_Semi-Supervised Nonnegative Matrix Factorization.pdf</p>
+<p>2011-JCAM-A multilevel approach for nonnegative matrix factorization.pdf</p>
+<p>2011-SADM-Non-Negative Residual Matrix Factorization.pdf</p>
+<p>2011_AMC_An alternating projected gradient algorithm for nonnegative matrix factorization.pdf</p>
+<p>2011_CIKM_Simultaneous Clustering of Multi-Type Relational Data via symmetric nonnegative matrix tri-factorization.pdf</p>
+<p>2011_ICDM_Learning Spectral Embedding for Semi-supervised Clustering.pdf</p>
+<p>2011_IEEE_Symmetric Nonnegative Matrix Factorization：Algorithms and Applications to Probabilistic.pdf</p>
+<p>2012-ICAISC-Initialization of Nonnegative Matrix.pdf</p>
+<p>2012-IEEE-Coupled Nonnegative Matrix Factorization Unmixing.pdf</p>
+<p>2012-IWSSIP-AUTOMATIC CYMBAL CLASSIFICATION.pdf</p>
+<p>2012-JMLR-MahNMF：Manhattan Non-negative Matrix Factorization.pdf</p>
+<p>2012-LSJ-Image Denoising based on Sparse Representation and Non-Negative Matrix Factorization.pdf</p>
+<p>2012_ICNIP_Adaptive Multiplicative Updates for Projective Nonnegative Matrix Factorization.pdf</p>
+<p>2012_ICONIP_Adaptive Multiplicative Updates for Projective Nonnegative Matrix Factorization.pdf</p>
+<p>2012-CORR-Two Algorithms for Orthogonal Nonnegative Matrix Factorization with Application to Clustering.pdf</p>
+<p>Nonnegative Matrix Factorization for Clustering（概述）.pdf</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1" role="doc-endnote"><p><a href="https://en.wikipedia.org/wiki/Non-negative_matrix_factorization" class="uri" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Non-negative_matrix_factorization</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Daniel D. Lee and H. Sebastian Seung (1999). "Learning the parts of objects by non-negative matrix factorization". Nature 401 (6755): 788–791. <a href="doi:10.1038/44565" class="uri" target="_blank" rel="noopener">doi:10.1038/44565</a>. PMID 10548103.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>Daniel D. Lee and H. Sebastian Seung (2001). Algorithms for Non-negative Matrix Factorization. Advances in Neural Information Processing Systems 13: Proceedings of the 2000 Conference. MIT Press. pp. 556–562.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>汪鹏.非负矩阵分解：数学的奇妙力量.《计算机教育》2004年第10期.http://blog.sciencenet.cn/blog-248606-466811.html<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>Matlab文档nnmf.http://cn.mathworks.com/help/stats/nnmf.html<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>Chih-Jen Lin（libSVM的作者）.NMF工具.http://www.csie.ntu.edu.tw/~cjlin/nmf/<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/15/2015_08_15_Social Psychology Week 2/"  data-tooltip="Week 2 The Psychology of Self-Presentation and Persuasion">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/12/2015_08_12_Social Psychology Week 1/" data-tooltip="Week 1 Social Perceptions and Misperceptions">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/15/2015_08_15_Social Psychology Week 2/"  data-tooltip="Week 2 The Psychology of Self-Presentation and Persuasion">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/12/2015_08_12_Social Psychology Week 1/" data-tooltip="Week 1 Social Perceptions and Misperceptions">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2015/08/13/2015_08_13_NMF/';
+                 
+                    this.page.identifier = '2015/08/13/2015_08_13_NMF/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

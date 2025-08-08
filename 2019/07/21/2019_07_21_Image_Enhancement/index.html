@@ -1,0 +1,1056 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>图像增强 Image Enhancement - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="图像增强（Image Enhancement），其目的是要改善图像的视觉效果。">
+<meta name="keywords" content="Computer Vision">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="图像增强 Image Enhancement">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="图像增强（Image Enhancement），其目的是要改善图像的视觉效果。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.822Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图像增强 Image Enhancement">
+<meta name="twitter:description" content="图像增强（Image Enhancement），其目的是要改善图像的视觉效果。">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            图像增强 Image Enhancement
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2019-07-21T00:00:00+08:00">
+	
+		    Jul 21, 2019
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动色阶"><span class="toc-text">自动色阶</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动对比度"><span class="toc-text">自动对比度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动颜色"><span class="toc-text">自动颜色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动色彩均衡"><span class="toc-text">自动色彩均衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动白平衡"><span class="toc-text">自动白平衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直方图均衡化"><span class="toc-text">直方图均衡化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拉普拉斯算子"><span class="toc-text">拉普拉斯算子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对数log变换"><span class="toc-text">对数Log变换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#伽马变换"><span class="toc-text">伽马变换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指数图像"><span class="toc-text">指数图像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#曝光过度问题处理"><span class="toc-text">曝光过度问题处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高反差保留"><span class="toc-text">高反差保留</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#偏色"><span class="toc-text">偏色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#低光图像增强"><span class="toc-text">低光图像增强</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高动态图像增强"><span class="toc-text">高动态图像增强</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#颜色滤镜"><span class="toc-text">颜色滤镜</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未归类"><span class="toc-text">未归类</span></a></li></ol>
+            <p>图像增强（Image Enhancement），其目的是要改善图像的视觉效果。</p>
+<a id="more"></a>
+<h2 id="自动色阶">自动色阶</h2>
+<p>作用：自动调整图像中的黑白场。</p>
+<p>原理：剪切每个通道中的阴影和高光部分，并将每个颜色通道中最亮或最暗的像素映射到纯白或纯黑；中间像素按比例重新分配分布。</p>
+<p>运用：会增强图像中的对比度，因数像素值会增大。</p>
+<p>特点：单独调整每个颜色通道，有可能会移去颜色或引入色痕。在像素平衡分布且需要以简单方式增加对比度的特定图像中，提供较好的效果。</p>
+<h2 id="自动对比度">自动对比度</h2>
+<p>作用：自动调整图像的对比度。</p>
+<p>原理：剪切图像中的阴影和高光值，再将图像中的剩余部分的最亮和最暗像素映射到纯白或纯黑；中间像素按比例重新分配分布。</p>
+<p>效果：会使高光看上去更亮，阴影看上去更暗。</p>
+<p>特点：不会单独调整各个颜色通道，不会引入或消除色痕。</p>
+<p>默认值情况：剪切白色/黑色像素的0.5%；也就是说忽略两个极端像素的0.5%</p>
+<p>（可使用【色阶】或【曲线】对话框中的“自动颜色校正”选项来更改这个默认设置）</p>
+<p>运用：可改进许多摄影或连续色调图像的外观，但无法改变单调颜色的图像属性。</p>
+<h2 id="自动颜色">自动颜色</h2>
+<p>原理：能过搜索图像来标识阴影、中间调、高光，从而校正图像的对比度和颜色。</p>
+<p>默认值情况：使用“RGB128灰色（中度灰色）”这一目标颜色来中和中间调，并将阴影和高光剪切0.5%</p>
+<p>（可使用【色阶】或【曲线】对话框中的“自动颜色校正”选项来更改这个默认设置）</p>
+<h2 id="自动色彩均衡">自动色彩均衡</h2>
+<ul>
+<li>(IPOL 2012) Automatic Color Enhancement (ACE) and its Fast Implementation<br>
+<a href="http://demo.ipol.im/demo/g_ace/" class="uri" target="_blank" rel="noopener">http://demo.ipol.im/demo/g_ace/</a></li>
+</ul>
+<p>自动色彩均衡：<a href="https://www.cnblogs.com/wangyong/p/9119394.html" class="uri" target="_blank" rel="noopener">https://www.cnblogs.com/wangyong/p/9119394.html</a></p>
+<p>自动色彩均衡（ACE）快速算法：<a href="https://blog.csdn.net/zmshy2128/article/details/53470357" class="uri" target="_blank" rel="noopener">https://blog.csdn.net/zmshy2128/article/details/53470357</a></p>
+<h2 id="自动白平衡">自动白平衡</h2>
+<p><a href="https://blog.csdn.net/weixin_43379058/article/details/88606961" class="uri" target="_blank" rel="noopener">https://blog.csdn.net/weixin_43379058/article/details/88606961</a></p>
+<p>(ISCS 2005) A Novel Automatic White Balance Method For Digital Still Cameras</p>
+<h2 id="直方图均衡化">直方图均衡化</h2>
+<p>直方图均衡化是图像处理领域中利用图像直方图对对比度进行调整的方法。</p>
+<p><a href="https://docs.opencv.org/2.4/modules/imgproc/doc/histograms.html?highlight=equalizehist" class="uri" target="_blank" rel="noopener">https://docs.opencv.org/2.4/modules/imgproc/doc/histograms.html?highlight=equalizehist</a></p>
+<h2 id="拉普拉斯算子">拉普拉斯算子</h2>
+<p>使用中心为5的8邻域拉普拉斯算子与图像卷积可以达到锐化增强图像的目的</p>
+<p><a href="https://docs.opencv.org/2.4/modules/imgproc/doc/filtering.html#filter2d" class="uri" target="_blank" rel="noopener">https://docs.opencv.org/2.4/modules/imgproc/doc/filtering.html#filter2d</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Mat kernel = (Mat_&lt;<span class="keyword">float</span>&gt;(<span class="number">3</span>, <span class="number">3</span>) &lt;&lt; <span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line">filter2D(image, imageEnhance, CV_8UC3, kernel);</span><br></pre></td></tr></table></figure>
+<h2 id="对数log变换">对数Log变换</h2>
+<p>对数变换可以将图像的低灰度值部分扩展，显示出低灰度部分更多的细节，将其高灰度值部分压缩，减少高灰度值部分的细节，从而达到强调图像低灰度部分的目的。</p>
+<h2 id="伽马变换">伽马变换</h2>
+<p>伽马变换主要用于图像的校正，将灰度过高或者灰度过低的图片进行修正，增强对比度。</p>
+<h2 id="指数图像">指数图像</h2>
+<p>指数变换的作用是扩展图像的高灰度级、压缩低灰度级，可用于亮度过高的图像。</p>
+<h2 id="曝光过度问题处理">曝光过度问题处理</h2>
+<p>对于曝光过度问题，可以通过计算当前图像的反相（255-image)，然后取当前图像和反相图像的较小者为当前像素位置的值。</p>
+<h2 id="高反差保留">高反差保留</h2>
+<p>将图像中颜色、明暗反差较大两部分的交界处保留下来。高反差保留 = 原图 - 高斯模糊图</p>
+<p><a href="https://docs.opencv.org/2.4/modules/imgproc/doc/filtering.html?highlight=gaussianblur#gaussianblur" class="uri" target="_blank" rel="noopener">https://docs.opencv.org/2.4/modules/imgproc/doc/filtering.html?highlight=gaussianblur#gaussianblur</a></p>
+<h2 id="偏色">偏色</h2>
+<ul>
+<li><p>(CVPR 2019) When Color Constancy Goes Wrong: Correcting Improperly White-Balanced Images<br>
+<a href="http://130.63.97.192/WB_for_srgb_rendered_images/demo.html" class="uri" target="_blank" rel="noopener">http://130.63.97.192/WB_for_srgb_rendered_images/demo.html</a><br>
+效果不佳</p></li>
+<li><p>(CVPR 2019) Quasi-Unsupervised Color Constancy<br>
+<a href="https://github.com/claudio-unipv/quasi-unsupervised-cc" class="uri" target="_blank" rel="noopener">https://github.com/claudio-unipv/quasi-unsupervised-cc</a><br>
+效果一般</p></li>
+<li><p>(CVPR 2018) Improving Color Reproduction Accuracy on Cameras<br>
+<a href="https://karaimer.github.io/camera-color/" class="uri" target="_blank" rel="noopener">https://karaimer.github.io/camera-color/</a><br>
+Matlab 代码</p></li>
+<li><p>(SIGGRAPH 2018) Exposure: A White-Box Photo Post-Processing Framework<br>
+<a href="https://github.com/yuanming-hu/exposure" class="uri" target="_blank" rel="noopener">https://github.com/yuanming-hu/exposure</a><br>
+效果偏暗</p></li>
+<li><p>(CVPR 2017) Fast Fourier Color Constancy<br>
+<a href="https://github.com/google/ffcc" class="uri" target="_blank" rel="noopener">https://github.com/google/ffcc</a><br>
+Matlab Toolbox</p></li>
+<li><p>(CVPR 2017) FC4: Fully Convolutional Color Constancy with Confidence-weighted Pooling<br>
+<a href="https://github.com/yuanming-hu/fc4" class="uri" target="_blank" rel="noopener">https://github.com/yuanming-hu/fc4</a><br>
+论文 Exposure 一作的旧工作</p></li>
+</ul>
+<h2 id="低光图像增强">低光图像增强</h2>
+<ul>
+<li><p>EnlightenGAN: Deep Light Enhancement without Paired Supervision<br>
+<a href="https://github.com/TAMU-VITA/EnlightenGAN" class="uri" target="_blank" rel="noopener">https://github.com/TAMU-VITA/EnlightenGAN</a></p></li>
+<li><p>(CVPR 2019) Underexposed Photo Enhancement Using Deep Illumination Estimation<br>
+<a href="https://github.com/wangruixing/DeepUPE" class="uri" target="_blank" rel="noopener">https://github.com/wangruixing/DeepUPE</a></p></li>
+<li><p>(CVPR 2018) Learning to See in the Dark<br>
+<a href="https://github.com/cchen156/Learning-to-See-in-the-Dark" class="uri" target="_blank" rel="noopener">https://github.com/cchen156/Learning-to-See-in-the-Dark</a></p></li>
+<li><p>(BMVC 2018) MBLLEN: Low-light Image/Video Enhancement Using CNNs</p></li>
+<li><p>(BMVC 2018) Deep Retinex Decomposition for Low-Light Enhancement<br>
+<a href="https://github.com/weichen582/RetinexNet" class="uri" target="_blank" rel="noopener">https://github.com/weichen582/RetinexNet</a></p></li>
+<li><p>(Pattern Recognition Letters 2018) LightenNet: A Convolutional Neural Network for weakly illuminated image enhancement<br>
+<a href="https://github.com/Li-Chongyi/Low-Light-Codes" class="uri" target="_blank" rel="noopener">https://github.com/Li-Chongyi/Low-Light-Codes</a></p></li>
+<li><ol start="2015" type="1">
+<li>LLNet: A Deep Autoencoder Approach to Natural Low-light Image Enhancement</li>
+</ol></li>
+</ul>
+<h2 id="高动态图像增强">高动态图像增强</h2>
+<p>从双边滤波到 HDRNet <a href="https://zhuanlan.zhihu.com/p/37404280" class="uri" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/37404280</a></p>
+<ul>
+<li><p>(CVPR 2018 spotlight) Deep Photo Enhancer: Unpaired Learning for Image Enhancement from Photographs with GANs<br>
+<a href="https://github.com/nothinglo/Deep-Photo-Enhancer" class="uri" target="_blank" rel="noopener">https://github.com/nothinglo/Deep-Photo-Enhancer</a></p></li>
+<li><p>(SIGGRAPH 2017) Deep Bilateral Learning for Real-Time Image Enhancement<br>
+<a href="https://groups.csail.mit.edu/graphics/hdrnet/" class="uri" target="_blank" rel="noopener">https://groups.csail.mit.edu/graphics/hdrnet/</a></p></li>
+</ul>
+<h2 id="颜色滤镜">颜色滤镜</h2>
+<p>颜色滤镜即调色滤镜，也是最常见的滤镜，任何通过调节图像像素值的亮度、对比度、饱和度、色相等等方法，得到的不同于原图像颜色的效果，都统称为颜色滤镜。</p>
+<p>LUT是Look Up Table的缩写，俗称为颜色查找表。颜色查找表有1D LUT、2D LUT、3D LUT三种。</p>
+<p><a href="https://blog.csdn.net/trent1985/article/details/81101688" class="uri" target="_blank" rel="noopener">https://blog.csdn.net/trent1985/article/details/81101688</a></p>
+<h2 id="未归类">未归类</h2>
+<ul>
+<li><p>(AAAI 2019) Fully Convolutional Network with Multi-Step Reinforcement Learning for Image Processing<br>
+<a href="https://github.com/rfuruta/pixelRL" class="uri" target="_blank" rel="noopener">https://github.com/rfuruta/pixelRL</a></p></li>
+<li><p>(PRIA 2019) Personalised aesthetics with residual adapters<br>
+<a href="https://github.com/crp94/Personalised-aesthetic-assessment-using-residual-adapters" class="uri" target="_blank" rel="noopener">https://github.com/crp94/Personalised-aesthetic-assessment-using-residual-adapters</a></p></li>
+</ul>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/07/30/2019_07_30_Image_Quality_Assessment/"  data-tooltip="图像质量评估 Image Quality Assessment">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/07/07/2019_07_07_Quantitative/" data-tooltip="常用的量化策略及其实现">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/07/30/2019_07_30_Image_Quality_Assessment/"  data-tooltip="图像质量评估 Image Quality Assessment">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2019/07/07/2019_07_07_Quantitative/" data-tooltip="常用的量化策略及其实现">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2019/07/21/2019_07_21_Image_Enhancement/';
+                 
+                    this.page.identifier = '2019/07/21/2019_07_21_Image_Enhancement/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

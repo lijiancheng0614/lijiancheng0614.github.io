@@ -1,0 +1,1091 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>Convex Optimization 2015.11.18 - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="Convex Optimization 2015.11.18">
+<meta name="keywords" content="Note,Convex Optimization">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Convex Optimization 2015.11.18">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="Convex Optimization 2015.11.18">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.754Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Convex Optimization 2015.11.18">
+<meta name="twitter:description" content="Convex Optimization 2015.11.18">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Convex Optimization 2015.11.18
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-11-18T00:00:00+08:00">
+	
+		    Nov 18, 2015
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Study/">Study</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Convex-Optimization/">Convex Optimization</a>, <a class="tag-link" href="/tags/Note/">Note</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span>
+            <p>Convex Optimization 2015.11.18</p>
+<a id="more"></a>
+<p>Let <span class="math inline">\(\{ f_a : a \in \mathcal{A} \}\)</span> be a collection of convex functinos from <span class="math inline">\(\mathbb{R}^n\)</span> to <span class="math inline">\(\mathbb{R}\)</span>, with same domain, then <span class="math inline">\(f(x) = \sup_{a \in \mathcal{A}} f_a(x)\)</span> is a convex function.</p>
+<ul>
+<li><p>Proof1: Take <span class="math inline">\(x, y \in dom \, f\)</span>, <span class="math inline">\(\theta \in [0, 1]\)</span>,</p>
+<p><span class="math display">\[\begin{align*}
+  f(\theta x + (1 - \theta)y) = &amp; \sup_a f_a(\theta x + (1 - \theta)y) \\
+                            \le &amp; \sup_a [\theta f_a(x) + (1 - \theta) f_a(y)] \\
+                            \le &amp; \theta \sup_a f_a(x) + (1 - \theta) \sup_a f_a(y) \\
+                              = &amp; \theta f(x) + (1 - \theta) f(y)
+  \end{align*}\]</span></p>
+<p>(The proposition is true for <span class="math inline">\(dom \, f = \bigcap _{a \in \mathcal{A}} dom \, f_a\)</span>, but false for <span class="math inline">\(dom \, f = \bigcup _{a \in \mathcal{A}} dom \, f_a\)</span>.)</p></li>
+<li><p>Proof2: <span class="math display">\[\begin{align*}
+epi(f) = &amp; \{ (x, t) : x \in dom \, f, \, t \gt f_a(x) \; \forall a \in \mathcal{A} \} \\
+     = &amp; \{ (x, t) : (x, t) \in epi(f_a) \; \forall a \in \mathbb{A} \} \\
+     = &amp; \bigcap _{a \in \mathcal{A}} epi(f_a)
+\end{align*}\]</span></p></li>
+<li><p>Example: Let <span class="math inline">\(x_{[i]}\)</span> denote the <span class="math inline">\(i\)</span>-th largest component of <span class="math inline">\(x = (x_1, \cdots, x_n) \in \mathbb{R}^n\)</span>,<br>
+then <span class="math inline">\(max-sum_r(x) = x_{[1]} + x_{[2]} + \cdots + x_{[r]}\)</span> is convex.</p></li>
+<li><p>Proof: <span class="math inline">\(max-sum_r(x) \ge x_{i_1} + x_{i_2} + \cdots + x_{i_r}\)</span></p>
+<p>for any <span class="math inline">\(\{ i_1, \cdots, i_r \} \subseteq \{ 1, \cdots, n \}\)</span> with <span class="math inline">\(i_j \neq i_k\)</span> for <span class="math inline">\(j \neq k\)</span></p>
+<p>so it is convex.</p></li>
+<li><p>Example: Let <span class="math inline">\(C \subseteq \mathbb{R}^n\)</span>, define <span class="math inline">\(S_c(x) = \sup \{ y^T x : y \in C \}\)</span>, then <span class="math inline">\(S_c\)</span> is convex.</p></li>
+<li><p>Example: Let <span class="math inline">\(f : S^n \to \mathbb{R}\)</span>, <span class="math inline">\(f(X)\)</span> is the largest eigenvalue of <span class="math inline">\(X\)</span>.</p>
+<p>Claim: <span class="math inline">\(f\)</span> is convex.</p></li>
+<li><p>Proof: First claim that <span class="math inline">\(f(X) = \sup \{ y^T X y : \lVert y \rVert _2 = 1 \}\)</span></p></li>
+<li><p>Proof of claim: <span class="math display">\[\begin{align*}
+\sup _{\lVert y \rVert _2 = 1} y^T X y = &amp; \sup _{\lVert y \rVert _2 = 1} y^T P D P^T y \\
+                                     = &amp; \sup _{\lVert v \rVert _2 = 1} v^T D v \\
+                                     = &amp; \sup _{\lVert v \rVert _2 = 1} \lambda _i v_i^2 \\
+                                   \le &amp; \sup _{\lVert v \rVert _2 = 1} \max (\lambda _i) \sum_{i = 1}^n v_i^2 \\
+                                     = &amp; \max (\lambda _i)
+\end{align*}\]</span></p></li>
+<li><p>Example: Let <span class="math inline">\(f : \mathbb{R}^{m \times n} \to \mathbb{R}\)</span> be defined by <span class="math inline">\(f(X) = \lVert X \rVert _2\)</span> where <span class="math inline">\(\lVert X \rVert _2 = \sup _{\lVert y \rVert _2 = 1} \lVert X y \rVert _2\)</span> is the spectural norm of <span class="math inline">\(X \in \mathbb{R}^{m \times n}\)</span>.</p></li>
+<li><p>Claim: <span class="math inline">\(f(X) = \sup _{u, v} \{ u^T X v : \lVert u \rVert _2 = 1, \lVert v \rVert _2 = 1 \}\)</span></p>
+<p>because <span class="math inline">\(\lVert Xv \rVert _2 = \sup \{ u^T X v : u \in \mathbb{R}^n, \, \lVert u \rVert _2 = 1 \}\)</span></p>
+<p>more generally: <span class="math inline">\(\lVert X \rVert _{a, b} = \sup \{ \lVert Xv \rVert _b : \lVert v \rVert _a = 1 \} = \sup \{ u^T X v : \lVert v \rVert _a = 1, \lVert u \rVert _{b*} = 1 \}\)</span></p>
+<p>(<span class="math inline">\(\lVert Xv \rVert _b = \lVert Xv \rVert _{b**} = \sup _u \{ u^T X v : \lVert u \rVert _{b*} = 1 \}\)</span>)</p></li>
+<li><p><strong>Composition</strong>: Have <span class="math inline">\(f(x) = h(g(x))\)</span>, <span class="math inline">\(x \in \mathbb{R}^n\)</span>, <span class="math inline">\(g(x) \in \mathbb{R}\)</span>, when is <span class="math inline">\(f\)</span> convex?</p></li>
+<li><p>Would-be-proof: Take <span class="math inline">\(x, y \in dom \, f\)</span>, <span class="math inline">\(\theta \in [0, 1]\)</span> then</p>
+<p><span class="math display">\[\begin{align*}
+  f(\theta x + (1 - \theta)y) = &amp; h(g(\theta x + (1 - \theta)y)) &amp; \text{use $dom \, f$ is convex} \\
+                            \le &amp; h(\theta g(x) + (1 - \theta)g(y)) &amp; \text{use $g$ is convex/concave, $h$ is nondecreasing/nonincreasing} \\
+                            \le &amp; \theta h(g(x)) + (1 - \theta)h(g(y)) &amp; \text{use $h$ is convex} \\
+                              = &amp; \theta f(x) + (1 - \theta)f(y)
+  \end{align*}\]</span></p></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">---</th>
+<th style="text-align: center;">-</th>
+<th style="text-align: center;">1</th>
+<th style="text-align: center;">2</th>
+<th style="text-align: center;">3</th>
+<th style="text-align: center;">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Condition</td>
+<td style="text-align: center;">g</td>
+<td style="text-align: center;">convex</td>
+<td style="text-align: center;">concave</td>
+<td style="text-align: center;">convex</td>
+<td style="text-align: center;">concave</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">---</td>
+<td style="text-align: center;">h</td>
+<td style="text-align: center;">nondecreasing</td>
+<td style="text-align: center;">nonincreasing</td>
+<td style="text-align: center;">nonincreasing</td>
+<td style="text-align: center;">nondecreasing</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">---</td>
+<td style="text-align: center;">h</td>
+<td style="text-align: center;">convex</td>
+<td style="text-align: center;">convex</td>
+<td style="text-align: center;">concave</td>
+<td style="text-align: center;">concave</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Result</td>
+<td style="text-align: center;">f</td>
+<td style="text-align: center;">convex</td>
+<td style="text-align: center;">convex</td>
+<td style="text-align: center;">concave</td>
+<td style="text-align: center;">concave</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>Example: <span class="math inline">\(g(x) = x^2 - 1, h(x) = x^{3 / 2}, dom \, h = \mathbb{R}_+\)</span></p>
+<p>then <span class="math inline">\(dom \, (h \circ g) = (-\infty, -1] \bigcup [1, +\infty]\)</span> is not convex.</p></li>
+<li><p>Example 3.13:</p>
+<p>If <span class="math inline">\(g\)</span> is convex then <span class="math inline">\(e^{g(x)}\)</span> is convex. <strong>1</strong></p>
+<p>If <span class="math inline">\(g\)</span> is concave and positive then <span class="math inline">\(\log(g(x))\)</span> is concave. <strong>4</strong></p>
+<p>If <span class="math inline">\(g\)</span> is concave and positive then <span class="math inline">\(\frac{1}{g(x)}\)</span> is convex. <strong>2</strong></p>
+<p>If <span class="math inline">\(g\)</span> is convex and nonnegative and <span class="math inline">\(p \ge 1\)</span>, <span class="math inline">\(g(x)^p\)</span> is convex. <strong>1</strong></p>
+<p><span class="math inline">\(g : \mathbb{R}^n \to \mathbb{R}^m\)</span>, say <span class="math inline">\(g\)</span> is K-convex, where <span class="math inline">\(K\)</span> is a cone in <span class="math inline">\(\mathbb{R}^m\)</span>,</p>
+<p>if <span class="math inline">\(dom \, g\)</span> is convex and <span class="math inline">\(g(\theta x + (1 - \theta)y) \preceq _K \theta g(x) + (1 - \theta) g(t)\)</span></p>
+<p><span class="math inline">\(x \succeq _K y \implies h(x) \ge h(y)\)</span> K-nondecreasing.</p></li>
+<li><p>Example 3.14:</p>
+<p><span class="math inline">\(h(z) = \log \left(\sum _{i = 1}^k e^{z_i} \right)\)</span>, so <span class="math inline">\(\log \left( \sum _{i = 1}^k e^{g_i(x)} \right)\)</span> will be convex if <span class="math inline">\(g_1, \cdots, g_k\)</span> are convex.</p></li>
+<li><p><strong>Minimization</strong>: Let <span class="math inline">\(f : \mathbb{R}^n \times \mathbb{R}^m\)</span> be a convex function, then</p>
+<p><span class="math inline">\(g(x) = \inf _{y : (x, y) \in dom \, f} f(x, y)\)</span> is convex.</p></li>
+<li><p>Proof: Let <span class="math inline">\(x_1, x_2 \in dom \, g\)</span>, <span class="math inline">\(\theta \in [0, 1]\)</span>.</p>
+<p>then for any <span class="math inline">\(\varepsilon \gt 0\)</span>, <span class="math inline">\(\exists y_1, y_2\)</span>, s.t.</p>
+<p><span class="math inline">\(g(x_1) \ge f(x_1, y_1) - \varepsilon\)</span>, <span class="math inline">\(g(x_2) \ge f(x_2, y_2) - \varepsilon\)</span> and</p>
+<p><span class="math display">\[\begin{align*}
+  g(\theta x_1 + (1 - \theta)x_2) = &amp; \inf _y f(\theta x_1 + (1 - \theta)x_2, y) \\
+                                \le &amp; f(\theta x_1 + (1 - \theta)x_2, \theta y_1 + (1 - \theta)y_2) \\
+                                \le &amp; \theta f(x_1, y_1) + (1 - \theta) f(x_2, y_2) \\
+                                \le &amp; \theta g(x_1) + (1 - \theta) g(x_2) + \varepsilon
+  \end{align*}\]</span></p></li>
+<li><p>Example: Let <span class="math inline">\(C \subseteq \mathbb{R}^n\)</span> be a convex set, then</p>
+<p><span class="math inline">\(g(x) = \inf _{y \in C} \lVert x - y \rVert\)</span> is a convex function.</p></li>
+<li><p>Proof: Use <span class="math inline">\(f(x, y) = \lVert x - y \rVert \; dom \, f = \mathbb{R}^n \times C\)</span>,</p>
+<p><span class="math display">\[\begin{align*}
+  f(\theta x_1 + (1 - \theta)x_2, \theta y + (1 - \theta)y_2) = &amp; \lVert \theta x_1 + (1 - \theta)x_2 - \theta y_1 - (1 - \theta)y_2 \rVert \\
+  = &amp; \lVert \theta (x_1 - y_1) + (1 - \theta)(x_2 - y_2) \rVert \\
+  \le &amp; \theta \lVert x_1 - y_1 \rVert + (1 - \theta) \lVert x_2 - y_2 \rVert \\
+  = &amp; f(x_1, y_1) + f(x_2, y_2)
+  \end{align*}\]</span></p>
+<p>Consider function <span class="math inline">\(g(w) = \inf _x \sum _{i = 1}^m w_i (a_i^T x - b_i)^2\)</span>, "weighted least square"</p>
+<p>concave function of <span class="math inline">\(w\)</span></p>
+<p>Let <span class="math inline">\(g(w) = \inf _x (Ax - b)^T W (Ax - b) = \inf _x (x^T A^T W A x - 2b^T W A x + b^T W b)\)</span></p>
+<p>assume <span class="math inline">\(A^T W A \succ 0\)</span>, then optimal <span class="math inline">\(x = (A^T W A)^{-1} A^T W b\)</span></p>
+<p>(<span class="math inline">\(\min _x(x^T A x + 2b^T x), \nabla = 2Ax + 2b = 0 \implies \text{best} \, x = -A^{-1} b\)</span>)</p>
+<p><span class="math display">\[\begin{align*}
+  \text{optimal value} = &amp; b^T W A (A^T W A)^{-1} A^T W b - 2 b^T W A (A^T W A)^{-1} A^T W b + b^T W b \\
+  = &amp; - b^T W A (A^T W A)^{-1} A^T W b + b^T W b \\
+  = &amp; \sum _{i = 1}^m b_i^2 w_i - \left(\sum _{i = 1}^m w_i b_i a_i^T \right) \left(\sum _{i = 1}^m w_i a_i a_i^T \right)^{-1} \left(\sum _{i = 1}^m w_i b_i a_i \right) \\
+  = &amp; \sum _{i = 1}^m b_i^2 w_i - \sum _{i, j} w_i w_j b_i b_j a_i^T \left(\sum _{i = 1}^m w_i a_i a_i^T \right)^{-1} a_j
+  \end{align*}\]</span></p>
+<p>(<span class="math inline">\(A^T W A = \sum a_i (w_i a_i^T) = \sum w_i a_i a_i^T\)</span>)</p></li>
+</ul>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/11/25/2015_11_25_Convex Optimization/"  data-tooltip="Convex Optimization 2015.11.25">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/11/11/2015_11_11_Metric_Learning/" data-tooltip="Metric learning 度量学习">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/11/25/2015_11_25_Convex Optimization/"  data-tooltip="Convex Optimization 2015.11.25">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/11/11/2015_11_11_Metric_Learning/" data-tooltip="Metric learning 度量学习">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2015/11/18/2015_11_18_Convex Optimization/';
+                 
+                    this.page.identifier = '2015/11/18/2015_11_18_Convex Optimization/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

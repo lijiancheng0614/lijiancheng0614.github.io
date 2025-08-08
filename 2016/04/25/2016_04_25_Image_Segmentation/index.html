@@ -1,0 +1,1072 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>图像分割之图割 - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="学习图像分割，使用属于图割（Graph Cut）方法的Efficient Graph-Based Image Segmentation进行实验。">
+<meta name="keywords" content="Python,Computer Vision,OpenCV">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="图像分割之图割">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="学习图像分割，使用属于图割（Graph Cut）方法的Efficient Graph-Based Image Segmentation进行实验。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/2008_000123.jpg">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/2008_000123_output.jpg">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/2008_000043.jpg">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/2008_000043_output.jpg">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.758Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图像分割之图割">
+<meta name="twitter:description" content="学习图像分割，使用属于图割（Graph Cut）方法的Efficient Graph-Based Image Segmentation进行实验。">
+<meta name="twitter:image" content="http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/2008_000123.jpg">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/2008_000123_output.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/2008_000123_output.jpg" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            图像分割之图割
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2016-04-25T00:00:00+08:00">
+	
+		    Apr 25, 2016
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>, <a class="tag-link" href="/tags/OpenCV/">OpenCV</a>, <a class="tag-link" href="/tags/Python/">Python</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#实验问题"><span class="toc-text">实验问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验环境"><span class="toc-text">实验环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验过程"><span class="toc-text">实验过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关工作"><span class="toc-text">相关工作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#图像的图表示"><span class="toc-text">图像的图表示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最小生成树"><span class="toc-text">最小生成树</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相关定义"><span class="toc-text">相关定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#分割区域component的内部差internal-difference"><span class="toc-text">分割区域（Component）的内部差（Internal difference）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分割区域component之间的差别difference"><span class="toc-text">分割区域（Component）之间的差别（Difference）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分割区域component边界的一种判断标准predicate"><span class="toc-text">分割区域（Component）边界的一种判断标准（predicate）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分割s太精细too-fine"><span class="toc-text">分割\(S\)太精细（too fine）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分割s太粗糙too-coarse"><span class="toc-text">分割\(S\)太粗糙（too coarse）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对任意一个图都存在一个分割s既不是太精细也不是太粗糙"><span class="toc-text">对任意一个图，都存在一个分割\(S\)，既不是太精细也不是太粗糙。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法过程"><span class="toc-text">算法过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法证明"><span class="toc-text">算法证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法效率分析"><span class="toc-text">算法效率分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法实现"><span class="toc-text">算法实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验数据集"><span class="toc-text">实验数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pascal-voc-2012数据集"><span class="toc-text">PASCAL VOC 2012数据集</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验结果"><span class="toc-text">实验结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+            <p>学习图像分割，使用属于图割（Graph Cut）方法的Efficient Graph-Based Image Segmentation进行实验。</p>
+<a id="more"></a>
+<h2 id="实验问题">实验问题</h2>
+<p>图像分割（Segmentation）<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>指的是将数字图像细分为多个图像子区域（像素的集合）（也被称作超像素）的过程。</p>
+<h2 id="实验环境">实验环境</h2>
+<p>操作系统：Ubuntu 14.04.3 LTS</p>
+<p>开发环境：gcc v4.8.5</p>
+<h2 id="实验过程">实验过程</h2>
+<p>这里使用Efficient Graph-Based Image Segmentation<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>作为本次实验的解决方案。</p>
+<p>这篇文章解决了把图像分割成区域的问题。文章定义了一个使用图像的图表示（graph-based）来衡量两个区域边界置信度的预测器，然后设计了一个基于该预测器的有效分割算法，并表明虽然该算法使用贪心决策但它产生的分割满足全局特性。文章使用2种不同的局部邻居的方法来构建图，并阐明真实与合成图像的结果。该算法的运行时间几乎与图的边数目成线性关系，在实验中也很快。该方法的一个重要特征是它能保持在变化较低的图像区域的细节，同时忽略了在变化较高的区域的细节。</p>
+<h3 id="相关工作">相关工作</h3>
+<h4 id="图像的图表示">图像的图表示</h4>
+<p>图像的图表示是指将图像表达成图论中的图<span class="math inline">\(G = (V, E)\)</span>。具体来说就是，把图像中的每一个像素点看成一个顶点<span class="math inline">\(v_i \in V\)</span>，像素点之间的关系对（一般指相邻关系）构成图的一条边<span class="math inline">\(e_i \in E\)</span>。图k 每条边的权值是基于像素点之间的关系，例如可以为像素点之间的灰度值差。</p>
+<h4 id="最小生成树">最小生成树</h4>
+<p>图像用图表示之后，可以使用最小生成树方法合并像素点，使其构成若干个区域。</p>
+<h3 id="相关定义">相关定义</h3>
+<h4 id="分割区域component的内部差internal-difference">分割区域（Component）的内部差（Internal difference）</h4>
+<p>假设图<span class="math inline">\(G\)</span>已经简化成了最小生成树<span class="math inline">\(MST(C, E)\)</span>，一个分割区域C包含若干个顶点，顶点之间通过最小生成树的边连接。这个内部差就是指分割区域C中包含的最大边的权值。</p>
+<p><span class="math display">\[Int(C) = \max_{e \in MST(C, E)} w(e)\]</span></p>
+<h4 id="分割区域component之间的差别difference">分割区域（Component）之间的差别（Difference）</h4>
+<p>指两个分割区域之间顶点相互连接的最小边的权值。</p>
+<p><span class="math display">\[Dif(C_1, C_2) = \min_{v_i \in C_1, v_j \in C_2, (v_i, v_j) \in E} w((v_i, v_j))\]</span></p>
+<p>如果两个分割部分之间没有边连接，定义<span class="math inline">\(Dif(C_1, C_2) = \infty\)</span>。</p>
+<h4 id="分割区域component边界的一种判断标准predicate">分割区域（Component）边界的一种判断标准（predicate）</h4>
+<p>判断两个分割部分之间的差别<span class="math inline">\(Dif\)</span>相对于<span class="math inline">\(MInt\)</span>的大小，这里引入了一个阈值函数<span class="math inline">\(\tau\)</span> 来控制两者之间的差值。下面给出这个判断标准的定义：</p>
+<p><span class="math display">\[D(C_1, C_2) =
+\begin{cases}
+    \text{true}  &amp; \text{if } Dif(C_1, C_2) &gt; MInt(C_1, C_2)
+    \text{false} &amp; \text{otherwise}
+\end{cases}\]</span></p>
+<p><span class="math display">\[MInt(C_1, C_2) = \min(Int(C_1) + \tau(C_1), Int(C_2) + \tau(C_2))\]</span></p>
+<p>阈值函数<span class="math inline">\(\tau\)</span>主要是为了更好的控制分割区域边界的定义。比较直观的理解，小分割区域的边界定义要强于大分割区域，否则可以将小分割区域继续合并形成大区域。在这里给出的阈值函数与区域的大小有关。</p>
+<p><span class="math display">\[\tau(C) = k / |C|\]</span></p>
+<p><span class="math inline">\(|C|\)</span>是指分割部分顶点的个数（或者像素点个数），k是一个参数，可以根据不同的需求（主要根据图像的尺寸）进行调节。</p>
+<h4 id="分割s太精细too-fine">分割<span class="math inline">\(S\)</span>太精细（too fine）</h4>
+<p>如果一个分割<span class="math inline">\(S\)</span>，存在两个分割区域<span class="math inline">\(C_1, C_2 \in S\)</span>，它们之间没有明显的边界，则称<span class="math inline">\(S\)</span>太精细。</p>
+<h4 id="分割s太粗糙too-coarse">分割<span class="math inline">\(S\)</span>太粗糙（too coarse）</h4>
+<p>如果一个分割<span class="math inline">\(S\)</span>，一个合适的调整（refinement）<span class="math inline">\(S’\)</span>使得<span class="math inline">\(S\)</span>不是太精细，则称<span class="math inline">\(S\)</span>太粗糙。</p>
+<h4 id="对任意一个图都存在一个分割s既不是太精细也不是太粗糙">对任意一个图，都存在一个分割<span class="math inline">\(S\)</span>，既不是太精细也不是太粗糙。</h4>
+<h3 id="算法过程">算法过程</h3>
+<p>算法如下所示。</p>
+<p><strong>输入：</strong> <span class="math inline">\(n\)</span>个点、<span class="math inline">\(m\)</span>条边的图<span class="math inline">\(G = (V, E)\)</span></p>
+<p><strong>输出：</strong> <span class="math inline">\(V\)</span>的分割<span class="math inline">\(S = (C_1, \cdots, C_r)\)</span></p>
+<ol start="0" type="1">
+<li><p>对于图<span class="math inline">\(G\)</span>的所有边，按权值进行不下降排序，得到<span class="math inline">\(\pi = (o_1, \cdots, o_m)\)</span></p></li>
+<li><p><span class="math inline">\(S^0\)</span>是一个原始分割，相当于每个顶点当做是一个分割区域</p></li>
+<li><p>重复3的操作<span class="math inline">\(\text{for} q = 1, \cdots, m\)</span></p></li>
+<li><p>根据上次<span class="math inline">\(S^{q - 1}\)</span>的构建。选择一条边<span class="math inline">\(o_q(v_i, v_j)\)</span>，如果<span class="math inline">\(v_i\)</span>和<span class="math inline">\(v_j\)</span>在分割的互不相交的区域中，比较这条边的权值与这两个分割区域之间的最小分割内部差<span class="math inline">\(MInt\)</span>，如果<span class="math inline">\(o_q(vi, vj) &lt; MInt\)</span>，那么合并这两个区域，其他区域不变；否则什么都不做</p></li>
+<li><p>最后得到的就是所求的分割<span class="math inline">\(S = S^m\)</span></p></li>
+</ol>
+<h3 id="算法证明">算法证明</h3>
+<p><strong>引理1</strong> 上述步骤3中两个通过边连接的互不相交区域，如果它们不合并，则它们将一直保留到最后。</p>
+<p>步骤3中的边是这两个区域之间相互连接最小的边，若这条边不允许这两个区域合并，后面权值更大的边更不可能使得这两个区域合并，故这两个区域能够保留到最后。</p>
+<p><strong>定理1</strong> 通过上述算法得到的分割不是太精细。</p>
+<p>对初始化状态<span class="math inline">\(S^0\)</span>，分割是最精细的。通过算法，把能合并的区域都合并了，得到的区域之间都有明显的分界线，所以不是太精细。</p>
+<p><strong>定理2</strong> 通过上述算法得到的分割不是太粗糙。</p>
+<p>对最后的状态<span class="math inline">\(S^m\)</span>，能够合并的区域都合并了，不能合并的都保留了下来。如果对于留下来的任意一个区域进行分割，那么必然就导致这两个子区域之间没有明显的分界线，那么这个调整是太精细。显然不存在一个调整不是太精细，故最后得到分割不是太粗糙。</p>
+<p><strong>定理3</strong> 在上述算法中，相同权值的不同边的顺序不影响最后的结果。</p>
+<p>两条边<span class="math inline">\(e_1, e_2\)</span>涉及四个顶点，只有当涉及到三个区域是对实验结果可能有影响，这里只讨论这种情况。在分割区域<span class="math inline">\(A\)</span>和<span class="math inline">\(B\)</span>之间，在分割区域<span class="math inline">\(B\)</span>和<span class="math inline">\(C\)</span>之间。对<span class="math inline">\(e_1\)</span>是否导致<span class="math inline">\(A\)</span>和<span class="math inline">\(B\)</span>合并，以及<span class="math inline">\(e_2\)</span>是否导致<span class="math inline">\(B\)</span>和<span class="math inline">\(C\)</span>合并，分类讨论就可以很容易得出上述结论。</p>
+<h3 id="算法效率分析">算法效率分析</h3>
+<p>算法使用排序和路径压缩的并查集实现，耗时主要分为两部分：</p>
+<ol type="1">
+<li><p>步骤0的排序，使用常用的排序算法都能够达到<span class="math inline">\(O(mlog(m))\)</span>。</p></li>
+<li><p>步骤1-3，时间复杂度为<span class="math inline">\(O(m\alpha(m))\)</span>，<span class="math inline">\(\alpha\)</span>是一个非常缓慢增长的Ackerman反函数。</p></li>
+</ol>
+<p>主要的时间都是在第二部分，<span class="math inline">\(\alpha\)</span>由于是一个增长非常缓慢的函数，所以基本可以认为是一个常数，这也是该算法基本能够与图像像素点数量成线性关系的原因。</p>
+<h3 id="算法实现">算法实现</h3>
+<p>首先对图像进行一个高斯滤波，这样做可以去掉一些噪声，而又不影响图像的视觉效果。在构建图表示的过程采用四邻域点，即每个像素点与其周边四个像素点之间各构成一条边，边的权值通过计算颜色值的欧式距离衡量。当然也可以先在每个颜色通道进行分割，然后求它们的交，这样会使得分割效果更好（分割的更精细）。阈值函数<span class="math inline">\(\tau\)</span>的参数<span class="math inline">\(k\)</span>可以根据图像大小以及需求进行调节。</p>
+<h2 id="实验数据集">实验数据集</h2>
+<h3 id="pascal-voc-2012数据集">PASCAL VOC 2012数据集</h3>
+<p>PASCAL VOC 2012<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>数据集相关地址：<a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html" class="uri" target="_blank" rel="noopener">http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html</a></p>
+<p>PASCAL VOC(Pattern Analysis, Statistical Modelling and Computational learning, Visual Object Classes) 2012指2012年一个视觉对象的分类识别和检测的挑战赛。</p>
+<p>挑战的主要目标是识别一些现实场景中的视觉对象类。数据集中有20个分类，分别是：</p>
+<ul>
+<li><p>人：人</p></li>
+<li><p>动物：鸟、猫、牛、狗、马、羊</p></li>
+<li><p>交通工具：飞机、自行车、船、公共汽车、汽车、摩托车、火车</p></li>
+<li><p>室内物体：瓶子、椅子、餐桌、盆栽植物、沙发、电视/显示器</p></li>
+</ul>
+<p>比赛主要分为分类、检测、分割3个部分，这里我们只关注分割比赛。</p>
+<p>分割比赛需要对给定的物体分类生成像素级的分割，其它则作为背景。</p>
+<h2 id="实验结果">实验结果</h2>
+<p>由于这篇文章并没有实现对特定对象的分割，故没办法完成PASCAL VOC 2012中对不同对象进行分割及同一类对象不同实例的分割。</p>
+<p>这里选择几张PASCAL VOC 2012中的测试图像，使用这篇文章的分法进行实验。</p>
+<p>部分图像及其分割结果如下。</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Original Image</th>
+<th style="text-align: center;">Segmented Image</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><div class="figure center" style="width:;"><img class="fig-img" src="2008_000123.jpg" alt></div></td>
+<td style="text-align: center;"><div class="figure center" style="width:;"><img class="fig-img" src="2008_000123_output.jpg" alt></div></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><div class="figure center" style="width:;"><img class="fig-img" src="2008_000043.jpg" alt></div></td>
+<td style="text-align: center;"><div class="figure center" style="width:;"><img class="fig-img" src="2008_000043_output.jpg" alt></div></td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考">参考</h2>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1" role="doc-endnote"><p>图像分割. 维基百科. 最后修订于2015年10月20日. <a href="https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2" class="uri" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Felzenszwalb P F, Huttenlocher D P. Efficient graph-based image segmentation[J]. International Journal of Computer Vision, 2004, 59(2): 167-181.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>Visual Object Classes Challenge 2012 (VOC2012). PASCAL2. <a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html" class="uri" target="_blank" rel="noopener">http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/09/2016_05_09_torch/"  data-tooltip="Torch学习">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/2016_04_21_VSR/" data-tooltip="VSR实验">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/09/2016_05_09_torch/"  data-tooltip="Torch学习">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/04/21/2016_04_21_VSR/" data-tooltip="VSR实验">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2016/04/25/2016_04_25_Image_Segmentation/';
+                 
+                    this.page.identifier = '2016/04/25/2016_04_25_Image_Segmentation/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

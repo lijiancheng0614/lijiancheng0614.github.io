@@ -1,0 +1,1178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>DeepLab-v3+ - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation Paper: https://arxiv.org/abs/1802.02611 Blog: https://research.googleblog.com/2018/03/semantic-image-segmentation-with">
+<meta name="keywords" content="Computer Vision,Deep Learning,Paper">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="DeepLab-v3+">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation Paper: https://arxiv.org/abs/1802.02611 Blog: https://research.googleblog.com/2018/03/semantic-image-segmentation-with">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://liangchiehchen.com/fig/deeplabv3plus.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/figure3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/table3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/table5.png">
+<meta property="og:image" content="http://liangchiehchen.com/fig/deeplabv3plus.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/figure3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/table3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/table5.png">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.805Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DeepLab-v3+">
+<meta name="twitter:description" content="Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation Paper: https://arxiv.org/abs/1802.02611 Blog: https://research.googleblog.com/2018/03/semantic-image-segmentation-with">
+<meta name="twitter:image" content="http://liangchiehchen.com/fig/deeplabv3plus.png">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="http://liangchiehchen.com/fig/deeplabv3plus.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="http://liangchiehchen.com/fig/deeplabv3plus.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            DeepLab-v3+
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2018-02-27T00:00:00+08:00">
+	
+		    Feb 27, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>, <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/Paper/">Paper</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中文"><span class="toc-text">中文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关工作"><span class="toc-text">相关工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法"><span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#带扩散卷积的编码器-解码器"><span class="toc-text">带扩散卷积的编码器-解码器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改的-aligned-xception"><span class="toc-text">修改的 Aligned Xception</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验评估"><span class="toc-text">实验评估</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解码器设计选择"><span class="toc-text">解码器设计选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#resnet-101-作为网络主干"><span class="toc-text">ResNet-101 作为网络主干</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xception-作为网络主干"><span class="toc-text">Xception 作为网络主干</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#沿物体边界的改进"><span class="toc-text">沿物体边界的改进</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-text">结论</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#english"><span class="toc-text">English</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#related-work"><span class="toc-text">Related Work</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#encoder-decoder-with-atrous-convolution"><span class="toc-text">Encoder-Decoder with Atrous Convolution</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#modified-aligned-xception"><span class="toc-text">Modified Aligned Xception</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#experimental-evaluation"><span class="toc-text">Experimental Evaluation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#decoder-design-choices"><span class="toc-text">Decoder Design Choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#resnet-101-as-network-backbone"><span class="toc-text">ResNet-101 as Network Backbone</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xception-as-network-backbone"><span class="toc-text">Xception as Network Backbone</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#improvement-along-object-boundaries"><span class="toc-text">Improvement along Object Boundaries</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#conclusion"><span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+            <p>Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation</p>
+<p>Paper: <a href="https://arxiv.org/abs/1802.02611" class="uri" target="_blank" rel="noopener">https://arxiv.org/abs/1802.02611</a></p>
+<p>Blog: <a href="https://research.googleblog.com/2018/03/semantic-image-segmentation-with.html" class="uri" target="_blank" rel="noopener">https://research.googleblog.com/2018/03/semantic-image-segmentation-with.html</a></p>
+<p>Code: <a href="https://github.com/tensorflow/models/tree/master/research/deeplab" class="uri" target="_blank" rel="noopener">https://github.com/tensorflow/models/tree/master/research/deeplab</a></p>
+<a id="more"></a>
+<p>在 DeepLab-v3 上添加解码器细化分割结果（尤其是物体边界），且使用深度可分离卷积加速。</p>
+<p>DeepLabv3+, extends DeepLabv3 by adding a simple yet effective decoder module to refine the segmentation results especially along object boundaries.</p>
+<p>We further explore the Xception model and apply the depthwise separable convolution to both Atrous Spatial Pyramid Pooling and decoder modules, resulting in a faster and stronger encoder-decoder network.</p>
+<h1 id="中文">中文</h1>
+<h2 id="简介">简介</h2>
+<p>考虑语义分割的两种类型：</p>
+<ol type="1">
+<li><p>空间金字塔池化模块：通过池化不同分辨率的特征，捕获丰富的上下文信息</p></li>
+<li><p>编码器-解码器结构：能够获得锐利的物体边界</p></li>
+</ol>
+<p>空间金字塔池化模块计算密集，因为提取输出特征只是输入大小的 8 倍甚至 4 倍。</p>
+<p>编码器解码器结构在编码器路径中计算更快（因为没有扩散特征）。</p>
+<p>结合二者优点，提出加入多尺度上下文信息来丰富编码器解码器网络中的编码器模块。</p>
+<p>采用 Xception 模型在速度和精度上都有所提升</p>
+<h2 id="相关工作">相关工作</h2>
+<p>空间金字塔池化</p>
+<p>编码器-解码器</p>
+<p>深度可分离卷积</p>
+<h2 id="方法">方法</h2>
+<h3 id="带扩散卷积的编码器-解码器">带扩散卷积的编码器-解码器</h3>
+<ul>
+<li><p>扩散卷积</p></li>
+<li><p>深度可分的卷积</p></li>
+<li><p>DeepLabv3 作为编码器</p></li>
+<li><p>提出的解码器</p>
+<p>在 DeepLabv3 的工作中，这些功能被双线性上采样 16 倍，可以被认为是一个朴素的解码器模块。</p>
+<p>但是，这个朴素的解码器模块可能无法成功恢复物体分割细节。</p>
+<p>因此，我们提出了一种简单而有效的解码器模块，如图2所示。</p>
+<ol type="1">
+<li><p>编码器特征双线性插值上采样 4 倍</p></li>
+<li><p>然后与具有相同空间分辨率的相应低级特征合并</p>
+<p>作用一个 1 x 1 卷积在低级特征上以减少通道数</p></li>
+<li><p>经过一些 3 x 3 的卷积以精炼特征</p></li>
+<li><p>再双线性插值上采样 4 倍</p></li>
+</ol></li>
+</ul>
+<p><img src="http://liangchiehchen.com/fig/deeplabv3plus.png"></p>
+<p>图 2. 我们提出的 DeepLabv3+，采用编码器 - 解码器结构扩展了 DeepLabv3。编码器模块通过在多个尺度上应用扩散卷积来编码多尺度上下文信息，而简单但有效的解码器模块沿着物体边界细化分割结果。</p>
+<h3 id="修改的-aligned-xception">修改的 Aligned Xception</h3>
+<p>Xception 模型在 ImageNet 上展示了具有快速计算能力的图像分类结果。</p>
+<p>最近，MSRA 团队修改了 Xception 模型（称为 Aligned Xception），并进一步推动了物体检测任务的性能。</p>
+<p><img src="figure3.png"></p>
+<p>图 3. Xception 模型修改如下：</p>
+<ol type="1">
+<li><p>更多层（与 MSRA 的修改相同，但 Entry 流中的更改除外）</p></li>
+<li><p>所有最大池化操作都由具有跨步的深度可分离卷积替换</p></li>
+<li><p>在每次 3 x 3 深度卷积之后添加额外 BN 和 ReLU，类似于 MobileNet</p></li>
+</ol>
+<p>一些改进：</p>
+<ol type="1">
+<li><p>不修改入口流的网络结构，为了快速计算和存储效率</p></li>
+<li><p>替代最大池化操作为深度可分离卷积，这使我们能够应用多孔分离卷积在任意分辨率提取特征（另一种选择是延长 arous 算法到最大池化操作）</p></li>
+<li><p>在 3 x 3 的深度可分离卷积后添加额外的 BN 和 ReLU 激活</p></li>
+</ol>
+<h2 id="实验评估">实验评估</h2>
+<h3 id="解码器设计选择">解码器设计选择</h3>
+<p>考虑三个地方进行不同的设计：</p>
+<ol type="1">
+<li><p>用来减少编码器模块的底层特征图的通道的 1 x 1 卷积</p></li>
+<li><p>得到清晰的分割结果的 3 x 3 卷积</p></li>
+<li><p>使用哪些编码器低级特征</p></li>
+</ol>
+<p>我们考虑三个不同的设计选择：</p>
+<ol type="1">
+<li><p>1 x 1 卷积用于减少编码器模块的低级特征映射的通道</p>
+<p>实验表明，48 个 channel 的 1 x 1 卷积效果最好</p></li>
+<li><p>3 x 3 卷积用于获得更清晰的分割结果</p>
+<p>实验表明，2 个 256 channel 的 3 x 3 卷积效果最好</p></li>
+<li><p>应该使用什么编码器低级特征</p>
+<p>实验表明，只使用 Conv2 的特征效果最好</p></li>
+</ol>
+<h3 id="resnet-101-作为网络主干">ResNet-101 作为网络主干</h3>
+<ul>
+<li><p>基线</p></li>
+<li><p>添加解码器</p></li>
+<li><p>更粗粒度的特征图</p></li>
+</ul>
+<p><img src="table3.png"></p>
+<p>表 3. 使用 ResNet-101 作为特征提取器时，PASCAL VOC 2012 val 集的推理策略。</p>
+<p>train OS：训练期间使用的输出步幅。</p>
+<p>eval OS：评估期间使用的输出步幅。</p>
+<p>Decoder：采用所提出的解码器结构。</p>
+<p>MS：评估期间的多尺度输入。</p>
+<p>Flip：添加左右翻转输入。</p>
+<h3 id="xception-作为网络主干">Xception 作为网络主干</h3>
+<ul>
+<li><p>ImageNet 预训练</p></li>
+<li><p>基线</p></li>
+<li><p>加入解码器</p></li>
+<li><p>使用深度可分离卷积</p></li>
+<li><p>在 COCO 上预训练</p></li>
+<li><p>在 JFT 上预训练</p></li>
+<li><p>测试集结果</p></li>
+<li><p>定性结果</p></li>
+<li><p>失败的情况</p></li>
+</ul>
+<p><img src="table5.png"></p>
+<p>表 5. 使用修改的 Xception 作为特征提取器时，PASCAL VOC 2012 val 集的推理策略。</p>
+<p>train OS：训练期间使用的输出步幅。</p>
+<p>eval OS：评估期间使用的输出步幅。</p>
+<p>Decoder：采用所提出的解码器结构。</p>
+<p>MS：评估期间的多尺度输入。</p>
+<p>Flip：添加左右翻转输入。</p>
+<p>SC：对 ASPP 和解码器模块采用深度可分离卷积。</p>
+<p>COCO：模型在 MS-COCO 数据集上预训练。</p>
+<p>JFT：模型在 JFT 数据集上预训练。</p>
+<h3 id="沿物体边界的改进">沿物体边界的改进</h3>
+<p>与朴素双线性上采样相比，将提出的解码器用于 ResNet-101 和 Xception 网络主干来改进性能。</p>
+<h2 id="结论">结论</h2>
+<p>我们提出的模型“DeepLabv3+”，采用编码器-解码器结构，其中 DeepLabv3 用于编码丰富的上下文信息，并且采用简单但有效的解码器模块来恢复对象边界。</p>
+<p>还可以应用扩散卷积来对提取任意分辨率的编码器特征，这取决于可用的计算资源。</p>
+<p>我们还探索了 Xception 模型和扩散可分离卷积，使得所提出的模型更快更强。</p>
+<p>最后，我们的实验结果表明，所提出的模型在 PASCAL VOC 2012 语义图像分割基准上得到了新的最新性能。</p>
+<h1 id="english">English</h1>
+<h2 id="introduction">Introduction</h2>
+<p>we consider two types of neural networks for semantic segmentation:</p>
+<ol type="1">
+<li><p>spatial pyramid pooling module: captures rich contextual information by pooling features at different resolution</p></li>
+<li><p>encoder-decoder structure: is able to obtain sharp object boundaries.</p></li>
+</ol>
+<p>it is computationally prohibitive to extract output feature maps that are 8, or even 4 times smaller than the input resolution.</p>
+<p>encoder-decoder models lend themselves to faster computation (since no features are dilated) in the encoder path and gradually recover sharp object boundaries in the decoder path.</p>
+<p>Attempting to combine the advantages from both methods, we propose to enrich the encoder module in the encoder-decoder networks by incorporating the multi-scale contextual information.</p>
+<p>show improvement in terms of both speed and accuracy by adapting the Xception model</p>
+<p>contributions:</p>
+<ol type="1">
+<li><p>propose a novel encoder-decoder structure which employs DeepLabv3 as a powerful encoder module.</p></li>
+<li><p>can arbitrarily control the resolution of extracted encoder features by atrous convolution to trade-off precision and runtime, which is not possible with existing encoder-decoder models.</p></li>
+<li><p>adapt the Xception model for the segmentation task and apply depthwise separable convolution to both<br>
+ASPP module and decoder module, resulting in a faster and stronger encoder-decoder network.</p></li>
+<li><p>attains a new state-of-art performance on PASCAL VOC 2012 dataset.</p></li>
+<li><p>make our Tensorflow-based implementation of the proposed model publicly available.</p></li>
+</ol>
+<h2 id="related-work">Related Work</h2>
+<p>Spatial pyramid pooling</p>
+<p>Encoder-decoder</p>
+<p>Depthwise separable convolution</p>
+<h2 id="methods">Methods</h2>
+<h3 id="encoder-decoder-with-atrous-convolution">Encoder-Decoder with Atrous Convolution</h3>
+<ul>
+<li><p>Atrous convolution</p></li>
+<li><p>Depthwise separable convolution</p></li>
+<li><p>DeepLabv3 as encoder</p></li>
+<li><p>Proposed decoder</p>
+<p>In the work of DeepLabv3, the features are bilinearly upsampled by a factor of 16, which could be considered a naive decoder module.</p>
+<p>However, this naive decoder module may not successfully recover object segmentation details.</p>
+<p>We thus propose a simple yet effective decoder module, as illustrated in Fig. 2.</p>
+<ol type="1">
+<li><p>The encoder features are first bilinearly upsampled by a factor of 4</p></li>
+<li><p>then concatenated with the corresponding low-level features from the network backbone that have the same spatial resolution</p>
+<p>apply another 1 x 1 convolution on the low-level features to reduce the number of channels</p></li>
+<li><p>apply a few 3 x 3 convolutions to refine the features</p></li>
+<li><p>another bilinear upsampling by a factor of 4</p></li>
+</ol></li>
+</ul>
+<p><img src="http://liangchiehchen.com/fig/deeplabv3plus.png"></p>
+<p>Figure 2. Our proposed DeepLabv3+ extends DeepLabv3 by employing a encoder-decoder structure. The encoder module encodes multiscale contextual information by applying atrous convolution at multiple scales, while the simple yet effective decoder module refines the segmentation results along object boundaries.</p>
+<h3 id="modified-aligned-xception">Modified Aligned Xception</h3>
+<p>The Xception model has shown promising image classification results on ImageNet with fast computation.</p>
+<p>More recently, the MSRA team modifies the Xception model (called Aligned Xception) and further pushes the performance in the task of object detection.</p>
+<p><img src="figure3.png"></p>
+<p>Figure 3. The Xception model is modified as follows:</p>
+<ol type="1">
+<li><p>more layers (same as MSRA’s modification except the changes in Entry flow)</p></li>
+<li><p>all the max pooling operations are replaced by depthwise separable convolutions with striding</p></li>
+<li><p>extra batch normalization and ReLU are added after each 3 x 3 depthwise convolution, similar to MobileNet.</p></li>
+</ol>
+<p>a few more changes:</p>
+<ol type="1">
+<li><p>do not modify the entry flow network structure for fast computation and memory efficiency</p></li>
+<li><p>all max pooling operations are replaced by depthwise separable convolution with striding, which enables us to apply atrous separable convolution to extract feature maps at an arbitrary resolution (another option is to extend the atrous algorithm to max pooling operations)</p></li>
+<li><p>extra batch normalization and ReLU activation are added after each 3 x 3 depthwise convolution</p></li>
+</ol>
+<h2 id="experimental-evaluation">Experimental Evaluation</h2>
+<h3 id="decoder-design-choices">Decoder Design Choices</h3>
+<p>we consider three places for different design choices:</p>
+<ol type="1">
+<li><p>the 1 x 1 convolution used to reduce the channels of the low-level feature map from the encoder module</p></li>
+<li><p>the 3 x 3 convolution used to obtain sharper segmentation results</p></li>
+<li><p>what encoder low-level features should be used</p></li>
+</ol>
+<h3 id="resnet-101-as-network-backbone">ResNet-101 as Network Backbone</h3>
+<ul>
+<li><p>Baseline</p></li>
+<li><p>Adding decoder</p></li>
+<li><p>Coarser feature maps</p></li>
+</ul>
+<p><img src="table3.png"></p>
+<p>Table 3. Inference strategy on the PASCAL VOC 2012 val set when using ResNet-101 as feature extractor. train OS: The output stride used during training. eval OS: The output stride used during evaluation. Decoder: Employing the proposed decoder structure. MS: Multi-scale inputs during evaluation. Flip: Adding left-right flipped inputs.</p>
+<h3 id="xception-as-network-backbone">Xception as Network Backbone</h3>
+<ul>
+<li><p>ImageNet pretraining</p></li>
+<li><p>Baseline</p></li>
+<li><p>Adding decoder</p></li>
+<li><p>Using depthwise separable convolution</p></li>
+<li><p>Pretraining on COCO</p></li>
+<li><p>Pretraining on JFT</p></li>
+<li><p>Test set results</p></li>
+<li><p>Qualitative results</p></li>
+<li><p>Failure mode</p></li>
+</ul>
+<p><img src="table5.png"></p>
+<p>Table 5. Inference strategy on the PASCAL VOC 2012 val set when using modified Xception as feature extractor. train OS: The output stride used during training. eval OS: The output stride used during evaluation. Decoder: Employing the proposed decoder structure. MS: Multi-scale inputs during evaluation. Flip: Adding left-right flipped inputs. SC: Adopting depthwise separable convolution for both ASPP and decoder modules. COCO: Models pretrained on MS-COCO dataset. JFT: Models pretrained on JFT dataset.</p>
+<h3 id="improvement-along-object-boundaries">Improvement along Object Boundaries</h3>
+<p>employing the proposed decoder for both ResNet-101 and Xception network backbones improves the performance compared to the naive bilinear upsampling.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Our proposed model “DeepLabv3+” employs the encoder-decoder structure where DeepLabv3 is used to encode the rich contextual information and a simple yet effective decoder module is adopted to recover the object boundaries.</p>
+<p>One could also apply the atrous convolution to extract the encoder features at an arbitrary resolution, depending on the available computation resources.</p>
+<p>We also explore the Xception model and atrous separable convolution to make the proposed model faster and stronger. Finally, our experimental results show that the proposed model sets a new state-of-the-art performance on the PASCAL VOC 2012 semantic image segmentation benchmark.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/03/13/2018_03_13_TensorFlow-DeepLab/"  data-tooltip="使用TensorFlow DeepLab进行语义分割">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/01/12/2018_01_12_code_review/" data-tooltip="代码评审 Code Review">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/03/13/2018_03_13_TensorFlow-DeepLab/"  data-tooltip="使用TensorFlow DeepLab进行语义分割">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/01/12/2018_01_12_code_review/" data-tooltip="代码评审 Code Review">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2018/02/27/2018_02_27_DeepLab-v3+/';
+                 
+                    this.page.identifier = '2018/02/27/2018_02_27_DeepLab-v3+/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

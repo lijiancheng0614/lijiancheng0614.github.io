@@ -1,0 +1,1218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>ICNet - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="ICNet for Real-Time Semantic Segmentation on High-Resolution Images Paper: https://arxiv.org/abs/1704.08545 Code: https://github.com/hszhao/ICNet">
+<meta name="keywords" content="Computer Vision,Deep Learning,Paper">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="ICNet">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="ICNet for Real-Time Semantic Segmentation on High-Resolution Images Paper: https://arxiv.org/abs/1704.08545 Code: https://github.com/hszhao/ICNet">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/fig1.png">
+<meta property="og:image" content="https://hszhao.github.io/projects/icnet/figures/icnet.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/fig6.png">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.802Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ICNet">
+<meta name="twitter:description" content="ICNet for Real-Time Semantic Segmentation on High-Resolution Images Paper: https://arxiv.org/abs/1704.08545 Code: https://github.com/hszhao/ICNet">
+<meta name="twitter:image" content="http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/fig1.png">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="https://hszhao.github.io/projects/icnet/figures/icnet.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://hszhao.github.io/projects/icnet/figures/icnet.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            ICNet
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-06-08T00:00:00+08:00">
+	
+		    Jun 08, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>, <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/Paper/">Paper</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#related-work"><span class="toc-text">Related Work</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#speed-analysis"><span class="toc-text">Speed Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#time-budget"><span class="toc-text">Time Budget</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#intuitive-speedup"><span class="toc-text">Intuitive Speedup</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#our-image-cascade-network"><span class="toc-text">Our Image Cascade Network</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#main-structures-and-branches"><span class="toc-text">Main structures and Branches</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#branch-analysis"><span class="toc-text">Branch Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#difference-from-other-cascade-structures"><span class="toc-text">Difference from Other Cascade Structures</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cascade-feature-fusion-and-final-model"><span class="toc-text">Cascade Feature Fusion and Final Model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-loss-function"><span class="toc-text">The Loss Function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#final-model-compression"><span class="toc-text">Final Model Compression</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#experimental-evaluation"><span class="toc-text">Experimental Evaluation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#model-compression"><span class="toc-text">Model Compression</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ablation-study-for-image-cascade-framework"><span class="toc-text">Ablation Study for Image Cascade Framework</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#final-results-and-comparison"><span class="toc-text">Final Results and Comparison</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#conclusion"><span class="toc-text">Conclusion</span></a></li></ol>
+            <p>ICNet for Real-Time Semantic Segmentation on High-Resolution Images<br>
+Paper: <a href="https://arxiv.org/abs/1704.08545" class="uri" target="_blank" rel="noopener">https://arxiv.org/abs/1704.08545</a><br>
+Code: <a href="https://github.com/hszhao/ICNet" class="uri" target="_blank" rel="noopener">https://github.com/hszhao/ICNet</a></p>
+<a id="more"></a>
+<p>基于PSPNet提出Image Cascade Network (ICNet)，进行较高准确率的实时图片语义分割。</p>
+<p>影响速度最重要的因素是图片分辨率，尝试了3种方法：对输入下采样，对特征下采样，模型压缩。但速度快了效果差很多。</p>
+<p>输入低中高三种分辨率的图片，并提出Casecade Feature Fusion来融合三种feature map。训练时采用级联标签监督策略（缩小ground-truth来算loss并线性组合不同尺寸的loss）。</p>
+<p>最后步进式地压缩模型：如果要保留1/2的kernel，则先保留3/4来fine-tune，然后再3/4，进行多次。</p>
+<p>We propose an compressed-PSPNet-based image cascade network (ICNet) that incorporates multi-resolution branches.</p>
+<h2 id="introduction">Introduction</h2>
+<figure>
+<img src="fig1.png" alt><figcaption>Figure 1</figcaption>
+</figure>
+<p>Figure 1. Inference speed and mIoU performance on Cityscapes [5] test set. Methods involved are ResNet38 [30], PSPNet [33], DUC [29], RefineNet [14], LRR [6], FRRN [22], DeepLabv2 [3], Dilation10 [32], DPN [18], FCN-8s [19], DeepLab [2], CRF-RNN [34], SQ [28], ENet [21], SegNet [1], and our ICNet.</p>
+<p>Our experiments show that high-accuracy methods of PSPNet [33] and ResNet38 [30] take more than 1 second to predict a 1024 × 2048 high-resolution image on one Nvidia TitanX GPU card during testing. These methods fall into the area illustrated in Figure 1 with high accuracy and low speed.</p>
+<p>Recent fast semantic segmentation methods of SegNet [1], ENet [21], and SQ [28], contrarily, take quite different positions in the plot of Figure 1. The speed is much accelerated; but accuracy notably drops, where the final mIoUs are lower than 60%. These methods locate near the right bottom corner in Figure 1.</p>
+<p>The idea is to let low-resolution image go through the full semantic perception network first for a coarse prediction map. Then the proposed cascade fusion unit introduces middle- and high-resolution image feature and improves the coarse semantic map gradually.</p>
+<p>contributions:</p>
+<ul>
+<li><p>We develop an image cascade network (ICNet), which utilizes semantic information in low resolution along<br>
+with details from high-resolution images efficiently.</p></li>
+<li><p>The proposed ICNet achieves 5x+ speedup of inference, and reduces memory consumption by 5+ times.</p></li>
+<li><p>Our proposed fast semantic segmentation system can run at resolution 1024×2048 in speed of 30.3 fps while accomplishing high-quality results.</p></li>
+</ul>
+<h2 id="related-work">Related Work</h2>
+<p><strong>High Quality Semantic Segmentation</strong></p>
+<p><strong>Fast Semantic Segmentation</strong></p>
+<p>SegNet [1] abandons layers to reduce layer parameters and ENet [21] is a lightweight network.</p>
+<p><strong>Video Segmentation Architectures</strong></p>
+<p>Clockwork [27] reused feature maps given stable video input. Deep feature flow [35] was based on a small-scale optical flow network to propagate features from key frames to others.</p>
+<h2 id="speed-analysis">Speed Analysis</h2>
+<h3 id="time-budget">Time Budget</h3>
+<p>We first study influence of image resolution in semantic segmentation using PSPNet.</p>
+<p>In additional to image resolution, width of a network or the number of kernels also effect the inference time.</p>
+<h3 id="intuitive-speedup">Intuitive Speedup</h3>
+<p><strong>Downsampling Input</strong></p>
+<p>A simple approach is to use the small-resolution image as input.</p>
+<p>although the inference time is reduced by a large margin, the prediction map is very coarse, missing many small but important details compared to the higher resolution prediction.</p>
+<p><strong>Downsampling Feature</strong></p>
+<p>scale down the feature map by a large ratio in the inference process.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Downsample Size</th>
+<th>8</th>
+<th>16</th>
+<th>32</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mIoU (%)</td>
+<td>71.7</td>
+<td>70.2</td>
+<td>67.1</td>
+</tr>
+<tr class="even">
+<td>Time (ms)</td>
+<td>446</td>
+<td>177</td>
+<td>131</td>
+</tr>
+</tbody>
+</table>
+<p>Table 1. Total time spent on PSPNet50 when choosing downsampling factors 8, 16 and 32.</p>
+<p>A smaller feature map can yield faster inference at the cost of sacrificing prediction accuracy. The lost information is similarly details contained in low-level layers.</p>
+<p><strong>Model Compression</strong></p>
+<p>trim kernels in each layer</p>
+<p>For each filter, we first calculate the L1 sum of its kernel weights. Then we sort these L1 sums in a descending order for keeping only the most significant ones.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Kernel Keeping Rates</th>
+<th>1</th>
+<th>0.5</th>
+<th>0.25</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mIoU (%)</td>
+<td>71.7</td>
+<td>67.9</td>
+<td>59.4</td>
+</tr>
+<tr class="even">
+<td>Time (ms)</td>
+<td>446</td>
+<td>170</td>
+<td>72</td>
+</tr>
+</tbody>
+</table>
+<p>Table 2. Kernel keeping rates in model compression along with related mIoUs and inference time.</p>
+<p>the inference time is still too long. Meanwhile the corresponding mIoU is intolerably low</p>
+<h2 id="our-image-cascade-network">Our Image Cascade Network</h2>
+<h3 id="main-structures-and-branches">Main structures and Branches</h3>
+<p><img src="https://hszhao.github.io/projects/icnet/figures/icnet.png"></p>
+<p><strong>Low Resolution</strong></p>
+<p>For the lowest resolution input, it goes through the top branch, which is an FCN-based PSPNet architecture. Since the input size is only 1/4 of the original one, convolution layers correspondingly downsize the feature maps by a ratio of 1/8 and yield 1/32 of the original spatial size.</p>
+<p><strong>Median Resolution</strong></p>
+<p>For the 1/2 size middle-resolution image, the output feature maps are of size 1/16 of the original ones.</p>
+<p>To fusion the 1/16 size feature map with the 1/32 size feature map in the top branch, we propose a cascade feature fusion (CFF) unit that will be discussed later in this paper.</p>
+<p>the convolutional parameters can be shared between the 1/4 and 1/2 resolution inputs, thus saving computational and reducing parameter number.</p>
+<p><strong>High Resolution</strong></p>
+<p>A 1/8 size feature map is resulted.</p>
+<p>we use the CFF unit to incorporate the output of previous CFF unit and current feature map in full resolution in branch three.</p>
+<p><strong>Cascade Label Guidance</strong></p>
+<p>It uses 1/16, 1/8, and 1/4 of ground truth labels to guide the learning stage of low, median and high resolution input.</p>
+<h3 id="branch-analysis">Branch Analysis</h3>
+<p>branch one: even with more than 50 layers, the inference operation and memory consumption are not large as 18ms and 0.6GB.</p>
+<p>There are 17 convolutional layers in branch two and only 3 in branch three.</p>
+<p>only 6ms more is spent to construct the fusion feature map using two branches.</p>
+<p>the inference time in branch three is just 9ms.</p>
+<h3 id="difference-from-other-cascade-structures">Difference from Other Cascade Structures</h3>
+<p>these methods focus on fusing features from different layers from a single-scale input or multi-scale ones.</p>
+<p>They all face the same problem of expensive computation given high-resolution input.</p>
+<p>our ICNet uses the low-resolution input to go through the main semantic segmentation branch and adopts the high-resolution information to help refinement.</p>
+<h2 id="cascade-feature-fusion-and-final-model">Cascade Feature Fusion and Final Model</h2>
+<figure>
+<img src="fig6.png" alt><figcaption>Figure 6</figcaption>
+</figure>
+<p>Figure 6. Cascade feature fusion unit. Given input two feature maps <span class="math inline">\(F_1\)</span> and <span class="math inline">\(F_2\)</span> where the spatial resolution of the latter is twice of the former one, the fused feature map <span class="math inline">\(F&#39;_2\)</span> is of the same spatial size as <span class="math inline">\(F_2\)</span>.</p>
+<p>The input to this unit contains three components: the two feature maps F1 and F2 of resolution <span class="math inline">\(H1 \times W1 \times C1\)</span> and <span class="math inline">\(H2 \times W2 \times C2\)</span> and a ground truth label in resolution <span class="math inline">\(H2 \times W2 \times 1\)</span>.</p>
+<p>Upsampling is applied to make F1 the same size as F2. Then a dilated convolution layer with kernel size <span class="math inline">\(3 \times 3\)</span> and dilation 1 is applied to refine upsampled features.</p>
+<p>for feature F2, a projection convolutional layer with kernel size <span class="math inline">\(1 \times 1\)</span> is utilized to project it with the same size as the output of feature F1.</p>
+<p>Then two batch normalization layers are used to normalize these two features.</p>
+<p>To enhance learning of F1, we use an auxiliary label guidance to the upsampled F1. The auxiliary loss weight is set to 0.4 as in [33].</p>
+<h3 id="the-loss-function">The Loss Function</h3>
+<p>To train ICNet, we append softmax cross entropy loss in each branch denoted as <span class="math inline">\(L_1\)</span>, <span class="math inline">\(L_2\)</span> and <span class="math inline">\(L_3\)</span> with corresponding weights <span class="math inline">\(\lambda_1\)</span>, <span class="math inline">\(\lambda_2\)</span>, and <span class="math inline">\(\lambda_3\)</span>.</p>
+<p><span class="math inline">\(L = \lambda_1 L_1 + \lambda_2 L_2 + \lambda_3 L_3\)</span></p>
+<p>All the losses we adopted are the cross-entropy loss on the corresponding downsampled score maps.</p>
+<h3 id="final-model-compression">Final Model Compression</h3>
+<p>We compress our model in a progressive way. Taking compression rate 1/2 as an example, instead of removing a half of kernels directly, we first choose to keep 3/4 of the kernels and initialize this compressed model for following fine tuning. After it is done, we remove more kernels and repeat this process until the goal of compression is achieved.</p>
+<p>For each filter, we calculate the L1 sum of its kernel weights.</p>
+<p>Then we sort these sums in a descending order for ranking.</p>
+<p>Finally, we remove those least important kernels which have smaller weights.</p>
+<h2 id="experimental-evaluation">Experimental Evaluation</h2>
+<p>We conduct experiments based on learning platform Caffe [12].</p>
+<p>Our testing uses only one card.</p>
+<p>Our network structure is modified from PSPNet.</p>
+<p>We changed the concatenation operations in the pyramid pooling module to summation, thus reducing feature length from 4096 to 2048.</p>
+<p>We changed the kernel size in the convolution layer after pyramid pooling from original <span class="math inline">\(3 \times 3\)</span> to <span class="math inline">\(1 \times 1\)</span>. It does not much affect final accuracy but saves computation a lot.</p>
+<p>To train the hyper-parameters, the mini-batch size is set to 16.</p>
+<p><strong>Dataset and Evaluation Metrics</strong></p>
+<p>Cityscapes</p>
+<p>high-resolution images up to <span class="math inline">\(1024 \times 2048\)</span></p>
+<p>training/validation/testing: 2975/500/1525</p>
+<p>contains 30 common class labels, 19 of them are used in training and testing</p>
+<p>For evaluation, both mean of class-wise intersection over union (mIoU) and network forward time are used.</p>
+<h3 id="model-compression">Model Compression</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Items</th>
+<th>Baseline</th>
+<th>ICNet</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mIoU (%)</td>
+<td>67.9</td>
+<td>67.7</td>
+</tr>
+<tr class="even">
+<td>Time (ms)</td>
+<td>170</td>
+<td>33</td>
+</tr>
+<tr class="odd">
+<td>Frame (fps)</td>
+<td>5.9</td>
+<td>30.3</td>
+</tr>
+<tr class="even">
+<td>Speedup</td>
+<td>1x</td>
+<td>5.2x</td>
+</tr>
+<tr class="odd">
+<td>Memory (G)</td>
+<td>9.2</td>
+<td>1.6</td>
+</tr>
+<tr class="even">
+<td>Memory Save</td>
+<td>1x</td>
+<td>5.8x</td>
+</tr>
+</tbody>
+</table>
+<p>Table 3. Performance of baseline and ICNet on validation set of Citysapes. The baseline method is the structure-optimized PSPNet50 with compress operation by half.</p>
+<p>They indicate that only model compression has almost no chance to achieve realtime<br>
+performance under the condition of keeping decent segmentation quality.</p>
+<p>In what follows, we take the model-compressed PSPNet50, which is reasonably accelerated, as our baseline system for comparison.</p>
+<h3 id="ablation-study-for-image-cascade-framework">Ablation Study for Image Cascade Framework</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Items</th>
+<th>Baseline</th>
+<th>sub4</th>
+<th>sub24</th>
+<th>sub124</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mIoU (%)</td>
+<td>67.9</td>
+<td>59.6</td>
+<td>66.5</td>
+<td>67.7</td>
+</tr>
+<tr class="even">
+<td>Time (ms)</td>
+<td>170</td>
+<td>18</td>
+<td>25</td>
+<td>33</td>
+</tr>
+<tr class="odd">
+<td>Frame (fps)</td>
+<td>5.9</td>
+<td>55.6</td>
+<td>40</td>
+<td>30.3</td>
+</tr>
+<tr class="even">
+<td>Speedup</td>
+<td>1x</td>
+<td>9.4x</td>
+<td>6.8x</td>
+<td>5.2x</td>
+</tr>
+<tr class="odd">
+<td>Memory (GB)</td>
+<td>9.2</td>
+<td>0.6</td>
+<td>1.1</td>
+<td>1.6</td>
+</tr>
+<tr class="even">
+<td>Memory Save</td>
+<td>1x</td>
+<td>15.3x</td>
+<td>8.4x</td>
+<td>5.8x</td>
+</tr>
+</tbody>
+</table>
+<p>Table 4. Our ICNet performance on the validation set of Cityscapes with different settings.</p>
+<p>The setting ‘sub4’ only uses the top branch with the low-resolution input. ‘sub24’ and ‘sub124’ respectively contain top two and all three branches.</p>
+<p><strong>Visual Comparison</strong></p>
+<p><strong>Quantitative Analysis</strong></p>
+<h3 id="final-results-and-comparison">Final Results and Comparison</h3>
+<h2 id="conclusion">Conclusion</h2>
+<p>We have proposed a realtime semantic segmentation system ICNet. It incorporates effective strategies to simplify network structures without significantly reducing performance.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/2017_06_08_ENet/"  data-tooltip="ENet">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/05/2017_06_05_simple_does_it/" data-tooltip="Simple Does It">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/08/2017_06_08_ENet/"  data-tooltip="ENet">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/05/2017_06_05_simple_does_it/" data-tooltip="Simple Does It">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2017/06/08/2017_06_08_ICNet/';
+                 
+                    this.page.identifier = '2017/06/08/2017_06_08_ICNet/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

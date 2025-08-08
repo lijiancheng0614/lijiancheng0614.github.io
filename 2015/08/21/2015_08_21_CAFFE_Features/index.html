@@ -1,0 +1,1053 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>CAFFE提取特征并可视化 - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="使用CAFFE（ http://caffe.berkeleyvision.org ）运行CNN网络，并提取出特征，将其存储成lmdb以供后续使用，亦可以对其可视化。">
+<meta name="keywords" content="Computer Vision,CAFFE,Deep Learning">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="CAFFE提取特征并可视化">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="使用CAFFE（ http://caffe.berkeleyvision.org ）运行CNN网络，并提取出特征，将其存储成lmdb以供后续使用，亦可以对其可视化。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.753Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CAFFE提取特征并可视化">
+<meta name="twitter:description" content="使用CAFFE（ http://caffe.berkeleyvision.org ）运行CNN网络，并提取出特征，将其存储成lmdb以供后续使用，亦可以对其可视化。">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/BVLC/caffe/master/examples/images/cat.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/BVLC/caffe/master/examples/images/cat.jpg" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            CAFFE提取特征并可视化
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-08-21T00:00:00+08:00">
+	
+		    Aug 21, 2015
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/CAFFE/">CAFFE</a>, <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>, <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用已训练好的模型进行图像分类"><span class="toc-text">使用已训练好的模型进行图像分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提取特征并可视化"><span class="toc-text">提取特征并可视化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提取特征并存储"><span class="toc-text">提取特征并存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用特征文件进行可视化"><span class="toc-text">使用特征文件进行可视化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#在python中读取mat文件"><span class="toc-text">在python中读取mat文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用自己的网络"><span class="toc-text">使用自己的网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用model-zoo里的网络"><span class="toc-text">使用Model Zoo里的网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+            <p>使用CAFFE（ <a href="http://caffe.berkeleyvision.org" class="uri" target="_blank" rel="noopener">http://caffe.berkeleyvision.org</a> ）运行CNN网络，并提取出特征，将其存储成lmdb以供后续使用，亦可以对其可视化。</p>
+<a id="more"></a>
+<h2 id="使用已训练好的模型进行图像分类">使用已训练好的模型进行图像分类</h2>
+<p>其实在 <a href="http://nbviewer.ipython.org/github/BVLC/caffe/blob/master/examples/00-classification.ipynb" class="uri" target="_blank" rel="noopener">http://nbviewer.ipython.org/github/BVLC/caffe/blob/master/examples/00-classification.ipynb</a> 中已经很详细地介绍了怎么使用已训练好的模型对测试图像进行分类了。由于CAFFE不断更新，这个页面的内容和代码也会更新。以下只记录当前能运行的主要步骤。</p>
+<ol type="1">
+<li><p>下载CAFFE，并安装相应的dependencies。</p></li>
+<li><p>在<code>caffe_root</code>下运行<code>./scripts/download_model_binary.py models/bvlc_reference_caffenet</code>获得预训练的CaffeNet。</p></li>
+<li><p>在ipython里（或python，但需要把部分代码注释掉）运行以下代码来加载网络。</p>
+<ul>
+<li><code>./models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel</code></li>
+</ul>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="comment"># Make sure that caffe is on the python path:</span></span><br><span class="line">caffe_root = <span class="string">'../'</span>  <span class="comment"># this file is expected to be in &#123;caffe_root&#125;/examples</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.insert(<span class="number">0</span>, caffe_root + <span class="string">'python'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"></span><br><span class="line">plt.rcParams[<span class="string">'figure.figsize'</span>] = (<span class="number">10</span>, <span class="number">10</span>)</span><br><span class="line">plt.rcParams[<span class="string">'image.interpolation'</span>] = <span class="string">'nearest'</span></span><br><span class="line">plt.rcParams[<span class="string">'image.cmap'</span>] = <span class="string">'gray'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.isfile(caffe_root + <span class="string">'models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'</span>):</span><br><span class="line">    print(<span class="string">"Downloading pre-trained CaffeNet model..."</span>)</span><br><span class="line">    !../scripts/download_model_binary.py ../models/bvlc_reference_caffenet</span><br></pre></td></tr></table></figure></p></li>
+<li><p>设置网络为测试阶段，并加载网络模型prototxt和数据平均值mean_npy。</p>
+<ul>
+<li><p><code>./models/bvlc_reference_caffenet/deploy.prototxt</code></p></li>
+<li><p><code>./models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel</code></p></li>
+<li><p><code>./python/caffe/imagenet/ilsvrc_2012_mean.npy</code></p></li>
+</ul>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">caffe.set_mode_cpu()</span><br><span class="line">net = caffe.Net(caffe_root + <span class="string">'models/bvlc_reference_caffenet/deploy.prototxt'</span>,</span><br><span class="line">                caffe_root + <span class="string">'models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'</span>,</span><br><span class="line">                caffe.TEST)</span><br><span class="line"></span><br><span class="line"><span class="comment"># input preprocessing: 'data' is the name of the input blob == net.inputs[0]</span></span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">'data'</span>: net.blobs[<span class="string">'data'</span>].data.shape&#125;)</span><br><span class="line">transformer.set_transpose(<span class="string">'data'</span>, (<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">transformer.set_mean(<span class="string">'data'</span>, np.load(caffe_root + <span class="string">'python/caffe/imagenet/ilsvrc_2012_mean.npy'</span>).mean(<span class="number">1</span>).mean(<span class="number">1</span>)) <span class="comment"># mean pixel</span></span><br><span class="line">transformer.set_raw_scale(<span class="string">'data'</span>, <span class="number">255</span>)  <span class="comment"># the reference model operates on images in [0,255] range instead of [0,1]</span></span><br><span class="line">transformer.set_channel_swap(<span class="string">'data'</span>, (<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>))  <span class="comment"># the reference model has channels in BGR order instead of RGB</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>加载测试图片，并预测分类结果。</p>
+<ul>
+<li><code>./examples/images/cat.jpg</code></li>
+</ul>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># set net to batch size of 50</span></span><br><span class="line">net.blobs[<span class="string">'data'</span>].reshape(<span class="number">50</span>,<span class="number">3</span>,<span class="number">227</span>,<span class="number">227</span>)</span><br><span class="line">net.blobs[<span class="string">'data'</span>].data[...] = transformer.preprocess(<span class="string">'data'</span>, caffe.io.load_image(caffe_root + <span class="string">'examples/images/cat.jpg'</span>))</span><br><span class="line">out = net.forward()</span><br><span class="line">print(<span class="string">"Predicted class is #&#123;&#125;."</span>.format(out[<span class="string">'prob'</span>].argmax()))</span><br></pre></td></tr></table></figure></p></li>
+<li><p>加载标签，并输出top_k。</p>
+<ul>
+<li><code>./data/ilsvrc12/synset_words.txt</code></li>
+</ul>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># load labels</span></span><br><span class="line">imagenet_labels_filename = caffe_root + <span class="string">'data/ilsvrc12/synset_words.txt'</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    labels = np.loadtxt(imagenet_labels_filename, str, delimiter=<span class="string">'\t'</span>)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    !../data/ilsvrc12/get_ilsvrc_aux.sh</span><br><span class="line">    labels = np.loadtxt(imagenet_labels_filename, str, delimiter=<span class="string">'\t'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># sort top k predictions from softmax output</span></span><br><span class="line">top_k = net.blobs[<span class="string">'prob'</span>].data[<span class="number">0</span>].flatten().argsort()[<span class="number">-1</span>:<span class="number">-6</span>:<span class="number">-1</span>]</span><br><span class="line"><span class="keyword">print</span> labels[top_k]</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="提取特征并可视化">提取特征并可视化</h2>
+<p>接上一章，如果提取特征之后不作存储直接可视化的话，可按以下步骤。</p>
+<ol type="1">
+<li><p>网络的特征存储在<code>net.blobs</code>，参数和bias存储在<code>net.params</code>，以下代码输出每一层的名称和大小。这里亦可手动把它们存储下来。</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[(k, v.data.shape) <span class="keyword">for</span> k, v <span class="keyword">in</span> net.blobs.items()]</span><br><span class="line">[(k, v[<span class="number">0</span>].data.shape) <span class="keyword">for</span> k, v <span class="keyword">in</span> net.params.items()]</span><br></pre></td></tr></table></figure></p></li>
+<li><p>可视化。以下是辅助函数。</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># take an array of shape (n, height, width) or (n, height, width, channels)</span></span><br><span class="line"><span class="comment"># and visualize each (height, width) thing in a grid of size approx. sqrt(n) by sqrt(n)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vis_square</span><span class="params">(data, padsize=<span class="number">1</span>, padval=<span class="number">0</span>)</span>:</span></span><br><span class="line">    data -= data.min()</span><br><span class="line">    data /= data.max()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># force the number of filters to be square</span></span><br><span class="line">    n = int(np.ceil(np.sqrt(data.shape[<span class="number">0</span>])))</span><br><span class="line">    padding = ((<span class="number">0</span>, n ** <span class="number">2</span> - data.shape[<span class="number">0</span>]), (<span class="number">0</span>, padsize), (<span class="number">0</span>, padsize)) + ((<span class="number">0</span>, <span class="number">0</span>),) * (data.ndim - <span class="number">3</span>)</span><br><span class="line">    data = np.pad(data, padding, mode=<span class="string">'constant'</span>, constant_values=(padval, padval))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># tile the filters into an image</span></span><br><span class="line">    data = data.reshape((n, n) + data.shape[<span class="number">1</span>:]).transpose((<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>) + tuple(range(<span class="number">4</span>, data.ndim + <span class="number">1</span>)))</span><br><span class="line">    data = data.reshape((n * data.shape[<span class="number">1</span>], n * data.shape[<span class="number">3</span>]) + data.shape[<span class="number">4</span>:])</span><br><span class="line"></span><br><span class="line">    plt.imshow(data)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>根据每一层的名称，选择需要可视化的层，可以可视化filters（参数）和output（特征）</li>
+</ul>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># the parameters are a list of [weights, biases]</span></span><br><span class="line">filters = net.params[<span class="string">'conv1'</span>][<span class="number">0</span>].data</span><br><span class="line">vis_square(filters.transpose(<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">feat = net.blobs[<span class="string">'conv1'</span>].data[<span class="number">0</span>, :<span class="number">36</span>]</span><br><span class="line">vis_square(feat, padval=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># There are 256 filters, each of which has dimension 5 x 5 x 48. We show only the first 48 filters, with each channel shown separately, so that each filter is a row.</span></span><br><span class="line">filters = net.params[<span class="string">'conv2'</span>][<span class="number">0</span>].data</span><br><span class="line">vis_square(filters[:<span class="number">48</span>].reshape(<span class="number">48</span>**<span class="number">2</span>, <span class="number">5</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># rectified, only the first 36 of 256 channels</span></span><br><span class="line">feat = net.blobs[<span class="string">'conv2'</span>].data[<span class="number">0</span>, :<span class="number">36</span>]</span><br><span class="line">vis_square(feat, padval=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">feat = net.blobs[<span class="string">'conv3'</span>].data[<span class="number">0</span>]</span><br><span class="line">vis_square(feat, padval=<span class="number">0.5</span>)</span><br><span class="line"></span><br><span class="line">feat = net.blobs[<span class="string">'conv4'</span>].data[<span class="number">0</span>]</span><br><span class="line">vis_square(feat, padval=<span class="number">0.5</span>)</span><br><span class="line"></span><br><span class="line">feat = net.blobs[<span class="string">'conv5'</span>].data[<span class="number">0</span>]</span><br><span class="line">vis_square(feat, padval=<span class="number">0.5</span>)</span><br><span class="line"></span><br><span class="line">feat = net.blobs[<span class="string">'pool5'</span>].data[<span class="number">0</span>]</span><br><span class="line">vis_square(feat, padval=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">feat = net.blobs[<span class="string">'fc6'</span>].data[<span class="number">0</span>]</span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">plt.plot(feat.flat)</span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">_ = plt.hist(feat.flat[feat.flat &gt; <span class="number">0</span>], bins=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">feat = net.blobs[<span class="string">'fc7'</span>].data[<span class="number">0</span>]</span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">plt.plot(feat.flat)</span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">_ = plt.hist(feat.flat[feat.flat &gt; <span class="number">0</span>], bins=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">feat = net.blobs[<span class="string">'prob'</span>].data[<span class="number">0</span>]</span><br><span class="line">plt.plot(feat.flat)</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="提取特征并存储">提取特征并存储</h2>
+<p>CAFFE提供了一个提取特征的tool，见 <a href="http://caffe.berkeleyvision.org/gathered/examples/feature_extraction.html" class="uri" target="_blank" rel="noopener">http://caffe.berkeleyvision.org/gathered/examples/feature_extraction.html</a> 。</p>
+<ol type="1">
+<li><p>选择需要特征提取的图像。</p>
+<ul>
+<li><code>./examples/_temp</code></li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir examples/_temp</span><br><span class="line">find `<span class="built_in">pwd</span>`/examples/images -<span class="built_in">type</span> f -<span class="built_in">exec</span> <span class="built_in">echo</span> &#123;&#125; \; &gt; examples/_temp/temp.txt</span><br><span class="line">sed <span class="string">"s/$/ 0/"</span> examples/_temp/temp.txt &gt; examples/_temp/file_list.txt</span><br></pre></td></tr></table></figure></p></li>
+<li><p>跟前面一样，下载模型以及定义prototxt。</p>
+<ul>
+<li><p><code>./models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel</code></p></li>
+<li><p><code>./examples/_temp/imagenet_val.prototxt</code></p></li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./data/ilsvrc12/get_ilsvrc_aux.sh</span><br><span class="line">cp examples/feature_extraction/imagenet_val.prototxt examples/_temp</span><br></pre></td></tr></table></figure></p></li>
+<li><p>使用<code>extract_features.bin</code>工具提取特征，并存储为lmdb。运行参数为<code>extract_features.bin  $MODEL $PROTOTXT $LAYER $LMDB_OUTPUT_PATH $BATCHSIZE</code></p>
+<ul>
+<li><p><code>./models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel</code></p></li>
+<li><p><code>./examples/_temp/imagenet_val.prototxt</code></p></li>
+<li><p><code>./examples/_temp/features</code></p></li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./build/tools/extract_features.bin \</span><br><span class="line">    models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel \</span><br><span class="line">    examples/_temp/imagenet_val.prototxt \</span><br><span class="line">    fc7 examples/_temp/features 10 lmdb</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="使用特征文件进行可视化">使用特征文件进行可视化</h2>
+<p>参考 <a href="http://www.cnblogs.com/platero/p/3967208.html" class="uri" target="_blank" rel="noopener">http://www.cnblogs.com/platero/p/3967208.html</a> 和 lmdb的文档 <a href="https://lmdb.readthedocs.org/en/release" class="uri" target="_blank" rel="noopener">https://lmdb.readthedocs.org/en/release</a> ，读取lmdb文件，然后转换成mat文件，再用matlab调用mat进行可视化。</p>
+<ol type="1">
+<li>安装CAFFE的python依赖库，并使用以下两个辅助文件把lmdb转换为mat。
+<ul>
+<li><p><code>./feat_helper_pb2.py</code><br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Generated by the protocol buffer compiler.  DO NOT EDIT!</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> google.protobuf <span class="keyword">import</span> descriptor</span><br><span class="line"><span class="keyword">from</span> google.protobuf <span class="keyword">import</span> message</span><br><span class="line"><span class="keyword">from</span> google.protobuf <span class="keyword">import</span> reflection</span><br><span class="line"><span class="keyword">from</span> google.protobuf <span class="keyword">import</span> descriptor_pb2</span><br><span class="line"><span class="comment"># @@protoc_insertion_point(imports)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">DESCRIPTOR = descriptor.FileDescriptor(</span><br><span class="line">  name=<span class="string">'datum.proto'</span>,</span><br><span class="line">  package=<span class="string">'feat_extract'</span>,</span><br><span class="line">  serialized_pb=<span class="string">'\n\x0b\x64\x61tum.proto\x12\x0c\x66\x65\x61t_extract\"i\n\x05\x44\x61tum\x12\x10\n\x08\x63hannels\x18\x01 \x01(\x05\x12\x0e\n\x06height\x18\x02 \x01(\x05\x12\r\n\x05width\x18\x03 \x01(\x05\x12\x0c\n\x04\x64\x61ta\x18\x04 \x01(\x0c\x12\r\n\x05label\x18\x05 \x01(\x05\x12\x12\n\nfloat_data\x18\x06 \x03(\x02'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">_DATUM = descriptor.Descriptor(</span><br><span class="line">  name=<span class="string">'Datum'</span>,</span><br><span class="line">  full_name=<span class="string">'feat_extract.Datum'</span>,</span><br><span class="line">  filename=<span class="literal">None</span>,</span><br><span class="line">  file=DESCRIPTOR,</span><br><span class="line">  containing_type=<span class="literal">None</span>,</span><br><span class="line">  fields=[</span><br><span class="line">    descriptor.FieldDescriptor(</span><br><span class="line">      name=<span class="string">'channels'</span>, full_name=<span class="string">'feat_extract.Datum.channels'</span>, index=<span class="number">0</span>,</span><br><span class="line">      number=<span class="number">1</span>, type=<span class="number">5</span>, cpp_type=<span class="number">1</span>, label=<span class="number">1</span>,</span><br><span class="line">      has_default_value=<span class="literal">False</span>, default_value=<span class="number">0</span>,</span><br><span class="line">      message_type=<span class="literal">None</span>, enum_type=<span class="literal">None</span>, containing_type=<span class="literal">None</span>,</span><br><span class="line">      is_extension=<span class="literal">False</span>, extension_scope=<span class="literal">None</span>,</span><br><span class="line">      options=<span class="literal">None</span>),</span><br><span class="line">    descriptor.FieldDescriptor(</span><br><span class="line">      name=<span class="string">'height'</span>, full_name=<span class="string">'feat_extract.Datum.height'</span>, index=<span class="number">1</span>,</span><br><span class="line">      number=<span class="number">2</span>, type=<span class="number">5</span>, cpp_type=<span class="number">1</span>, label=<span class="number">1</span>,</span><br><span class="line">      has_default_value=<span class="literal">False</span>, default_value=<span class="number">0</span>,</span><br><span class="line">      message_type=<span class="literal">None</span>, enum_type=<span class="literal">None</span>, containing_type=<span class="literal">None</span>,</span><br><span class="line">      is_extension=<span class="literal">False</span>, extension_scope=<span class="literal">None</span>,</span><br><span class="line">      options=<span class="literal">None</span>),</span><br><span class="line">    descriptor.FieldDescriptor(</span><br><span class="line">      name=<span class="string">'width'</span>, full_name=<span class="string">'feat_extract.Datum.width'</span>, index=<span class="number">2</span>,</span><br><span class="line">      number=<span class="number">3</span>, type=<span class="number">5</span>, cpp_type=<span class="number">1</span>, label=<span class="number">1</span>,</span><br><span class="line">      has_default_value=<span class="literal">False</span>, default_value=<span class="number">0</span>,</span><br><span class="line">      message_type=<span class="literal">None</span>, enum_type=<span class="literal">None</span>, containing_type=<span class="literal">None</span>,</span><br><span class="line">      is_extension=<span class="literal">False</span>, extension_scope=<span class="literal">None</span>,</span><br><span class="line">      options=<span class="literal">None</span>),</span><br><span class="line">    descriptor.FieldDescriptor(</span><br><span class="line">      name=<span class="string">'data'</span>, full_name=<span class="string">'feat_extract.Datum.data'</span>, index=<span class="number">3</span>,</span><br><span class="line">      number=<span class="number">4</span>, type=<span class="number">12</span>, cpp_type=<span class="number">9</span>, label=<span class="number">1</span>,</span><br><span class="line">      has_default_value=<span class="literal">False</span>, default_value=<span class="string">""</span>,</span><br><span class="line">      message_type=<span class="literal">None</span>, enum_type=<span class="literal">None</span>, containing_type=<span class="literal">None</span>,</span><br><span class="line">      is_extension=<span class="literal">False</span>, extension_scope=<span class="literal">None</span>,</span><br><span class="line">      options=<span class="literal">None</span>),</span><br><span class="line">    descriptor.FieldDescriptor(</span><br><span class="line">      name=<span class="string">'label'</span>, full_name=<span class="string">'feat_extract.Datum.label'</span>, index=<span class="number">4</span>,</span><br><span class="line">      number=<span class="number">5</span>, type=<span class="number">5</span>, cpp_type=<span class="number">1</span>, label=<span class="number">1</span>,</span><br><span class="line">      has_default_value=<span class="literal">False</span>, default_value=<span class="number">0</span>,</span><br><span class="line">      message_type=<span class="literal">None</span>, enum_type=<span class="literal">None</span>, containing_type=<span class="literal">None</span>,</span><br><span class="line">      is_extension=<span class="literal">False</span>, extension_scope=<span class="literal">None</span>,</span><br><span class="line">      options=<span class="literal">None</span>),</span><br><span class="line">    descriptor.FieldDescriptor(</span><br><span class="line">      name=<span class="string">'float_data'</span>, full_name=<span class="string">'feat_extract.Datum.float_data'</span>, index=<span class="number">5</span>,</span><br><span class="line">      number=<span class="number">6</span>, type=<span class="number">2</span>, cpp_type=<span class="number">6</span>, label=<span class="number">3</span>,</span><br><span class="line">      has_default_value=<span class="literal">False</span>, default_value=[],</span><br><span class="line">      message_type=<span class="literal">None</span>, enum_type=<span class="literal">None</span>, containing_type=<span class="literal">None</span>,</span><br><span class="line">      is_extension=<span class="literal">False</span>, extension_scope=<span class="literal">None</span>,</span><br><span class="line">      options=<span class="literal">None</span>),</span><br><span class="line">  ],</span><br><span class="line">  extensions=[</span><br><span class="line">  ],</span><br><span class="line">  nested_types=[],</span><br><span class="line">  enum_types=[</span><br><span class="line">  ],</span><br><span class="line">  options=<span class="literal">None</span>,</span><br><span class="line">  is_extendable=<span class="literal">False</span>,</span><br><span class="line">  extension_ranges=[],</span><br><span class="line">  serialized_start=<span class="number">29</span>,</span><br><span class="line">  serialized_end=<span class="number">134</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">DESCRIPTOR.message_types_by_name[<span class="string">'Datum'</span>] = _DATUM</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Datum</span><span class="params">(message.Message)</span>:</span></span><br><span class="line">  __metaclass__ = reflection.GeneratedProtocolMessageType</span><br><span class="line">  DESCRIPTOR = _DATUM</span><br><span class="line"></span><br><span class="line">  <span class="comment"># @@protoc_insertion_point(class_scope:feat_extract.Datum)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># @@protoc_insertion_point(module_scope)</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p><code>./lmdb2mat.py</code><br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lmdb</span><br><span class="line"><span class="keyword">import</span> feat_helper_pb2</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.io <span class="keyword">as</span> sio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(argv)</span>:</span></span><br><span class="line">    lmdb_name = sys.argv[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"%s"</span> % sys.argv[<span class="number">1</span>]</span><br><span class="line">    batch_num = int(sys.argv[<span class="number">2</span>]);</span><br><span class="line">    batch_size = int(sys.argv[<span class="number">3</span>]);</span><br><span class="line">    window_num = batch_num*batch_size;</span><br><span class="line"></span><br><span class="line">    start = time.time()</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'db'</span> <span class="keyword">not</span> <span class="keyword">in</span> locals().keys():</span><br><span class="line">        db = lmdb.open(lmdb_name)</span><br><span class="line">        txn= db.begin()</span><br><span class="line">        cursor = txn.cursor()</span><br><span class="line">        cursor.iternext()</span><br><span class="line">        datum = feat_helper_pb2.Datum()</span><br><span class="line"></span><br><span class="line">        keys = []</span><br><span class="line">        values = []</span><br><span class="line">        <span class="keyword">for</span> key, value <span class="keyword">in</span> enumerate( cursor.iternext_nodup()):</span><br><span class="line">            keys.append(key)</span><br><span class="line">            values.append(cursor.value())</span><br><span class="line"></span><br><span class="line">    ft = np.zeros((window_num, int(sys.argv[<span class="number">4</span>])))</span><br><span class="line">    <span class="keyword">for</span> im_idx <span class="keyword">in</span> range(window_num):</span><br><span class="line">        datum.ParseFromString(values[im_idx])</span><br><span class="line">        ft[im_idx, :] = datum.float_data</span><br><span class="line"></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'time 1: %f'</span> %(time.time() - start)</span><br><span class="line">    sio.savemat(sys.argv[<span class="number">5</span>], &#123;<span class="string">'feats'</span>:ft&#125;)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'time 2: %f'</span> %(time.time() - start)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'done!'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    main(sys.argv)</span><br></pre></td></tr></table></figure></p></li>
+<li><p>运行bash<br>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env sh</span></span><br><span class="line">LMDB=./examples/_temp/features_fc7 <span class="comment"># lmdb文件路径</span></span><br><span class="line">BATCHNUM=1</span><br><span class="line">BATCHSIZE=10</span><br><span class="line"><span class="comment"># DIM=290400 # feature长度，conv1</span></span><br><span class="line"><span class="comment"># DIM=43264 # conv5</span></span><br><span class="line">DIM=4096</span><br><span class="line">OUT=./examples/_temp/features_fc7.mat <span class="comment">#mat文件保存路径</span></span><br><span class="line">python ./lmdb2mat.py <span class="variable">$LMDB</span> <span class="variable">$BATCHNUM</span> <span class="variable">$BATCHSIZE</span> <span class="variable">$DIM</span> <span class="variable">$OUT</span></span><br></pre></td></tr></table></figure></p></li>
+</ul></li>
+<li>参考UFLDL里的display_network函数，对mat文件里的特征进行可视化。
+<ul>
+<li><p><code>display_network.m</code><br>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[h, array]</span> = <span class="title">display_network</span><span class="params">(A, opt_normalize, opt_graycolor, cols, opt_colmajor)</span></span></span><br><span class="line"><span class="comment">% This function visualizes filters in matrix A. Each column of A is a</span></span><br><span class="line"><span class="comment">% filter. We will reshape each column into a square image and visualizes</span></span><br><span class="line"><span class="comment">% on each cell of the visualization panel.</span></span><br><span class="line"><span class="comment">% All other parameters are optional, usually you do not need to worry</span></span><br><span class="line"><span class="comment">% about it.</span></span><br><span class="line"><span class="comment">% opt_normalize: whether we need to normalize the filter so that all of</span></span><br><span class="line"><span class="comment">% them can have similar contrast. Default value is true.</span></span><br><span class="line"><span class="comment">% opt_graycolor: whether we use gray as the heat map. Default is true.</span></span><br><span class="line"><span class="comment">% cols: how many columns are there in the display. Default value is the</span></span><br><span class="line"><span class="comment">% squareroot of the number of columns in A.</span></span><br><span class="line"><span class="comment">% opt_colmajor: you can switch convention to row major for A. In that</span></span><br><span class="line"><span class="comment">% case, each row of A is a filter. Default value is false.</span></span><br><span class="line">warning off all</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ~exist(<span class="string">'opt_normalize'</span>, <span class="string">'var'</span>) || <span class="built_in">isempty</span>(opt_normalize)</span><br><span class="line">    opt_normalize= <span class="built_in">true</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ~exist(<span class="string">'opt_graycolor'</span>, <span class="string">'var'</span>) || <span class="built_in">isempty</span>(opt_graycolor)</span><br><span class="line">    opt_graycolor= <span class="built_in">true</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ~exist(<span class="string">'opt_colmajor'</span>, <span class="string">'var'</span>) || <span class="built_in">isempty</span>(opt_colmajor)</span><br><span class="line">    opt_colmajor = <span class="built_in">false</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% rescale</span></span><br><span class="line">A = A - <span class="built_in">mean</span>(A(:));</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> opt_graycolor, colormap(gray); <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% compute rows, cols</span></span><br><span class="line">[L M]=<span class="built_in">size</span>(A);</span><br><span class="line">sz=<span class="built_in">sqrt</span>(L);</span><br><span class="line">buf=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">if</span> ~exist(<span class="string">'cols'</span>, <span class="string">'var'</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">floor</span>(<span class="built_in">sqrt</span>(M))^<span class="number">2</span> ~= M</span><br><span class="line">        n=<span class="built_in">ceil</span>(<span class="built_in">sqrt</span>(M));</span><br><span class="line">        <span class="keyword">while</span> <span class="built_in">mod</span>(M, n)~=<span class="number">0</span> &amp;&amp; n&lt;<span class="number">1.2</span>*<span class="built_in">sqrt</span>(M), n=n+<span class="number">1</span>; <span class="keyword">end</span></span><br><span class="line">        m=<span class="built_in">ceil</span>(M/n);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        n=<span class="built_in">sqrt</span>(M);</span><br><span class="line">        m=n;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    n = cols;</span><br><span class="line">    m = <span class="built_in">ceil</span>(M/n);</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">array=-<span class="built_in">ones</span>(buf+m*(sz+buf),buf+n*(sz+buf));</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ~opt_graycolor</span><br><span class="line">    array = <span class="number">0.1</span>.* array;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ~opt_colmajor</span><br><span class="line">    k=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:m</span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:n</span><br><span class="line">            <span class="keyword">if</span> k&gt;M,</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            clim=<span class="built_in">max</span>(<span class="built_in">abs</span>(A(:,k)));</span><br><span class="line">            <span class="keyword">if</span> opt_normalize</span><br><span class="line">                array(buf+(<span class="built_in">i</span><span class="number">-1</span>)*(sz+buf)+(<span class="number">1</span>:sz),buf+(<span class="built_in">j</span><span class="number">-1</span>)*(sz+buf)+(<span class="number">1</span>:sz))=<span class="built_in">reshape</span>(A(:,k),sz,sz)'/clim;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                array(buf+(<span class="built_in">i</span><span class="number">-1</span>)*(sz+buf)+(<span class="number">1</span>:sz),buf+(<span class="built_in">j</span><span class="number">-1</span>)*(sz+buf)+(<span class="number">1</span>:sz))=<span class="built_in">reshape</span>(A(:,k),sz,sz)'/<span class="built_in">max</span>(<span class="built_in">abs</span>(A(:)));</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            k=k+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    k=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:n</span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:m</span><br><span class="line">            <span class="keyword">if</span> k&gt;M,</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            clim=<span class="built_in">max</span>(<span class="built_in">abs</span>(A(:,k)));</span><br><span class="line">            <span class="keyword">if</span> opt_normalize</span><br><span class="line">                array(buf+(<span class="built_in">i</span><span class="number">-1</span>)*(sz+buf)+(<span class="number">1</span>:sz),buf+(<span class="built_in">j</span><span class="number">-1</span>)*(sz+buf)+(<span class="number">1</span>:sz))=<span class="built_in">reshape</span>(A(:,k),sz,sz)'/clim;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                array(buf+(<span class="built_in">i</span><span class="number">-1</span>)*(sz+buf)+(<span class="number">1</span>:sz),buf+(<span class="built_in">j</span><span class="number">-1</span>)*(sz+buf)+(<span class="number">1</span>:sz))=<span class="built_in">reshape</span>(A(:,k),sz,sz)';</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            k=k+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> opt_graycolor</span><br><span class="line">    h=imagesc(array);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    h=imagesc(array,<span class="string">'EraseMode'</span>,<span class="string">'none'</span>,[<span class="number">-1</span> <span class="number">1</span>]);</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">axis image off</span><br><span class="line"></span><br><span class="line">drawnow;</span><br><span class="line"></span><br><span class="line">warning on all</span><br></pre></td></tr></table></figure></p></li>
+<li><p>在matlab里运行以下代码：<br>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">nsample = <span class="number">2</span>;</span><br><span class="line"><span class="comment">% num_output = 96; % conv1</span></span><br><span class="line"><span class="comment">% num_output = 256; % conv5</span></span><br><span class="line">num_output = <span class="number">4096</span>; <span class="comment">% fc7</span></span><br><span class="line"></span><br><span class="line">load features_fc7.mat</span><br><span class="line">width = <span class="built_in">size</span>(feats, <span class="number">2</span>);</span><br><span class="line">nmap = width / num_output;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span> : nsample</span><br><span class="line">    feat = feats(<span class="built_in">i</span>, :);</span><br><span class="line">    feat = <span class="built_in">reshape</span>(feat, [nmap num_output]);</span><br><span class="line">    <span class="built_in">figure</span>(<span class="string">'name'</span>, sprintf(<span class="string">'image #%d'</span>, <span class="built_in">i</span>));</span><br><span class="line">    display_network(feat);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p></li>
+</ul></li>
+</ol>
+<h3 id="在python中读取mat文件">在python中读取mat文件</h3>
+<p>在python中，使用<code>scipy.io.loadmat()</code>即可读取mat文件，返回一个<code>dict()</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scipy.io</span><br><span class="line">matfile = <span class="string">'features_fc7.mat'</span></span><br><span class="line">data = scipy.io.loadmat(matfile)</span><br></pre></td></tr></table></figure>
+<h2 id="使用自己的网络">使用自己的网络</h2>
+<p>只需把前面列出来的文件与参数修改成自定义的即可。</p>
+<h2 id="使用model-zoo里的网络">使用Model Zoo里的网络</h2>
+<p>根据 <a href="https://github.com/BVLC/caffe/wiki/Model-Zoo" class="uri" target="_blank" rel="noopener">https://github.com/BVLC/caffe/wiki/Model-Zoo</a> 的介绍，选择自己所需的网络，并下载到相应位置即可。</p>
+<p>如VGG-16：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./scripts/download_model_from_gist.sh 211839e770f7b538e2d8</span><br><span class="line">mv ./models/211839e770f7b538e2d8 ./models/VGG_ILSVRC_16_layers</span><br><span class="line">./scripts/download_model_binary.py ./models/VGG_ILSVRC_16_layers</span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2>
+<p><a href="http://nbviewer.ipython.org/github/BVLC/caffe/blob/master/examples/00-classification.ipynb" class="uri" target="_blank" rel="noopener">http://nbviewer.ipython.org/github/BVLC/caffe/blob/master/examples/00-classification.ipynb</a></p>
+<p><a href="http://caffe.berkeleyvision.org/gathered/examples/feature_extraction.html" class="uri" target="_blank" rel="noopener">http://caffe.berkeleyvision.org/gathered/examples/feature_extraction.html</a></p>
+<p><a href="http://www.cnblogs.com/platero/p/3967208.html" class="uri" target="_blank" rel="noopener">http://www.cnblogs.com/platero/p/3967208.html</a></p>
+<p><a href="https://lmdb.readthedocs.org/en/release/" class="uri" target="_blank" rel="noopener">https://lmdb.readthedocs.org/en/release/</a></p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/31/2015_08_31_KNN/"  data-tooltip="K-Nearest Neighbor algorithm K最邻近结点算法">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/17/2015_08_17_Python_Download/" data-tooltip="Python使用urllib2下载文件">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/31/2015_08_31_KNN/"  data-tooltip="K-Nearest Neighbor algorithm K最邻近结点算法">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/17/2015_08_17_Python_Download/" data-tooltip="Python使用urllib2下载文件">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2015/08/21/2015_08_21_CAFFE_Features/';
+                 
+                    this.page.identifier = '2015/08/21/2015_08_21_CAFFE_Features/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

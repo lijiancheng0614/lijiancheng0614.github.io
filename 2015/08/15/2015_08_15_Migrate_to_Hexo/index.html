@@ -1,0 +1,1114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>Migrate to Hexo - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="由于习惯了StackEdit的markdown，而Jekyll的markdown不知道为什么开了GFM却不是全部插件都能用的感觉，然后又考虑到Jekyll渲染很花时间。正好又看到了Hexo，于是就把github pages转Hexo了。">
+<meta name="keywords" content="Website,Hexo">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Migrate to Hexo">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="由于习惯了StackEdit的markdown，而Jekyll的markdown不知道为什么开了GFM却不是全部插件都能用的感觉，然后又考虑到Jekyll渲染很花时间。正好又看到了Hexo，于是就把github pages转Hexo了。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.753Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Migrate to Hexo">
+<meta name="twitter:description" content="由于习惯了StackEdit的markdown，而Jekyll的markdown不知道为什么开了GFM却不是全部插件都能用的感觉，然后又考虑到Jekyll渲染很花时间。正好又看到了Hexo，于是就把github pages转Hexo了。">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="https://hexo.io/logo.svg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://hexo.io/logo.svg" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Migrate to Hexo
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-08-15T00:00:00+08:00">
+	
+		    Aug 15, 2015
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Develop/">Develop</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Hexo/">Hexo</a>, <a class="tag-link" href="/tags/Website/">Website</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装node.js"><span class="toc-text">安装Node.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装hexo"><span class="toc-text">安装Hexo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#初始化hexo"><span class="toc-text">初始化Hexo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#下载模块"><span class="toc-text">下载模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成静态页面"><span class="toc-text">生成静态页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地调试"><span class="toc-text">本地调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成文章"><span class="toc-text">生成文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编辑文章"><span class="toc-text">编辑文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#部署到github"><span class="toc-text">部署到Github</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装主题"><span class="toc-text">安装主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打开rss"><span class="toc-text">打开RSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo-math插件"><span class="toc-text">hexo-math插件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化"><span class="toc-text">初始化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改markdown"><span class="toc-text">修改Markdown</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修改heading里-后的空格"><span class="toc-text">修改heading里# 后的空格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#增加footnotes"><span class="toc-text">增加footnotes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加gotop"><span class="toc-text">添加gotop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加all-tags并修改排序方式tag大小"><span class="toc-text">添加all-tags并修改排序方式、tag大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加swiftype站内搜索"><span class="toc-text">添加Swiftype站内搜索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+            <p>由于习惯了StackEdit的markdown，而Jekyll的markdown不知道为什么开了GFM却不是全部插件都能用的感觉，然后又考虑到Jekyll渲染很花时间。正好又看到了Hexo，于是就把github pages转Hexo了。</p>
+<a id="more"></a>
+<h2 id="安装node.js">安装Node.js</h2>
+<p>Node.js官网（<a href="https://nodejs.org/" class="uri" target="_blank" rel="noopener">https://nodejs.org/</a> ）下载安装即可。</p>
+<h2 id="安装hexo">安装Hexo</h2>
+<p>安装Node.js时自动添加了PATH，所以直接在命令行里运行以下命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo</span><br></pre></td></tr></table></figure>
+<h2 id="初始化hexo">初始化Hexo</h2>
+<p>新建一个文件夹，进里面，执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init</span><br></pre></td></tr></table></figure>
+<h2 id="下载模块">下载模块</h2>
+<p>执行如下命令，下载生成网站所需要的插件模块。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+<h2 id="生成静态页面">生成静态页面</h2>
+<p>执行如下命令，生成静态页面至<code>./public/</code>目录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<h2 id="本地调试">本地调试</h2>
+<p>执行如下命令，启动本地服务，进行博客预览调试。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>打开http://localhost:4000/ 即可看到网站效果。</p>
+<h2 id="生成文章">生成文章</h2>
+<p>执行如下命令，生成文章。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new [layout] <span class="string">"名称"</span></span><br></pre></td></tr></table></figure>
+<p>其中layout是可选参数，默认值为<code>post</code>。Hexo默认提供三种layout选择，具体可到<code>./scaffolds/</code>目录下查看文件，分别是<code>draft</code>、<code>page</code>与<code>post</code>。可以自定义其内容或者新建一种layout。</p>
+<ul>
+<li><p>参数<code>post</code>的作用为新建一篇文章。指定名称的md文件存在于<code>./source/_post/</code>目录下，当我们使用命令<code>hexo generate</code>来生成静态页面的时候，该目录下的文章会生成到<code>./public/</code>文件夹里面，当我们更新数据到网站上时，该文章就会显示在网页上。</p></li>
+<li><p>参数<code>draft</code>的作用为新建一篇文章草稿。指定名称的md文件存在于<code>./source/_drafts/</code>目录里面，当我们生成静态页面的时候，该目录下的文章不会生成到<code>./public/</code>文件夹里面，即不会同步到我们网站上。当你认为可以发布该文章的时候，应把该文章的md文件移到<code>./source/_post/</code>目录下。</p></li>
+<li><p>参数<code>page</code>的作用为新建一个网站页面。该命令会在<code>./source</code>目录下新建一个指定名称的文件夹，该文件夹下有一个<code>index.md</code>文件。</p></li>
+</ul>
+<h2 id="编辑文章">编辑文章</h2>
+<p>生成文章后，打开相应的md文件，就可以开始编辑了。</p>
+<ul>
+<li><p>文章开头格式如下：</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">title: 文章名称</span><br><span class="line">date: YYYY-MM-DD HH:mm:ss # 文章的时间，会自动生成</span><br><span class="line">categories: # 文章的分类，可以为空</span><br><span class="line">tags: # 文章的标签，多标签请用格式[tag1,tag2,tag3]，可以为空</span><br><span class="line">description: # 文章的描述，可以为空</span><br><span class="line">---</span><br><span class="line">&lt;!--这里开始使用markdown格式输入你的正文。--&gt;</span><br><span class="line">......</span><br></pre></td></tr></table></figure></p>
+<p><strong>需要注意的是，上面所有:后面必须要有一个空格，不然会报错的。</strong></p></li>
+<li><p>如果需要文章摘要功能，只需在正文中添加如下代码：</p>
+<p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">以上是摘要</span><br><span class="line"><span class="xml"><span class="comment">&lt;!--more--&gt;</span></span></span><br><span class="line">以下是余下全文</span><br></pre></td></tr></table></figure></p>
+<p><code>&lt;!--more--&gt;</code>以上的正文内容即是文章摘要，在网站首页显示。以下内容需要点击<code>Read More</code>链接打开全文才能显示。</p></li>
+</ul>
+<h2 id="部署到github">部署到Github</h2>
+<ol type="1">
+<li><p>首先，需要配置<code>./_config.yml</code>文件：</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#  Deployment</span><br><span class="line">##  Docs: http://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">    type: git</span><br><span class="line">    repository: git@github.com:username/username.github.io.git</span><br><span class="line">    branch: master</span><br></pre></td></tr></table></figure></p>
+<p>记得把其中的<code>username</code>替换成你Github的账号名。</p></li>
+<li><p>接着，执行如下指令，即可完成部署。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo generate</span><br><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是每一次部署都会覆盖掉之前在Github版本库中存放的文件，如果想提交一些额外的文件保存在仓库里，譬如说404页面，可以把它直接放在source目录下，那每一次生成页面时也会自动把你想要额外提交的文件生成到public目录下。</p></li>
+<li><p>如果出现如下问题：</p>
+<ol type="1">
+<li><p>出现以下信息</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR Deployer not found: git</span><br></pre></td></tr></table></figure></p>
+<p>不要紧张，原因是没有hexo-deployer-git这个插件模块，我们只需要输入如下命令：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></p>
+<p>稍等片刻，安装完重新执行上面第二步，如无意外，便能部署成功。</p></li>
+<li><p>出现以下信息</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Error: spawn git ENOENT</span><br><span class="line">    at exports._errnoException (util.js:746:11)</span><br><span class="line">    at Process.ChildProcess._handle.onexit (child_process.js:1053:32)</span><br><span class="line">    at child_process.js:1144:20</span><br><span class="line">    at process._tickCallback (node.js:355:11)</span><br></pre></td></tr></table></figure></p>
+<p>添加环境变量<code>C:\Program Files (x86)\Git\bin;C:\Program Files (x86)\Git\libexec\git-core</code></p></li>
+<li><p>出现以下信息</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal: Not a git repository (or any of the parent directories): .git</span><br></pre></td></tr></table></figure></p>
+<p>提示说没有<code>.git</code>目录，到<code>./.deploy_git</code>下运行：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure></p></li>
+<li><p>出现以下信息</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">warning: LF will be replaced by CRLF</span><br></pre></td></tr></table></figure></p>
+<p>LF被CRLF代替，可以关掉这个提醒。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.autocrlf <span class="literal">false</span></span><br></pre></td></tr></table></figure></p></li>
+</ol></li>
+</ol>
+<hr>
+<p>=========以下是DIY部分=========</p>
+<h2 id="安装主题">安装主题</h2>
+<ol type="1">
+<li><p>切换到<code>./themes/</code>文件夹，然后把相关主题（如tranquilpeak<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>）<code>clone</code>下来，或复制到这里：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> themes</span><br><span class="line">$ git <span class="built_in">clone</span> https://github.com/LouisBarranqueiro/tranquilpeak-hexo-theme.git</span><br><span class="line">$ rename tranquilpeak-hexo-theme tranquilpeak</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>注意这个主题要安装Hexo CLI</li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure></p></li>
+<li><p>打开<code>./_config.yml</code>文件，修改主题为<code>tranquilpeak</code></p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#  Extensions</span><br><span class="line">##  Plugins: http://hexo.io/plugins/</span><br><span class="line">##  Themes: http://hexo.io/themes/</span><br><span class="line">theme: tranquilpeak</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="打开rss">打开RSS</h2>
+<ol type="1">
+<li><p>执行如下命令。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-generator-feed --save</span><br></pre></td></tr></table></figure></p></li>
+<li><p>在<code>./_config.yml</code>中添加:</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">feed:</span><br><span class="line">    type: atom</span><br><span class="line">    path: atom.xml</span><br><span class="line">    limit: 20</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="hexo-math插件">hexo-math插件</h2>
+<p>有个hexo-math插件<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>，说是支持MathJax，但不知道为什么我这里有问题。。</p>
+<h3 id="安装">安装</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-math --save</span><br></pre></td></tr></table></figure>
+<h3 id="初始化">初始化</h3>
+<p>在blog文件夹中执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo math install</span><br></pre></td></tr></table></figure>
+<p>在_config.yml文件中添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plugins:</span><br><span class="line">  - hexo-math</span><br></pre></td></tr></table></figure>
+<h2 id="修改markdown">修改Markdown</h2>
+<p>装了MathJax之后依然效果不出来，该冲突主要是由于对  和 _ 的转义造成的<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。有以下两种方法解决，但方法2会出现有时星号解析成下划线（因为本来星号解析成斜体，而斜体替换成下划线）。</p>
+<ol type="1">
+<li><p>使用Pandoc。</p>
+<p>先到官网下载并安装Pandoc，然后卸载原来的<code>hexo-renderer-marked</code>，安装<code>hexo-renderer-pandoc</code>。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-pandoc --save</span><br></pre></td></tr></table></figure></p>
+<p>如果要加入各种extension，则修改<code>node_modules\hexo-renderer-pandoc\index.js</code>中<code>var args =</code>部分，如</p>
+<p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> args = [ <span class="string">'-f'</span>, <span class="string">'markdown+autolink_bare_uris+shortcut_reference_links+hard_line_breaks'</span>, <span class="string">'-t'</span>, <span class="string">'html'</span>, math, <span class="string">'--smart'</span>]</span><br></pre></td></tr></table></figure></p></li>
+<li><p>修改Markdown。</p>
+<p>找到 marked 脚本文件, 通常在<br>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node_modules\marked\lib\marked.js</span><br></pre></td></tr></table></figure></p>
+<p>先备份一下，然后修改第449行</p>
+<p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">escape: /^\\([<span class="string">\\`*&#123;&#125;\[\</span>](<span class="link"></span>)# +\-.!_&gt;])/,</span><br></pre></td></tr></table></figure></p>
+<p>为</p>
+<p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">escape: /^\\([<span class="string">`*\[\</span>](<span class="link"></span>)# +\-.!_&gt;])/,</span><br></pre></td></tr></table></figure></p>
+<p>第847行</p>
+<p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return '<span class="xml"><span class="tag">&lt;<span class="name">em</span>&gt;</span></span>' + text + '<span class="xml"><span class="tag">&lt;/<span class="name">em</span>&gt;</span></span>';</span><br></pre></td></tr></table></figure></p>
+<p>修改为：</p>
+<p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return '<span class="emphasis">_' + text + '_</span>';</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h3 id="修改heading里-后的空格">修改heading里# 后的空格</h3>
+<p>如果习惯StackEdit在<code>##</code>后不用加空格，直接写标题，所以要把相关的js中的空格去掉。</p>
+<p>把<code>.\node_modules\marked\lib\marked.js</code>（注：要开启GFM）的</p>
+<p>第80行<br>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heading: <span class="regexp">/^ *(# &#123;1,6&#125;) +([^\n]+?) *# * *(?:\n+|$)/</span></span><br></pre></td></tr></table></figure></p>
+<p>改为</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heading: <span class="regexp">/^ *(# &#123;1,6&#125;)+([^\n]+?) *# * *(?:\n+|$)/</span></span><br></pre></td></tr></table></figure>
+<h3 id="增加footnotes">增加footnotes</h3>
+<p>有不少人做了footnotes然后pull上去了，如</p>
+<p>pull request 351: <a href="https://github.com/chjj/marked/pull/351" class="uri" target="_blank" rel="noopener">https://github.com/chjj/marked/pull/351</a></p>
+<p>pull request 431：<a href="https://github.com/chjj/marked/pull/431" class="uri" target="_blank" rel="noopener">https://github.com/chjj/marked/pull/431</a></p>
+<p>也有两个branch：</p>
+<p><a href="https://github.com/chjj/marked/tree/footnotes" class="uri" target="_blank" rel="noopener">https://github.com/chjj/marked/tree/footnotes</a></p>
+<p><a href="https://github.com/chjj/marked/tree/feature-footnotes" class="uri" target="_blank" rel="noopener">https://github.com/chjj/marked/tree/feature-footnotes</a></p>
+<p>使用方法：</p>
+<p>如果对<code>marked.js</code>没改动的话，可以直接使用footnotes分支的<code>marked.js</code>，下载 <a href="https://raw.githubusercontent.com/chjj/marked/footnotes/lib/marked.js" class="uri" target="_blank" rel="noopener">https://raw.githubusercontent.com/chjj/marked/footnotes/lib/marked.js</a> ，然后替换<code>./node_modules/marked/lib/marked.js</code>即可。</p>
+<p>（也可以下载相应的patch文件：<a href="https://patch-diff.githubusercontent.com/raw/chjj/marked/pull/351.patch" class="uri" target="_blank" rel="noopener">https://patch-diff.githubusercontent.com/raw/chjj/marked/pull/351.patch</a> ，并将其应用到<code>./lib/marked.js</code>，只是patch不一定能apply：<br>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git apply 351.patch</span><br></pre></td></tr></table></figure></p>
+<p>（还可以手动把commit修改的相关代码加进marked.js中：按照 <a href="https://github.com/chjj/marked/commit/abe526268ca5445c91234ea5b3b81b3627ed56e7" class="uri" target="_blank" rel="noopener">https://github.com/chjj/marked/commit/abe526268ca5445c91234ea5b3b81b3627ed56e7</a> 上把绿色部分的新增代码添加到<code>./lib/marked.js</code>相应位置中。）</p>
+<p>这里提供我自己用的<code>marked.js</code>：<a href="https://gist.github.com/lijiancheng0614/9d3b429ee1f3b6d21fd4cdaead842aa4" class="uri" target="_blank" rel="noopener">https://gist.github.com/lijiancheng0614/9d3b429ee1f3b6d21fd4cdaead842aa4</a></p>
+<h2 id="添加gotop">添加gotop</h2>
+<p>参考 <a href="http://lukang.me/2015/hexo-gotop.html" class="uri" target="_blank" rel="noopener">http://lukang.me/2015/hexo-gotop.html</a></p>
+<ol type="1">
+<li><p>首先确保您的主题开启了<code>jQuery</code>，然后把下面的代码加入到你的主题的<code>js</code>文件里。（如<code>themes/tranquilpeak/layout/_partial/script.ejs</code>）<br>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">var</span> bigfa_scroll = &#123;</span><br><span class="line">    drawCircle: <span class="function"><span class="keyword">function</span>(<span class="params">id, percentage, color</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> width = jQuery(id).width();</span><br><span class="line">        <span class="keyword">var</span> height = jQuery(id).height();</span><br><span class="line">        <span class="keyword">var</span> radius = <span class="built_in">parseInt</span>(width / <span class="number">2.20</span>);</span><br><span class="line">        <span class="keyword">var</span> position = width;</span><br><span class="line">        <span class="keyword">var</span> positionBy2 = position / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">var</span> bg = jQuery(id)[<span class="number">0</span>];</span><br><span class="line">        id = id.split(<span class="string">"# "</span>);</span><br><span class="line">        <span class="keyword">var</span> ctx = bg.getContext(<span class="string">"2d"</span>);</span><br><span class="line">        <span class="keyword">var</span> imd = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">var</span> circ = <span class="built_in">Math</span>.PI * <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">var</span> quart = <span class="built_in">Math</span>.PI / <span class="number">2</span>;</span><br><span class="line">        ctx.clearRect(<span class="number">0</span>, <span class="number">0</span>, width, height);</span><br><span class="line">        ctx.beginPath();</span><br><span class="line">        ctx.strokeStyle = color;</span><br><span class="line">        ctx.lineCap = <span class="string">"square"</span>;</span><br><span class="line">        ctx.closePath();</span><br><span class="line">        ctx.fill();</span><br><span class="line">        ctx.lineWidth = <span class="number">3</span>;</span><br><span class="line">        imd = ctx.getImageData(<span class="number">0</span>, <span class="number">0</span>, position, position);</span><br><span class="line">        <span class="keyword">var</span> draw = <span class="function"><span class="keyword">function</span>(<span class="params">current, ctxPass</span>) </span>&#123;</span><br><span class="line">            ctxPass.putImageData(imd, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">            ctxPass.beginPath();</span><br><span class="line">            ctxPass.arc(positionBy2, positionBy2, radius, -(quart), ((circ) * current) - quart, <span class="literal">false</span>);</span><br><span class="line">            ctxPass.stroke();</span><br><span class="line">        &#125;</span><br><span class="line">        draw(percentage / <span class="number">100</span>, ctx);</span><br><span class="line">    &#125;,</span><br><span class="line">    backToTop: <span class="function"><span class="keyword">function</span>(<span class="params">$this</span>) </span>&#123;</span><br><span class="line">        $<span class="keyword">this</span>.click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            jQuery(<span class="string">"body,html"</span>).animate(&#123;</span><br><span class="line">                scrollTop: <span class="number">0</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="number">800</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    scrollHook: <span class="function"><span class="keyword">function</span>(<span class="params">$this, color</span>) </span>&#123;</span><br><span class="line">        color = color ? color: <span class="string">"# 000000"</span>;</span><br><span class="line">        $<span class="keyword">this</span>.scroll(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> docHeight = (jQuery(<span class="built_in">document</span>).height() - jQuery(<span class="built_in">window</span>).height()),</span><br><span class="line">            $windowObj = $<span class="keyword">this</span>,</span><br><span class="line">            $per = jQuery(<span class="string">".per"</span>),</span><br><span class="line">            percentage = <span class="number">0</span>;</span><br><span class="line">            defaultScroll = $windowObj.scrollTop();</span><br><span class="line">            percentage = <span class="built_in">parseInt</span>((defaultScroll / docHeight) * <span class="number">100</span>);</span><br><span class="line">            <span class="keyword">var</span> backToTop = jQuery(<span class="string">"# backtoTop"</span>);</span><br><span class="line">            <span class="keyword">if</span> (backToTop.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> ($windowObj.scrollTop() &gt; <span class="number">200</span>) &#123;</span><br><span class="line">                    backToTop.addClass(<span class="string">"button--show"</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    backToTop.removeClass(<span class="string">"button--show"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                $per.attr(<span class="string">"data-percent"</span>, percentage);</span><br><span class="line">                bigfa_scroll.drawCircle(<span class="string">"# backtoTopCanvas"</span>, percentage, color);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">jQuery(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    jQuery(<span class="string">"body"</span>).append(<span class="string">'&lt;div id="backtoTop" data-action="gototop"&gt;&lt;canvas id="backtoTopCanvas" width="48" height="48"&gt;&lt;/canvas&gt;&lt;div class="per"&gt;&lt;/div&gt;&lt;/div&gt;'</span>);</span><br><span class="line">    <span class="keyword">var</span> T = bigfa_scroll;</span><br><span class="line">    T.backToTop(jQuery(<span class="string">"# backtoTop"</span>));</span><br><span class="line">    T.scrollHook(jQuery(<span class="built_in">window</span>), <span class="string">"# 99ccff"</span>);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>在<code>themes/tranquilpeak/layout/_partial/head.ejs</code>中加入以下代码：<br>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;style id=<span class="string">'inline-css'</span> type=<span class="string">'text/css'</span>&gt;</span><br><span class="line"># backtoTop&#123;background-color:# eee;border-radius:100%;bottom:10%;height:48px;position:fixed;right:-100px;width:48px;transition:0.5s;-webkit-transition:0.5s&#125;</span><br><span class="line"># backtoTop.button--show&#123;right:10px&#125;</span><br><span class="line">.per&#123;font-size:16px;height:48px;line-height:48px;position:absolute;text-align:center;top:0;width:48px;color:# 555;cursor:pointer&#125;</span><br><span class="line">.per:before&#123;<span class="attr">content</span>:attr(data-percent)&#125;</span><br><span class="line">.per:hover:before&#123;<span class="attr">content</span>:<span class="string">"↑"</span>;font-size:<span class="number">20</span>px&#125;</span><br><span class="line">&lt;<span class="regexp">/style&gt;</span></span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="添加all-tags并修改排序方式tag大小">添加all-tags并修改排序方式、tag大小</h2>
+<p>把<code>.\themes\tranquilpeak\layout\all-tags.ejs</code>中的<code>&lt;% site.tags.sort('name')</code>修改为<code>&lt;% site.tags.sort('-length')</code>，即可按tag出现次数而不是字典序排序。</p>
+<p>把<code>.\themes\tranquilpeak\layout\all-tags.ejs</code>中第一个<code>section</code>内容修改如下即可使tag根据出现次数有不同大小。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;section&gt;</span><br><span class="line">    &lt;% max = site.tags.first.length;</span><br><span class="line">        min = max;</span><br><span class="line">        site.tags.each(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>) </span>&#123;</span><br><span class="line">            max = <span class="built_in">Math</span>.max(max, item.length)</span><br><span class="line">            min = <span class="built_in">Math</span>.min(min, item.length)</span><br><span class="line">        &#125;);</span><br><span class="line">        diff = max - min;</span><br><span class="line">    site.tags.sort(<span class="string">'-length'</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>) </span>&#123;</span><br><span class="line">        temp = (item.length - min) * <span class="number">36</span> / diff;</span><br><span class="line">        base = <span class="built_in">parseInt</span>(temp / <span class="number">4</span>);</span><br><span class="line">        remain = temp % <span class="number">4</span>;</span><br><span class="line">        <span class="keyword">if</span> (remain == <span class="number">0</span>) &#123;</span><br><span class="line">            size = base + <span class="number">9</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (remain == <span class="number">1</span> || remain == <span class="number">2</span>) &#123;</span><br><span class="line">            size = base + <span class="number">9.5</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            size = base + <span class="number">10</span>;</span><br><span class="line">        &#125; %&gt;</span><br><span class="line">        &lt;a <span class="class"><span class="keyword">class</span></span>=<span class="string">"tag tag--primary tag--small"</span> href=<span class="string">"&lt;%= '# ' + item.name + '-list' %&gt;"</span> data-tag=<span class="string">"&lt;%= item.name.replace('.','__').toLowerCase() %&gt;"</span> style=<span class="string">"font-size: &lt;%= size %&gt;pt"</span>&gt;</span><br><span class="line">            &lt;%= item.name %&gt;</span><br><span class="line">        &lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">    &lt;% &#125;); %&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>section&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="添加swiftype站内搜索">添加Swiftype站内搜索</h2>
+<p>在<code>.\themes\tranquilpeak\_config.yml</code>中添加<code>swiftype_install_key</code>即可。</p>
+<h2 id="参考">参考</h2>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1" role="doc-endnote"><p><a href="https://github.com/LouisBarranqueiro/tranquilpeak-hexo-theme" class="uri" target="_blank" rel="noopener">https://github.com/LouisBarranqueiro/tranquilpeak-hexo-theme</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p><a href="http://catx.me/2014/03/09/hexo-mathjax-plugin/" class="uri" target="_blank" rel="noopener">http://catx.me/2014/03/09/hexo-mathjax-plugin/</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p><a href="http://lukang.me/2014/mathjax-for-hexo.html" class="uri" target="_blank" rel="noopener">http://lukang.me/2014/mathjax-for-hexo.html</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/17/2015_08_17_Python_Image_Combination/"  data-tooltip="Python使用Image合并图像">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/15/2015_08_15_Social Psychology Week 2/" data-tooltip="Week 2 The Psychology of Self-Presentation and Persuasion">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/17/2015_08_17_Python_Image_Combination/"  data-tooltip="Python使用Image合并图像">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/15/2015_08_15_Social Psychology Week 2/" data-tooltip="Week 2 The Psychology of Self-Presentation and Persuasion">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2015/08/15/2015_08_15_Migrate_to_Hexo/';
+                 
+                    this.page.identifier = '2015/08/15/2015_08_15_Migrate_to_Hexo/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

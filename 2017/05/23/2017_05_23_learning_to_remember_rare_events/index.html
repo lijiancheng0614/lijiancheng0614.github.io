@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>Learning to Remember Rare Events - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="(ICLR 2017) Learning to Remember Rare Events Paper: https://openreview.net/pdf?id=SJTQLdqlg Code: https://github.com/tensorflow/models/tree/master/learning_to_remember_rare_events">
+<meta name="keywords" content="Computer Vision,Deep Learning,Paper">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Learning to Remember Rare Events">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="(ICLR 2017) Learning to Remember Rare Events Paper: https://openreview.net/pdf?id=SJTQLdqlg Code: https://github.com/tensorflow/models/tree/master/learning_to_remember_rare_events">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/fig1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/fig2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/fig3.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/table1.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/table2.png">
+<meta property="og:image" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/table3.png">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.796Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Learning to Remember Rare Events">
+<meta name="twitter:description" content="(ICLR 2017) Learning to Remember Rare Events Paper: https://openreview.net/pdf?id=SJTQLdqlg Code: https://github.com/tensorflow/models/tree/master/learning_to_remember_rare_events">
+<meta name="twitter:image" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/fig1.png">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/fig1.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/fig1.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Learning to Remember Rare Events
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-05-23T00:00:00+08:00">
+	
+		    May 23, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>, <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/Paper/">Paper</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#memory-module"><span class="toc-text">Memory Module</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-the-memory-module"><span class="toc-text">Using The Memory Module</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#related-work"><span class="toc-text">Related Work</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#experiments"><span class="toc-text">Experiments</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#discussion"><span class="toc-text">Discussion</span></a></li></ol>
+            <p>(ICLR 2017) Learning to Remember Rare Events<br>
+Paper: <a href="https://openreview.net/pdf?id=SJTQLdqlg" class="uri" target="_blank" rel="noopener">https://openreview.net/pdf?id=SJTQLdqlg</a><br>
+Code: <a href="https://github.com/tensorflow/models/tree/master/learning_to_remember_rare_events" class="uri" target="_blank" rel="noopener">https://github.com/tensorflow/models/tree/master/learning_to_remember_rare_events</a></p>
+<a id="more"></a>
+<p>提出一个大规模的终身学习的记忆模块使得one-shot learning应用于各种神经网络。</p>
+<p>memory-augmented deep neural networks are still limited when it comes to life-long and one-shot learning, especially in remembering rare events.</p>
+<p>We present a large-scale life-long memory module for use in deep learning.</p>
+<p>The module exploits fast nearest-neighbor algorithms for efficiency and thus scales to large memory sizes.</p>
+<p>It operates in a life-long manner, i.e., without the need to reset it during training.</p>
+<p>Our memory module can be easily added to any part of a supervised neural network.</p>
+<p>the enhanced network gains the ability to remember and do life-long one-shot learning.</p>
+<p>Our module remembers training examples shown many thousands of steps in the past and it can successfully generalize from them.</p>
+<h2 id="introduction">Introduction</h2>
+<p>general problem with current deep learning models: it is necessary to extend the training data and re-train them to handle such rare or new events.</p>
+<p>Motivation: Humans, on the other hand, learn in a life-long fashion, often from single examples.</p>
+<p>We present a life-long memory module that enables one-shot learning in a variety of neural networks.</p>
+<p>Our memory module consists of key-value pairs. Keys are activations of a chosen layer of a neural network, and values are the ground-truth targets for the given example.</p>
+<p>as the network is trained, its memory increases and becomes more useful. Eventually it can give predictions that leverage on knowledge from past data with similar activations.</p>
+<p>advantages of having a long-term memory:</p>
+<p>One-shot learning</p>
+<p>Even real-world tasks where we have large training sets, such as translation, can benefit from long-term memory.</p>
+<p>since the memory can be traced back to training examples, it might help explain the decisions that the model is making and thus improve understandability of the model.</p>
+<p>evaluate in a few ways, to show that our memory module indeed works:</p>
+<ol type="1">
+<li><p>evaluate on the well-known one-shot learning task Omniglot</p></li>
+<li><p>devise a synthetic task that requires life-long one-shot learning</p></li>
+<li><p>train an English-German translation model that has our life-long one-shot learning module.</p></li>
+</ol>
+<h2 id="memory-module">Memory Module</h2>
+<p>Our memory consists of a matrix <span class="math inline">\(K\)</span> of memory keys, a vector <span class="math inline">\(V\)</span> of memory values, and an additional vector <span class="math inline">\(A\)</span> that tracks the age of items stored in memory.</p>
+<p><span class="math inline">\(\mathcal{M} = (K_{memory-size \times key-size}, V_{memory-size}, A_{memory-size})\)</span></p>
+<p>A memory query is a vector of size key-size which we assume to be normalized, i.e., <span class="math inline">\(\lVert q \rVert = 1\)</span>.</p>
+<p>Given a query <span class="math inline">\(q\)</span>, we define the nearest neighbor of <span class="math inline">\(q\)</span> in <span class="math inline">\(\mathcal{M}\)</span> as any of the keys that maximize the dot product with <span class="math inline">\(q\)</span>:</p>
+<p><span class="math inline">\(NN(q, \mathcal{M}) = \text{argmax}_i \, q \cdot K[i]\)</span></p>
+<p>Since the keys are normalized, the above notion corresponds to the nearest neighbor with respect<br>
+to <em>cosine similarity</em>.</p>
+<p>When given a query q, the memory <span class="math inline">\(\mathcal{M} = (K, V, A)\)</span> will compute <span class="math inline">\(k\)</span> nearest neighbors (sorted by<br>
+decreasing cosine similarity):</p>
+<p><span class="math inline">\((n_1, \cdots, n_k) = NN_k(q, \mathcal{M})\)</span></p>
+<p><strong>Memory Loss</strong></p>
+<p>Assume now that in addition to a query <span class="math inline">\(q\)</span> we are also given the correct desired (supervised) value <span class="math inline">\(v\)</span>.</p>
+<p>In the case of classification, this <span class="math inline">\(v\)</span> would be the class label.</p>
+<p>In a sequence-to-sequence task, <span class="math inline">\(v\)</span> would be the desired output token of the current time step.</p>
+<p>let <span class="math inline">\(p\)</span> be the smallest index such that <span class="math inline">\(V[n_p] = v\)</span> and <span class="math inline">\(b\)</span> the smallest index such that <span class="math inline">\(V[n_b] \neq v\)</span>. We call <span class="math inline">\(n_p\)</span> the <em>positive neighbor</em> and <span class="math inline">\(n_b\)</span> the <em>negative neighbor</em>. When no positive neighbor is among the top-k, we pick any vector from memory with value <span class="math inline">\(v\)</span> instead of <span class="math inline">\(K[n_p]\)</span>.</p>
+<p>We define the memory loss as:</p>
+<p><span class="math inline">\(loss(q, v, \mathcal{M}) = [q \cdot K[n_b] − q \cdot K[n_p] + \alpha]_+\)</span></p>
+<p><strong>Memory Update</strong></p>
+<p>If the memory already returns the correct value, i.e., if <span class="math inline">\(V[n_1] = v\)</span>, then we only update the key for <span class="math inline">\(n_1\)</span> by taking the average of the current key and <span class="math inline">\(q\)</span> and normalizing it:</p>
+<p><span class="math inline">\(K[n_1] \leftarrow \frac{q + K[n_1]}{\lVert q + K[n_1] \rVert}\)</span></p>
+<p>When doing this, we also re-set the age: <span class="math inline">\(A[n_1] \leftarrow 0\)</span>.</p>
+<p>when <span class="math inline">\(V[n_1] \neq v\)</span>, we find memory items with maximum age, and write to one of those (randomly chosen).</p>
+<p>More formally, we pick <span class="math inline">\(n&#39; = \text{argmax}_i \, A[i] + r_i\)</span> where <span class="math inline">\(\lVert r_i \rVert &lt;&lt; \lVert \mathcal{M} \rVert\)</span> is a random number that introduces some randomness in the choice so as to avoid race conditions in asynchronous multi-replica training. We then set:</p>
+<p><span class="math inline">\(K[n&#39;] \leftarrow q, V[n&#39;] \leftarrow v, A[n&#39;] \leftarrow 0\)</span></p>
+<p>With every memory update we also increment the age of all non-updated indices by <span class="math inline">\(1\)</span>.</p>
+<p><img src="fig1.png"></p>
+<p><strong>Efficient nearest neighbor computation</strong></p>
+<p>The most expensive operation in our memory module is the computation of <span class="math inline">\(k\)</span> nearest neighbors. This can be done exactly or in an approximate way.</p>
+<p>In the exact mode, to calculate the nearest neighbors in <span class="math inline">\(K\)</span> to a mini-batch of queries <span class="math inline">\(Q = (q_1, \cdots, q_b)\)</span>, we perform a single matrix multiplication: <span class="math inline">\(Q \times K^T\)</span>. This multiplies the <span class="math inline">\(\text{batch-size} \times \text{key-size}\)</span> matrix <span class="math inline">\(Q\)</span> by the <span class="math inline">\(\text{key-size} \times \text{memory-size}\)</span> matrix <span class="math inline">\(K^T\)</span>, and the result is the <span class="math inline">\(\text{batch-size} \times \text{memory-size}\)</span> matrix of all distances, from which we can choose the top-<span class="math inline">\(k\)</span>. This procedure is linear in <span class="math inline">\(\text{memory-size}\)</span>, so it can be expensive for very large memory sizes. But matrix multiplication is very heavily optimized, so in our experiments on GPUs we find that this operation is not a bottleneck for memory sizes up to half a million.</p>
+<h3 id="using-the-memory-module">Using The Memory Module</h3>
+<p>The memory module presented above can be added to any classification network.</p>
+<p>In the simplest case, we use the final layer of a network as query and the output of the module is directly used for classification.</p>
+<p>it is possible to embed it again into a dense representation and mix it with other predictions made by the network. To study this setting, we add the memory module to sequence-to-sequence recurrent neural networks.</p>
+<p><strong>Convolutional Network with Memory</strong></p>
+<p>To test our memory module in a simple setting, we first add it to a basic convolutional network network for image classification.</p>
+<p>The output of the final layer is used as query to our memory module and the nearest neighbor returned by the memory is used as the final network prediction.</p>
+<p><strong>Sequence-to-sequence with Memory</strong></p>
+<p>We add the memory module to the Google Neural Machine Translation (GNMT) model (Wu et al., 2016).</p>
+<p>This model consists of an encoder RNN, which creates a representation of the source language sentence, and a decoder RNN that outputs the target language sentence.</p>
+<p>We left the encoder RNN unmodified.</p>
+<p>In the decoder RNN, we use the vector retrieved by the attention mechanism as query to the memory module.</p>
+<p>In the GNMT model, the attention vector is used in all LSTM layers beyond the second one, so the computation of the other layers and the memory can happen in parallel.</p>
+<p>Before the final softmax layer, we combine the embedded memory output with the output of the final LSTM layer using an additional linear layer, as depicted in Figure 2.</p>
+<p><img src="fig2.png"></p>
+<p><strong>Extended Neural GPU with Memory</strong></p>
+<p>we also add it to the Extended Neural GPU, a convolutional-recurrent model introduced by Kaiser &amp; Bengio (2016).</p>
+<p>The Extended Neural GPU is a sequence-to-sequence model too, but its decoder is convolutional and the size of its state changes depending on the size of the input.</p>
+<p>Again, we leave the encoder part of the model intact, and extend the decoder part by a memory query.</p>
+<p>This time, we use the position one step ahead to query memory, and we put the embedded result to the output tape, as shown in Figure 3.</p>
+<p><img src="fig3.png"></p>
+<h2 id="related-work">Related Work</h2>
+<p><strong>Memory in Neural Networks</strong></p>
+<p><strong>One-shot Learning</strong></p>
+<h2 id="experiments">Experiments</h2>
+<p><strong>Omniglot</strong></p>
+<p>The Omniglot dataset (Lake et al., 2011) consists of 1623 characters from 50 different alphabets, each hand-drawn by 20 different people. The large number of classes (characters) with relatively few data per class (20), makes this an ideal data set for testing one-shot classification.</p>
+<p><img src="table1.png"></p>
+<p><strong>Synthetic task</strong></p>
+<p>To better understand the memory module operation and to test what it can remember, we devise a synthetic task and train the Extended Neural GPU with and without memory.</p>
+<p>To create training and test data for our synthetic task, we use symbols from the set <span class="math inline">\(S = \{2, \cdots, 16000\}\)</span> and first fix a random function <span class="math inline">\(f : S \to S\)</span>.</p>
+<p><img src="table2.png"></p>
+<p><strong>Translation</strong></p>
+<p>To evaluate the memory module in a large-scale setting we use the GNMT model (Wu et al., 2016) extended with our memory module on the WMT14 English-to-German translation task.</p>
+<p><img src="table3.png"></p>
+<h2 id="discussion">Discussion</h2>
+<p>We presented a long-term memory module that can be used for life-long learning.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/05/24/2017_05_24_LIP/"  data-tooltip="Look Into Person">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/05/22/2017_05_22_Hypernetworks/" data-tooltip="Hypernetworks">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/05/24/2017_05_24_LIP/"  data-tooltip="Look Into Person">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/05/22/2017_05_22_Hypernetworks/" data-tooltip="Hypernetworks">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2017/05/23/2017_05_23_learning_to_remember_rare_events/';
+                 
+                    this.page.identifier = '2017/05/23/2017_05_23_learning_to_remember_rare_events/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>

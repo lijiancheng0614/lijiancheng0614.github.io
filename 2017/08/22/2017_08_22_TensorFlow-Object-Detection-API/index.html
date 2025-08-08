@@ -1,0 +1,1066 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="lijiancheng0614">
+    <title>使用TensorFlow Object Detection API进行物体检测 - lijiancheng0614</title>
+    <meta name="author" content="Jiancheng Li">
+    
+    
+        <link rel="icon" href="http://lijiancheng0614.github.io/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="参考 https://github.com/tensorflow/models/tree/master/research/object_detection 使用TensorFlow Object Detection API进行物体检测">
+<meta name="keywords" content="Computer Vision,Deep Learning,TensorFlow">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="使用TensorFlow Object Detection API进行物体检测">
+<meta property="og:url" content="http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/index.html">
+<meta property="og:site_name" content="lijiancheng0614">
+<meta property="og:description" content="参考 https://github.com/tensorflow/models/tree/master/research/object_detection 使用TensorFlow Object Detection API进行物体检测">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/g3doc/img/kites_detections_output.jpg">
+<meta property="og:updated_time" content="2025-08-08T03:42:05.804Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用TensorFlow Object Detection API进行物体检测">
+<meta name="twitter:description" content="参考 https://github.com/tensorflow/models/tree/master/research/object_detection 使用TensorFlow Object Detection API进行物体检测">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/g3doc/img/kites_detections_output.jpg">
+<meta name="twitter:creator" content="@lijiancheng0614">
+    
+        <link rel="publisher" href="https://plus.google.com/+JianchengLi"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://lijiancheng0614.github.io/assets/images/avatar.jpg"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/g3doc/img/kites_detections_output.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/g3doc/img/kites_detections_output.jpg" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-66414521-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1deebf45fca6db0c7cac1c85f8b91b5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+    <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">lijiancheng0614</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Jiancheng Li</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/projects"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-file-code-o"></i>
+                        <span class="sidebar-button-desc">Projects</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/lijiancheng0614" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://www.linkedin.com/in/lijiancheng0614/" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:lijiancheng0614@gmail.com" target="_blank" rel="noopener">
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            使用TensorFlow Object Detection API进行物体检测
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-08-22T00:00:00+08:00">
+	
+		    Aug 22, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        <strong>
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+</strong>
+    
+    
+        / 
+        <span class="text-color-light text-small">Tagged in</span>
+        <strong>
+    <a class="tag-link" href="/tags/Computer-Vision/">Computer Vision</a>, <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+</strong>
+    
+</div>
+
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <span id="table-of-contents"></span><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#准备"><span class="toc-text">准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练"><span class="toc-text">训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li></ol>
+            <p>参考 <a href="https://github.com/tensorflow/models/tree/master/research/object_detection" class="uri" target="_blank" rel="noopener">https://github.com/tensorflow/models/tree/master/research/object_detection</a></p>
+<p>使用TensorFlow Object Detection API进行物体检测</p>
+<a id="more"></a>
+<p><img src="https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/g3doc/img/kites_detections_output.jpg"></p>
+<h2 id="准备">准备</h2>
+<ol start="0" type="1">
+<li><p>文件结构</p>
+<p>为了方便查看文件，使用以下文件结构。</p>
+<p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">object_detection</span><br><span class="line">├── checkpoints</span><br><span class="line">│   └── ssd_mobilenet_v1_coco_11_06_2017</span><br><span class="line">│       ├── frozen_inference_graph.pb</span><br><span class="line">│       ├── graph.pbtxt</span><br><span class="line">│       ├── model.ckpt.data-00000-of-00001</span><br><span class="line">│       ├── model.ckpt.index</span><br><span class="line">│       └── model.ckpt.meta</span><br><span class="line">└── VOC2012</span><br><span class="line">    ├── data</span><br><span class="line">    │   ├── VOCdevkit</span><br><span class="line">    │   │   └── ...</span><br><span class="line">    │   ├── pascal_label_map.pbtxt</span><br><span class="line">    │   ├── pascal_train.record</span><br><span class="line">    │   └── pascal_val.record</span><br><span class="line">    ├── ssd_mobilenet</span><br><span class="line">    │   ├── eval_logs</span><br><span class="line">    │   │   ├── ...</span><br><span class="line">    │   │   └── events.out.tfevents....</span><br><span class="line">    │   ├── logs</span><br><span class="line">    │   │   ├── ...</span><br><span class="line">    │   │   └── train_....txt</span><br><span class="line">    │   ├── output</span><br><span class="line">    │   │   ├── saved_model</span><br><span class="line">    │   │   │   ├── variables</span><br><span class="line">    │   │   │   └── saved_model.pb</span><br><span class="line">    │   │   ├── checkpoint</span><br><span class="line">    │   │   ├── frozen_inference_graph.pb</span><br><span class="line">    │   │   ├── model.ckpt.data-00000-of-00001</span><br><span class="line">    │   │   ├── model.ckpt.index</span><br><span class="line">    │   │   └── model.ckpt.meta</span><br><span class="line">    │   ├── train_logs</span><br><span class="line">    │   │   ├── ...</span><br><span class="line">    │   │   ├── model.ckpt-0.data-00000-of-00001</span><br><span class="line">    │   │   ├── model.ckpt-0.index</span><br><span class="line">    │   │   └── model.ckpt-0.meta</span><br><span class="line">    │   ├── eval.sh</span><br><span class="line">    │   ├── ssd_mobilenet_v1.config</span><br><span class="line">    │   └── train.sh</span><br><span class="line">    ├── create_pascal_tf_record.py</span><br><span class="line">    ├── eval.py</span><br><span class="line">    ├── infer.py</span><br><span class="line">    └── test.py</span><br></pre></td></tr></table></figure></p></li>
+<li><p>安装TensorFlow</p>
+<p>参考 <a href="https://www.tensorflow.org/install/" class="uri" target="_blank" rel="noopener">https://www.tensorflow.org/install/</a></p>
+<p>如在Ubuntu下安装TensorFlow with GPU support, python 2.7版本的TensorFlow 1.2.0</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.2.0-cp27-none-linux_x86_64.whl</span><br><span class="line">pip install tensorflow_gpu-1.2.0-cp27-none-linux_x86_64.whl</span><br></pre></td></tr></table></figure></p></li>
+<li><p>配置TensorFlow Models</p>
+<ul>
+<li>下载TensorFlow Models</li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/tensorflow/models.git</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>编译protobuf</li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/</span></span><br><span class="line">protoc object_detection/protos/*.proto --python_out=.</span><br></pre></td></tr></table></figure></p>
+<p>生成若干py文件在<code>object_detection/protos/</code>。</p>
+<ul>
+<li>添加PYTHONPATH</li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/</span></span><br><span class="line"><span class="built_in">export</span> PYTHONPATH=<span class="variable">$PYTHONPATH</span>:`<span class="built_in">pwd</span>`:`<span class="built_in">pwd</span>`/slim</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>测试</li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/</span></span><br><span class="line">python object_detection/builders/model_builder_test.py</span><br></pre></td></tr></table></figure></p>
+<p>若成功，显示<code>OK</code>。</p></li>
+<li><p>准备数据</p>
+<p>参考 <a href="https://github.com/tensorflow/models/blob/master/object_detection/g3doc/preparing_inputs.md" class="uri" target="_blank" rel="noopener">https://github.com/tensorflow/models/blob/master/object_detection/g3doc/preparing_inputs.md</a></p>
+<p>这里以<code>PASCAL VOC 2012</code>为例。</p>
+<ul>
+<li>下载并解压</li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection</span></span><br><span class="line">mkdir -p VOC2012/data</span><br><span class="line"><span class="built_in">cd</span> VOC2012/data</span><br><span class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar</span><br><span class="line">tar -xvf VOCtrainval_11-May-2012.tar</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>生成TFRecord</li>
+</ul>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection/VOC2012/</span></span><br><span class="line">cp ../../create_pascal_tf_record.py .</span><br><span class="line">cp ../../data/pascal_label_map.pbtxt data/</span><br><span class="line">python create_pascal_tf_record.py \</span><br><span class="line">    --label_map_path=data/pascal_label_map.pbtxt \</span><br><span class="line">    --data_dir=data/VOCdevkit --year=VOC2012 --<span class="built_in">set</span>=train \</span><br><span class="line">    --output_path=data/pascal_train.record</span><br><span class="line">python create_pascal_tf_record.py \</span><br><span class="line">    --label_map_path=data/pascal_label_map.pbtxt \</span><br><span class="line">    --data_dir=data/VOCdevkit --year=VOC2012 --<span class="built_in">set</span>=val \</span><br><span class="line">    --output_path=data/pascal_val.record</span><br></pre></td></tr></table></figure></p>
+<p>得到<code>data/pascal_train.record</code>和<code>data/pascal_val.record</code>。</p>
+<p>如果需要用自己的数据，则参考<code>create_pascal_tf_record.py</code>编写处理数据生成TFRecord的脚本。可参考 <a href="https://github.com/tensorflow/models/blob/master/object_detection/g3doc/using_your_own_dataset.md" class="uri" target="_blank" rel="noopener">https://github.com/tensorflow/models/blob/master/object_detection/g3doc/using_your_own_dataset.md</a></p></li>
+<li><p>（可选）下载模型</p>
+<p>官方提供了不少预训练模型（ <a href="https://github.com/tensorflow/models/blob/master/object_detection/g3doc/detection_model_zoo.md" class="uri" target="_blank" rel="noopener">https://github.com/tensorflow/models/blob/master/object_detection/g3doc/detection_model_zoo.md</a> ），这里以<code>ssd_mobilenet_v1_coco</code>以例。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection/</span></span><br><span class="line">mkdir checkpoints</span><br><span class="line"><span class="built_in">cd</span> checkpoints</span><br><span class="line">wget http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_11_06_2017.tar.gz</span><br><span class="line">tar zxf ssd_mobilenet_v1_coco_11_06_2017.tar.gz</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="训练">训练</h2>
+<p>如果使用现有模型进行预测则不需要训练。</p>
+<ol type="1">
+<li><p>配置</p>
+<p>参考 <a href="https://github.com/tensorflow/models/blob/master/object_detection/g3doc/configuring_jobs.md" class="uri" target="_blank" rel="noopener">https://github.com/tensorflow/models/blob/master/object_detection/g3doc/configuring_jobs.md</a></p>
+<p>这里使用SSD with MobileNet，把<code>object_detection/samples/configs/ssd_mobilenet_v1_pets.config</code>复制到<code>object_detection/VOC2012/ssd_mobilenet/ssd_mobilenet_v1.config</code></p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection/VOC2012</span></span><br><span class="line">mkdir ssd_mobilenet</span><br><span class="line">cp ../samples/configs/ssd_mobilenet_v1_pets.config ssd_mobilenet/ssd_mobilenet_v1.config</span><br></pre></td></tr></table></figure></p>
+<p>并进行相应的修改：</p>
+<p>修改第9行为<code>num_classes: 20</code>。</p>
+<p>修改第158行为<code>fine_tune_checkpoint: "../../checkpoints/ssd_mobilenet_v1_coco_11_06_2017/model.ckpt"</code></p>
+<p>修改第177行为<code>input_path: "../data/pascal_train.record"</code></p>
+<p>修改第179行和193行为<code>label_map_path: "../data/pascal_label_map.pbtxt"</code></p>
+<p>修改第191行为<code>input_path: "../data/pascal_val.record"</code></p></li>
+<li><p>训练</p>
+<p>新建<code>object_detection/VOC2012/ssd_mobilenet/train.sh</code>，内容以下：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p logs/</span><br><span class="line">now=$(date +<span class="string">"%Y%m%d_%H%M%S"</span>)</span><br><span class="line">python ../../train.py \</span><br><span class="line">    --logtostderr \</span><br><span class="line">    --pipeline_config_path=ssd_mobilenet_v1.config \</span><br><span class="line">    --train_dir=train_logs 2&gt;&amp;1 | tee logs/train_<span class="variable">$now</span>.txt &amp;</span><br></pre></td></tr></table></figure></p>
+<p>进入<code>object_detection/VOC2012/ssd_mobilenet/</code>，运行<code>./train.sh</code>即可训练。</p></li>
+<li><p>验证</p>
+<p>可一边训练一边验证，注意使用其它的GPU或合理分配显存。</p>
+<p>新建<code>object_detection/VOC2012/ssd_mobilenet/eval.sh</code>，内容以下：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p eval_logs</span><br><span class="line">python ../../eval.py \</span><br><span class="line">    --logtostderr \</span><br><span class="line">    --pipeline_config_path=ssd_mobilenet_v1.config \</span><br><span class="line">    --checkpoint_dir=train_logs \</span><br><span class="line">    --eval_dir=eval_logs &amp;</span><br></pre></td></tr></table></figure></p>
+<p>进入<code>object_detection/VOC2012/ssd_mobilenet/</code>，运行<code>CUDA_VISIBLE_DEVICES="1" ./eval.sh</code>即可验证（这里指定了第二个GPU）。</p></li>
+<li><p>可视化log</p>
+<p>可一边训练一边可视化训练的log，访问<code>http://localhost:6006/</code>即可看到Loss等的变化。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection/VOC2012/ssd_mobilenet/</span></span><br><span class="line">tensorboard --logdir train_logs/</span><br></pre></td></tr></table></figure></p>
+<p>可视化验证的log，可看到<code>Precision/mAP@0.5IOU</code>的变化以及具体image的预测结果，这里指定了另一个端口。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection/VOC2012/ssd_mobilenet/</span></span><br><span class="line">tensorboard --logdir eval_logs/ --port 6007</span><br></pre></td></tr></table></figure></p>
+<p>或同时可视化训练与验证的log：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection/VOC2012/ssd_mobilenet/</span></span><br><span class="line">tensorboard --logdir .</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<h2 id="测试">测试</h2>
+<ol type="1">
+<li><p>导出模型</p>
+<p>训练完成后得到一些checkpoint文件在<code>tensorflow/models/object_detection/VOC2012/ssd_mobilenet/train_logs/</code>中，如：</p>
+<ul>
+<li>graph.pbtxt</li>
+<li>model.ckpt-200000.data-00000-of-00001</li>
+<li>model.ckpt-200000.info</li>
+<li>model.ckpt-200000.meta</li>
+</ul>
+<p>其中meta保存了graph和metadata，ckpt保存了网络的weights。</p>
+<p>而进行预测时只需模型和权重，不需要metadata，故可使用官方提供的脚本生成推导图。</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection/VOC2012/ssd_mobilenet/</span></span><br><span class="line">mkdir -p output</span><br><span class="line">CUDA_VISIBLE_DEVICES=<span class="string">"1"</span> python ../../export_inference_graph.py \</span><br><span class="line">    --input_type image_tensor \</span><br><span class="line">    --pipeline_config_path ssd_mobilenet_v1.config \</span><br><span class="line">    --trained_checkpoint_prefix train_logs/model.ckpt-200000 \</span><br><span class="line">    --output_directory output/</span><br></pre></td></tr></table></figure></p></li>
+<li><p>测试图片</p>
+<ul>
+<li><p>运行<code>object_detection_tutorial.ipynb</code>并修改其中的各种路径即可。</p></li>
+<li><p>或自写inference脚本，如<code>tensorflow/models/object_detection/VOC2012/infer.py</code></p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">'..'</span>)</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> utils <span class="keyword">import</span> label_map_util</span><br><span class="line"><span class="keyword">from</span> utils <span class="keyword">import</span> visualization_utils <span class="keyword">as</span> vis_util</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv) &lt; <span class="number">3</span>:</span><br><span class="line">    print(<span class="string">'Usage: python &#123;&#125; test_image_path checkpoint_path'</span>.format(sys.argv[<span class="number">0</span>]))</span><br><span class="line">    exit()</span><br><span class="line"></span><br><span class="line">PATH_TEST_IMAGE = sys.argv[<span class="number">1</span>]</span><br><span class="line">PATH_TO_CKPT = sys.argv[<span class="number">2</span>]</span><br><span class="line">PATH_TO_LABELS = <span class="string">'data/pascal_label_map.pbtxt'</span></span><br><span class="line">NUM_CLASSES = <span class="number">21</span></span><br><span class="line">IMAGE_SIZE = (<span class="number">18</span>, <span class="number">12</span>)</span><br><span class="line"></span><br><span class="line">label_map = label_map_util.load_labelmap(PATH_TO_LABELS)</span><br><span class="line">categories = label_map_util.convert_label_map_to_categories(</span><br><span class="line">    label_map, max_num_classes=NUM_CLASSES, use_display_name=<span class="literal">True</span>)</span><br><span class="line">category_index = label_map_util.create_category_index(categories)</span><br><span class="line"></span><br><span class="line">detection_graph = tf.Graph()</span><br><span class="line"><span class="keyword">with</span> detection_graph.as_default():</span><br><span class="line">    od_graph_def = tf.GraphDef()</span><br><span class="line">    <span class="keyword">with</span> tf.gfile.GFile(PATH_TO_CKPT, <span class="string">'rb'</span>) <span class="keyword">as</span> fid:</span><br><span class="line">        serialized_graph = fid.read()</span><br><span class="line">        od_graph_def.ParseFromString(serialized_graph)</span><br><span class="line">        tf.import_graph_def(od_graph_def, name=<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">config = tf.ConfigProto()</span><br><span class="line">config.gpu_options.allow_growth = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> detection_graph.as_default():</span><br><span class="line">    <span class="keyword">with</span> tf.Session(graph=detection_graph, config=config) <span class="keyword">as</span> sess:</span><br><span class="line">        start_time = time.time()</span><br><span class="line">        print(time.ctime())</span><br><span class="line">        image = Image.open(PATH_TEST_IMAGE)</span><br><span class="line">        image_np = np.array(image).astype(np.uint8)</span><br><span class="line">        image_np_expanded = np.expand_dims(image_np, axis=<span class="number">0</span>)</span><br><span class="line">        image_tensor = detection_graph.get_tensor_by_name(<span class="string">'image_tensor:0'</span>)</span><br><span class="line">        boxes = detection_graph.get_tensor_by_name(<span class="string">'detection_boxes:0'</span>)</span><br><span class="line">        scores = detection_graph.get_tensor_by_name(<span class="string">'detection_scores:0'</span>)</span><br><span class="line">        classes = detection_graph.get_tensor_by_name(<span class="string">'detection_classes:0'</span>)</span><br><span class="line">        num_detections = detection_graph.get_tensor_by_name(<span class="string">'num_detections:0'</span>)</span><br><span class="line">        (boxes, scores, classes, num_detections) = sess.run(</span><br><span class="line">            [boxes, scores, classes, num_detections],</span><br><span class="line">            feed_dict=&#123;image_tensor: image_np_expanded&#125;)</span><br><span class="line">        print(<span class="string">'&#123;&#125; elapsed time: &#123;:.3f&#125;s'</span>.format(time.ctime(), time.time() - start_time))</span><br><span class="line">        vis_util.visualize_boxes_and_labels_on_image_array(</span><br><span class="line">            image_np, np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores),</span><br><span class="line">            category_index, use_normalized_coordinates=<span class="literal">True</span>, line_thickness=<span class="number">8</span>)</span><br><span class="line">        plt.figure(figsize=IMAGE_SIZE)</span><br><span class="line">        plt.imshow(image_np)</span><br></pre></td></tr></table></figure></p>
+<p>运行以下命令即可：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection/VOC2012/</span></span><br><span class="line">python infer.py \</span><br><span class="line">    ../test_images/image1.jpg \</span><br><span class="line">    ssd_mobilenet/output/frozen_inference_graph.pb</span><br></pre></td></tr></table></figure></p></li>
+</ul></li>
+<li><p>批量测试</p>
+<ul>
+<li><p>运行<code>./eval.sh</code>即可测试<code>train_logs/</code>中<code>train_logs/checkpoint</code>里包含的checkpoint并计算<code>Precision/mAP@0.5IOU</code>。</p></li>
+<li><p>或自写脚本，对每张图片进行预测并把分类得分大于某个阈值的预测结果保存到json文件中，如<code>tensorflow/models/object_detection/VOC2012/test.py</code></p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">'..'</span>)</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> utils <span class="keyword">import</span> label_map_util</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv) &lt; <span class="number">5</span>:</span><br><span class="line">    print(<span class="string">'Usage: python &#123;&#125; output_json_path checkpoint_path test_ids_path image_dir'</span>.format(sys.argv[<span class="number">0</span>]))</span><br><span class="line">    exit()</span><br><span class="line"></span><br><span class="line">PATH_OUTPUT = sys.argv[<span class="number">1</span>]</span><br><span class="line">PATH_TO_CKPT = sys.argv[<span class="number">2</span>]</span><br><span class="line">PATH_TEST_IDS = sys.argv[<span class="number">3</span>]</span><br><span class="line">DIR_IMAGE = sys.argv[<span class="number">4</span>]</span><br><span class="line">PATH_TO_LABELS = <span class="string">'data/pascal_label_map.pbtxt'</span></span><br><span class="line">NUM_CLASSES = <span class="number">21</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_results</span><span class="params">(boxes, classes, scores, category_index, im_width, im_height,</span></span></span><br><span class="line"><span class="function"><span class="params">    min_score_thresh=<span class="number">.5</span>)</span>:</span></span><br><span class="line">    bboxes = list()</span><br><span class="line">    <span class="keyword">for</span> i, box <span class="keyword">in</span> enumerate(boxes):</span><br><span class="line">        <span class="keyword">if</span> scores[i] &gt; min_score_thresh:</span><br><span class="line">            ymin, xmin, ymax, xmax = box</span><br><span class="line">            bbox = &#123;</span><br><span class="line">                <span class="string">'bbox'</span>: &#123;</span><br><span class="line">                    <span class="string">'xmax'</span>: xmax * im_width,</span><br><span class="line">                    <span class="string">'xmin'</span>: xmin * im_width,</span><br><span class="line">                    <span class="string">'ymax'</span>: ymax * im_height,</span><br><span class="line">                    <span class="string">'ymin'</span>: ymin * im_height</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">'category'</span>: category_index[classes[i]][<span class="string">'name'</span>],</span><br><span class="line">                <span class="string">'score'</span>: float(scores[i])</span><br><span class="line">            &#125;</span><br><span class="line">            bboxes.append(bbox)</span><br><span class="line">    <span class="keyword">return</span> bboxes</span><br><span class="line"></span><br><span class="line">label_map = label_map_util.load_labelmap(PATH_TO_LABELS)</span><br><span class="line">categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=<span class="literal">True</span>)</span><br><span class="line">category_index = label_map_util.create_category_index(categories)</span><br><span class="line"></span><br><span class="line">detection_graph = tf.Graph()</span><br><span class="line"><span class="keyword">with</span> detection_graph.as_default():</span><br><span class="line">    od_graph_def = tf.GraphDef()</span><br><span class="line">    <span class="keyword">with</span> tf.gfile.GFile(PATH_TO_CKPT, <span class="string">'rb'</span>) <span class="keyword">as</span> fid:</span><br><span class="line">        serialized_graph = fid.read()</span><br><span class="line">        od_graph_def.ParseFromString(serialized_graph)</span><br><span class="line">        tf.import_graph_def(od_graph_def, name=<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">config = tf.ConfigProto()</span><br><span class="line">config.gpu_options.allow_growth = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">test_ids = [line.split()[<span class="number">0</span>] <span class="keyword">for</span> line <span class="keyword">in</span> open(PATH_TEST_IDS)]</span><br><span class="line">total_time = <span class="number">0</span></span><br><span class="line">test_annos = dict()</span><br><span class="line">flag = <span class="literal">False</span></span><br><span class="line"><span class="keyword">with</span> detection_graph.as_default():</span><br><span class="line">    <span class="keyword">with</span> tf.Session(graph=detection_graph, config=config) <span class="keyword">as</span> sess:</span><br><span class="line">        <span class="keyword">for</span> image_id <span class="keyword">in</span> test_ids:</span><br><span class="line">            image_path = os.path.join(DIR_IMAGE, image_id + <span class="string">'.jpg'</span>)</span><br><span class="line">            image = Image.open(image_path)</span><br><span class="line">            image_np = np.array(image).astype(np.uint8)</span><br><span class="line">            im_width, im_height, _ = image_np.shape</span><br><span class="line">            image_np_expanded = np.expand_dims(image_np, axis=<span class="number">0</span>)</span><br><span class="line">            image_tensor = detection_graph.get_tensor_by_name(<span class="string">'image_tensor:0'</span>)</span><br><span class="line">            boxes = detection_graph.get_tensor_by_name(<span class="string">'detection_boxes:0'</span>)</span><br><span class="line">            scores = detection_graph.get_tensor_by_name(<span class="string">'detection_scores:0'</span>)</span><br><span class="line">            classes = detection_graph.get_tensor_by_name(<span class="string">'detection_classes:0'</span>)</span><br><span class="line">            num_detections = detection_graph.get_tensor_by_name(<span class="string">'num_detections:0'</span>)</span><br><span class="line">            start_time = time.time()</span><br><span class="line">            (boxes, scores, classes, num_detections) = sess.run(</span><br><span class="line">                [boxes, scores, classes, num_detections],</span><br><span class="line">                feed_dict=&#123;image_tensor: image_np_expanded&#125;)</span><br><span class="line">            end_time = time.time()</span><br><span class="line">            print(<span class="string">'&#123;&#125; &#123;&#125; &#123;:.3f&#125;s'</span>.format(time.ctime(), image_id, end_time - start_time))</span><br><span class="line">            <span class="keyword">if</span> flag:</span><br><span class="line">                total_time += end_time - start_time</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                flag = <span class="literal">True</span></span><br><span class="line">            test_annos[image_id] = &#123;<span class="string">'objects'</span>: get_results(</span><br><span class="line">                np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores), category_index,</span><br><span class="line">                im_width, im_height)&#125;</span><br><span class="line"></span><br><span class="line">print(<span class="string">'total time: &#123;&#125;, total images: &#123;&#125;, average time: &#123;&#125;'</span>.format(</span><br><span class="line">    total_time, len(test_ids), total_time / len(test_ids)))</span><br><span class="line">test_annos = &#123;<span class="string">'imgs'</span>: test_annos&#125;</span><br><span class="line">fd = open(PATH_OUTPUT, <span class="string">'w'</span>)</span><br><span class="line">json.dump(test_annos, fd)</span><br><span class="line">fd.close()</span><br></pre></td></tr></table></figure></p>
+<p>运行以下命令即可：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From tensorflow/models/object_detection/VOC2012/</span></span><br><span class="line">python test.py \</span><br><span class="line">    ssd_mobilenet/output/result_annos.json \</span><br><span class="line">    ssd_mobilenet/output/frozen_inference_graph.pb \</span><br><span class="line">    data/VOCdevkit/VOC2012/ImageSets/Main/train_val.txt \</span><br><span class="line">    data/VOCdevkit/VOC2012/JPEGImages/</span><br></pre></td></tr></table></figure></p></li>
+</ul></li>
+</ol>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/08/27/2017_08_27_vps_ipv6/"  data-tooltip="用VPS搭建IPv6的VPN">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/" data-tooltip="使用TensorFlow-Slim进行图像分类">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2025 Jiancheng Li. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/08/27/2017_08_27_vps_ipv6/"  data-tooltip="用VPS搭建IPv6的VPN">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">Previous</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/06/29/2017_06_29_TensorFlow-Slim-image-classification/" data-tooltip="使用TensorFlow-Slim进行图像分类">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">Next</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-facebook-official"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    
+                    <a class="post-action-btn btn btn--default" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-weibo"></i>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="post-action hide-xs">
+                
+                    <a class="post-action-btn btn btn--default" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            <a class="post-action-btn btn btn--default" href="#table-of-contents">
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    
+                    <a class="share-option-btn" target="new" href="http://service.weibo.com/share/share.php?&amp;title=http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/">
+                        <i class="fa fa-weibo"></i><span>Share on Weibo</span>
+                    </a>
+                
+            </li>
+        
+            
+            <li class="share-option">
+                
+                    <a class="share-option-btn" target="new" href="#qrcode" id="show_qrcode">
+                        <i class="fa fa-weixin"></i><span>Share on Weixin</span>
+                    </a>
+                    <div id="qrcode" style="display:none"></div>
+                
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Jiancheng Li</h4>
+        
+            <div id="about-card-bio"><p><a href="mailto:lijiancheng0614@gmail.com" class="email">lijiancheng0614@gmail.com</a></p>
+</div>
+        
+        
+        <p><a href="http://blog.csdn.net/lijiancheng0614">http://blog.csdn.net/lijiancheng0614</a></p>
+        <p><a href="http://blog.sina.com.cn/lijiancheng5201314">http://blog.sina.com.cn/lijiancheng5201314</a></p>
+        <p><a href="http://www.douban.com/people/lijiancheng0614">http://www.douban.com/people/lijiancheng0614</a></p>
+        <p><a href="https://zh.wikipedia.org/wiki/User:Lijiancheng0614">https://zh.wikipedia.org/wiki/User:Lijiancheng0614</a></p>
+    </div>
+</div>
+
+        <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-close"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <img class="media-image" src="https://icpc.baylor.edu/img/welcome/cm2-logo-panel_joel_wo_lang.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2013/05/18/2013_05_18_ICPC2013Nanjing_E/">
+                            <h3 class="media-heading">ICPC2013南京邀请赛 E. Eloh 解题报告</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    May 18, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>ICPC2013南京邀请赛 E. Eloh 解题报告</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/05/2014_06_05_Jekyll/">
+                            <h3 class="media-heading">Jekyll</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 5, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Studying Jekyll.</p>
+<p>Migrating the website to Jekyll.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <img class="media-image" src="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/screenshot2.jpg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2014/06/27/2014_06_27_jwgl/">
+                            <h3 class="media-heading">教务系统课程评价自动填写</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Jun 27, 2014
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>教务系统课程评价自动填写</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Handler/">
+                            <h3 class="media-heading">Android Handler的处理方式</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>在写Android App时，一些逻辑不能放在UI线程中，于是可能会用到Handler。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/13/2015_04_13_Android_Socket/">
+                            <h3 class="media-heading">Android客户端使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 13, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用socket来进行数据传输。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/15/2015_04_15_Java_Socket/">
+                            <h3 class="media-heading">Java服务器使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 15, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>用Java来写一个简单的服务器（server），对客户端（client）的request进行回应。</p>
+<p>这个sample主要使用socket来进行演示，分别可以接收与发送string和object。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/0/0d/C_Sharp_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_CSharp_Number_System/">
+                            <h3 class="media-heading">C#进制间的转换</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>把<code>string</code>变量 <code>x</code> 转换为另一种进制的<code>string</code></p>
+<p>第一行为直接转换，</p>
+<p>第二行为数字宽度为6（前面不足补0），总宽度为8的字符串。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <img class="media-image" src="https://az590446.vo.msecnd.net/images/splash-logo-lowres.png" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/19/2015_04_19_Code_Hunt_SECTOR_02/">
+                            <h3 class="media-heading">Code Hunt SECTOR 02 LOOPS</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 19, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Code Hunt SECTOR 02 LOOPS</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Python_logo_and_wordmark.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/22/2015_04_22_Python_Socket/">
+                            <h3 class="media-heading">Python使用socket通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 22, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>整理Python官网给的sample：<a href="https://docs.python.org/3/library/socket.html" class="uri" target="_blank" rel="noopener">https://docs.python.org/3/library/socket.html</a></p>
+<p>官网展示了支持IPv4的TCP代码，这里也展示UDP的代码，两者基本类似。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-left">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <img class="media-image" src="https://upload.wikimedia.org/wikipedia/commons/d/db/Android_robot_2014.svg" width="90" height="90"/>
+                        </a>
+                    </div>
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="http://lijiancheng0614.github.io/2015/04/27/2015_04_27_Android_HTTP/">
+                            <h3 class="media-heading">Android客户端使用HTTP通信</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Apr 27, 2015
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Android作为客户端（client）对服务器（server）进行request操作，并从服务器中得到response。</p>
+<p>这里主要使用HTTP来进行数据传输，request有GET和POST两种方式。</p>
+<p>完整的项目：<a href="https://github.com/lijiancheng0614/android-NetworkConnect" class="uri" target="_blank" rel="noopener">https://github.com/lijiancheng0614/android-NetworkConnect</a></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                137 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script.min.js"></script>
+<!--SCRIPTS END-->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+    <script type="text/javascript">
+        $('#qrcode').qrcode({
+            text: "http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/"
+        });
+        $("#show_qrcode").fancybox();
+    </script>
+
+</script>
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://lijiancheng0614.github.io/2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/';
+                 
+                    this.page.identifier = '2017/08/22/2017_08_22_TensorFlow-Object-Detection-API/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'lijiancheng0614';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('MUUPC9BXF1', '24df25d4c210daa741ebc4ae87a8844c');
+        var algoliaIndex = algoliaClient.initIndex('my-hexo-blog');
+    </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+    </body>
+</html>
